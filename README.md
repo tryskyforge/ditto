@@ -4,8 +4,6 @@
 
 # Ditto
 
-**English** · [Español](./README.es.md) · [Português (BR)](./README.pt-BR.md) · [Français](./README.fr.md) · [简体中文](./README.zh-CN.md)
-
 **Auto-capture any browser workflow into a step-by-step guide. No account, no cloud, no tracking.**
 
 Click record, do the thing, get a polished guide with annotated screenshots. Narrate it as you go, edit it after, then replay or export.
