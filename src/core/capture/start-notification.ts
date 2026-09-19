@@ -30,7 +30,7 @@ const STYLES = `
   .mascot-wrap {
     position: relative;
     width: clamp(120px, 20vw, 250px);
-    aspect-ratio: 200 / 150;
+    aspect-ratio: 1;
     animation: bounceSquash 1.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
   }
 
@@ -40,10 +40,6 @@ const STYLES = `
     display: block;
   }
 
-  .wink-eye {
-    transform-origin: 124px 117px;
-    animation: wink 0.45s ease 2.8s;
-  }
 
   @keyframes bounceSquash {
     0%   { transform: translateY(-80px) scaleY(1.1) scaleX(0.9); opacity: 0; }
@@ -54,40 +50,36 @@ const STYLES = `
     100% { transform: translateY(0) scaleY(1) scaleX(1); }
   }
 
-  @keyframes wink {
-    0%   { transform: scaleY(1); }
-    35%  { transform: scaleY(0.05); }
-    50%  { transform: scaleY(0.05); }
-    75%  { transform: scaleY(1.15); }
-    100% { transform: scaleY(1); }
-  }
 `;
 
+function pandaPaths(ink: string, fur: string, scarf: string, scarfDark: string, extras: boolean): string {
+  return `
+      <circle cx="33" cy="34" r="18" fill="${ink}"/><circle cx="95" cy="34" r="18" fill="${ink}"/>
+      <ellipse cx="64" cy="62" rx="45" ry="41" fill="${fur}"/>
+      <path d="M20 92 Q64 120 108 92 L108 108 Q64 134 20 108 Z" fill="${scarf}"/>
+      <path d="M20 92 Q64 120 108 92" stroke="${scarfDark}" stroke-width="3" fill="none"/>
+      <ellipse cx="46" cy="60" rx="13" ry="15" fill="${ink}" transform="rotate(-15 46 60)"/>
+      <ellipse cx="82" cy="60" rx="13" ry="15" fill="${ink}" transform="rotate(15 82 60)"/>
+      <path d="M40 59 Q46 64 52 59" stroke="${fur}" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+      <path d="M76 59 Q82 64 88 59" stroke="${fur}" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="64" cy="76" rx="6" ry="4.2" fill="${ink}"/>
+      <path d="M57 84 Q64 89 71 84" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      ${extras ? '<circle cx="30" cy="76" r="6" fill="#F2B8B5" opacity="0.7"/><circle cx="98" cy="76" r="6" fill="#F2B8B5" opacity="0.7"/>' : ''}`;
+}
+
 function buildMascotSVG(): string {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 50 160 120" width="200" height="150">
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="200" height="200">
     <defs>
       <mask id="riseMask">
-        <rect x="20" y="50" width="160" height="120" fill="black"/>
-        <rect x="20" y="170" width="160" height="120" fill="white">
-          <animate attributeName="y" from="170" to="50" dur="${FILL_DURATION}" begin="${FILL_DELAY}" fill="freeze" calcMode="spline" keySplines="0.22 0.61 0.36 1"/>
+        <rect x="0" y="0" width="128" height="128" fill="black"/>
+        <rect x="0" y="128" width="128" height="128" fill="white">
+          <animate attributeName="y" from="128" to="0" dur="${FILL_DURATION}" begin="${FILL_DELAY}" fill="freeze" calcMode="spline" keySplines="0.22 0.61 0.36 1"/>
         </rect>
       </mask>
     </defs>
-    <g opacity="0.3">
-      <rect x="30" y="95" width="140" height="68" rx="5" fill="#0F0E2A"/>
-      <path d="M30 95 L30 80 Q30 60, 100 60 Q170 60, 170 80 L170 95 Z" fill="#0F0E2A"/>
-      <rect x="30" y="93" width="140" height="3" fill="#252360"/>
-      <path d="M68 122 Q76 112 84 122" stroke="#252360" stroke-width="5" fill="none" stroke-linecap="round"/>
-      <path d="M116 122 Q124 112 132 122" stroke="#252360" stroke-width="5" fill="none" stroke-linecap="round"/>
-      <path d="M84 138 Q100 148 116 138" stroke="#252360" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <g opacity="0.3">${pandaPaths('#0F0E2A', '#252360', '#1B2A1F', '#1B2A1F', false)}
     </g>
-    <g mask="url(#riseMask)">
-      <rect x="30" y="95" width="140" height="68" rx="5" fill="#1E1B4B"/>
-      <path d="M30 95 L30 80 Q30 60, 100 60 Q170 60, 170 80 L170 95 Z" fill="#3730A3"/>
-      <rect x="30" y="93" width="140" height="3" fill="#C7D2FE"/>
-      <path d="M68 122 Q76 112 84 122" stroke="#C7D2FE" stroke-width="5" fill="none" stroke-linecap="round"/>
-      <path class="wink-eye" d="M116 122 Q124 112 132 122" stroke="#C7D2FE" stroke-width="5" fill="none" stroke-linecap="round"/>
-      <path d="M84 138 Q100 148 116 138" stroke="#C7D2FE" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <g mask="url(#riseMask)">${pandaPaths('#22232B', '#FBF8F2', '#6E9A5E', '#4F7A45', true)}
     </g>
   </svg>`;
 }

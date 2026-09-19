@@ -7,6 +7,7 @@ import type { Guide } from '@/core/guides/types';
 import { useFullview } from '@/stores/fullview';
 import { Dialog, DialogPortal } from '@/ui/components/ui/dialog';
 import { Input } from '@/ui/components/ui/input';
+import MascotIcon from '@/ui/shared/MascotIcon';
 import KeyboardHints from './components/KeyboardHints';
 import SearchResults from './components/SearchResults';
 import { navigate } from './router';
@@ -115,17 +116,7 @@ export default function SearchModal() {
               </div>
             ) : (
               <div className="flex flex-col items-center py-7 gap-2.5">
-                <svg width="56" height="52" viewBox="0 0 56 52" fill="none">
-                  <rect x="8" y="16" width="40" height="24" rx="3" fill="#1E1B4B" />
-                  <path d="M8 16 L8 11 Q8 3, 28 3 Q48 3, 48 11 L48 16 Z" fill="#3730A3" />
-                  <rect x="8" y="15" width="40" height="1.5" fill="#C7D2FE" />
-                  <path d="M17 27 Q20.5 23 24 27" stroke="#C7D2FE" strokeWidth="2" fill="none" strokeLinecap="round" />
-                  <path d="M22 36 Q28 40 34 36" stroke="#C7D2FE" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-                  <circle cx="38" cy="24" r="8" stroke="#4F46E5" strokeWidth="2" fill="none" />
-                  <line x1="44" y1="30" x2="50" y2="36" stroke="#4F46E5" strokeWidth="2.5" strokeLinecap="round" />
-                  <circle cx="38" cy="24" r="3" fill="#C7D2FE" />
-                  <circle cx="39" cy="23.5" r="1" fill="#1E1B4B" />
-                </svg>
+                <MascotIcon size={56} pose="lookaway" />
                 <span className="text-[13px] font-medium text-muted-foreground/50">{i18n.t('search_startTyping')}</span>
               </div>
             )}

@@ -41,6 +41,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/ui/components/ui/popo
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/ui/components/ui/select';
 import ColorPicker from '@/ui/shared/ColorPicker';
 import { KeyStatusNote, KeyWarningNote, ModelList, SecretInput, useKeyCheck } from '@/ui/shared/key-check';
+import MascotIcon from '@/ui/shared/MascotIcon';
 import MicrophonePicker from '@/ui/shared/MicrophonePicker';
 import { changedSettings, type SettingsSnapshot } from '@/ui/shared/settings-autosave';
 
@@ -668,7 +669,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
         </a>
 
         <div className="flex items-center gap-3.5 border border-border rounded-[10px] p-3.5">
-          <img src="/mascot.svg" alt="" width="44" height="44" className="shrink-0" />
+          <MascotIcon size={44} />
           <div className="flex-1 min-w-0">
             <p className="text-xs font-bold text-foreground mb-0.5">{i18n.t('settings.starCtaTitle')}</p>
             <p className="text-[10px] text-muted-foreground leading-relaxed mb-2">

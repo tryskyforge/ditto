@@ -9,6 +9,7 @@ import type { PanelAiUpdate, PanelVoiceUpdate } from '@/lib/port';
 import { extractDomain } from '@/lib/utils';
 import { Button } from '@/ui/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/ui/components/ui/tooltip';
+import MascotIcon from '@/ui/shared/MascotIcon';
 import ScreenshotView from '@/ui/shared/ScreenshotView';
 import StepSourceBadge from '@/ui/shared/StepSourceBadge';
 import AiStatus from './AiStatus';
@@ -137,7 +138,7 @@ export default function RecordingView({ guideId, onStop, voice, aiFailure }: Rec
       <div className="flex-1 overflow-y-auto pt-12">
         {steps.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full gap-3">
-            <img src="/mascot.svg" alt="" width="64" height="64" />
+            <MascotIcon size={72} coffee />
             <div className="text-center">
               <p className="text-sm font-semibold text-foreground">{i18n.t('recording.readyTitle')}</p>
               <p className="text-xs text-muted-foreground mt-0.5">{i18n.t('recording.readySub')}</p>

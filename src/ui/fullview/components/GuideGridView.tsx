@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { i18n } from '#imports';
 import { formatDate } from '@/lib/utils';
 import { useFullview } from '@/stores/fullview';
+import MascotIcon from '@/ui/shared/MascotIcon';
 import ScreenshotView from '@/ui/shared/ScreenshotView';
 import { navigate } from '../router';
 
@@ -17,7 +18,7 @@ interface GuideGridViewProps {
 function DittoEyes() {
   return (
     <div className="w-full h-full flex items-center justify-center bg-primary">
-      <img src="/mascot.svg" alt="" width="96" height="96" />
+      <MascotIcon size={96} coffee />
     </div>
   );
 }
