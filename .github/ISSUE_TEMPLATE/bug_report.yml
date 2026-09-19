@@ -1,0 +1,94 @@
+name: Bug report
+description: Something in Ditto does not work
+title: "[Bug] "
+labels: [bug, needs-triage]
+body:
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Before you report
+      options:
+        - label: I searched existing issues to avoid a duplicate.
+          required: true
+        - label: I reproduced this myself, rather than having a tool report it.
+          required: true
+        - label: I can reproduce it on the latest version.
+          required: false
+        - label: I can reproduce it in a clean browser profile with Ditto as the only extension.
+          required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        Suggesting something new instead? Use the [feature request form](https://github.com/OWNER/ditto/issues/new?template=feature_request.yml).
+
+  - type: textarea
+    id: behaviour
+    attributes:
+      label: Current vs expected behaviour
+      description: >
+        What happened, and what you expected instead. Screenshots help a lot.
+        Incomplete reports may be closed without investigation.
+      placeholder: I exported a guide as PDF and expected A, but got B.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Start a recording on example.com
+        2. Click a couple of things, then stop
+        3. Export as PDF
+        4. Observe ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: areas
+    attributes:
+      label: Which areas are affected?
+      multiple: true
+      options:
+        - Recording and capture
+        - Guide editor
+        - Screenshot editor, annotation or crop
+        - Smart Blur
+        - Export (PDF, DOCX, HTML, Markdown)
+        - Export (video)
+        - Guide Me replay
+        - Voice narration
+        - AI descriptions
+        - Onboarding or settings
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      render: text
+      placeholder: |
+        - Browser: Chrome 140 / Firefox 145 / Edge 140
+        - Ditto version: 1.1.1
+        - OS: macOS 15, Windows 11, Ubuntu 26.04
+        - Site being recorded, if it matters:
+    validations:
+      required: true
+
+  - type: textarea
+    id: console
+    attributes:
+      label: Console errors
+      description: >
+        Chrome: chrome://extensions, Ditto, "service worker", Console.
+        Firefox: about:debugging, Inspect. Paste anything red.
+      render: text
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Anything else that helps. If you used an AI tool to write this report, say so here and confirm you verified every claim in it.

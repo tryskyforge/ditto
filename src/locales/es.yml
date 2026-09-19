@@ -1,0 +1,557 @@
+meta:
+  locale: es
+
+app:
+  name: Ditto
+  store_title: "Ditto: guías paso a paso y tutoriales"
+  description: "Graba cualquier tarea del navegador como una guía paso a paso. Edita, narra con voz y exporta a vídeo, PDF o DOCX. Código abierto."
+
+common:
+  loading: Cargando...
+  cancel: Cancelar
+  save: Guardar
+  delete: Eliminar
+  back: Volver
+  continue: Continuar
+  skip: Saltar
+  export: Exportar
+  close: Cerrar
+  undo: Deshacer
+  star: Favorito
+  unstar: Quitar de favoritos
+  restore: Restaurar
+  updated: "Actualizado a la v$1"
+  whatsNew: Ver novedades
+
+sidepanel:
+  connected: Conectado
+  connecting: Conectando...
+  heroTitle: "¿Qué quieres capturar?"
+  heroSubtitle: Graba cualquier flujo de trabajo al instante
+  startCapture: Empezar a capturar
+  searchPlaceholder: Buscar guías...
+  recentLabel: Recientes
+  notRecordable: Abre un sitio web para empezar a grabar
+
+library:
+  noGuidesTitle: No hay guías todavía
+  noGuidesSub: Haz tu primera captura para crear una guía
+  noStarredTitle: Sin favoritos
+  noStarredSub: Marca una guía como favorita para tenerla a mano
+  trashEmptyTitle: La papelera está vacía
+  trashEmptySub: "¡Nada por aquí!"
+  noMatchingGuides: No se encontraron guías
+  moveToTrash: Mover a la papelera
+  deletePermanently: Eliminar definitivamente
+  openInFullView: Abrir en vista completa
+
+guideme:
+  live: En vivo
+  roadblock: "Nos encontramos con un obstáculo. Actúa en la pantalla para avanzar."
+  manualStep: "Este paso fue editado, así que no se puede detectar automáticamente. Usa Siguiente cuando lo hayas hecho."
+  stepOf: "Paso $1 de $2"
+  noDescription: Sin descripción
+  prev: Anterior
+  next: Siguiente
+  finish: "Finalizar"
+  exitTitle: "¿Ya te vas?"
+  exitMessage: Se detendrá el recorrido y se quitará la guía de la página.
+  stay: Quedarme
+  exit: Salir
+  guideNotFound: No se encontró la guía
+
+guidemeCompletion:
+  title: "¡Listo, crack!"
+  stepsCompleted: "Completaste $1 paso."
+  stepsCompletedPlural: "Completaste los $1 pasos."
+  allDone: Listo
+  runAgain: Repetir
+
+recording:
+  capturePaused: Captura en pausa
+  recording: "Grabando \xB7 $1 paso"
+  recordingPlural: "Grabando \xB7 $1 pasos"
+  readyTitle: "¡Listo para grabar!"
+  readySub: Haz clic en la página para empezar
+  finishRecording: Terminar grabación
+  smartBlur: Desenfoque inteligente
+  discard: Descartar
+  deleteStep: Eliminar paso
+  justNow: Ahora
+  secondsAgo: "hace $1s"
+  minutesAgo: "hace $1m"
+
+settings:
+  title: Ajustes
+  aiDescriptions: Descripciones con IA
+  provider: Proveedor
+  model: Modelo
+  modelCustom: Modelo personalizado
+  baseUrl: URL base
+  useOwnServer: Usar mi propio servidor
+  ownServerHintOpenai: "Funciona con Ollama, LM Studio, vLLM o cualquier servidor compatible con OpenAI."
+  ownServerHintAnthropic: "Funciona con un proxy LiteLLM o cualquier servidor compatible con Anthropic."
+  apiKey: Clave API
+  showKey: Mostrar clave
+  hideKey: Ocultar clave
+  aiLanguage: Idioma de descripciones
+  voiceNarration: "Narración por voz"
+  voiceUsingAiKey: "No hay clave de voz, así que Ditto usa la clave de OpenAI de Descripciones con IA de arriba."
+  aiNoKey: "No hay clave de API, así que los pasos usarán descripciones básicas por reglas."
+  voiceNoKey: "No hay ninguna clave de API configurada, así que tus grabaciones no se narrarán."
+  microphone: "Micrófono"
+  microphoneDefault: Predeterminado del sistema
+  microphoneNeedsAccess: "Permite el acceso al micrófono para ver los nombres de tus dispositivos."
+  microphoneGrantAccess: "Permitir acceso al micrófono"
+  microphoneNone: "No se encontró ningún micrófono. Conecta uno y aparecerá aquí."
+  microphoneUnavailable: "Micrófono no disponible"
+  microphoneMissing: "El micrófono que elegiste no está disponible ahora mismo, así que Ditto usará el predeterminado del sistema."
+  microphoneTest: "Probar micrófono"
+  microphoneStatusAllowed: Permitido
+  microphoneStatusBlocked: Bloqueado
+  microphoneStatusPending: Aún sin permiso
+  microphoneBlocked: Tu navegador está bloqueando el micrófono para Ditto. Abre la configuración del sitio desde el icono a la izquierda de la barra de direcciones y pon Micrófono en Permitir.
+  microphoneUnblockHow: ¿Cómo lo desbloqueo?
+  microphoneTestStop: Detener prueba
+  microphoneTestFailed: "No se pudo abrir ese micrófono. Elige otro e inténtalo de nuevo."
+  targetColor: "Color de marca"
+  targetColorHint: "Resaltados de clic y acentos de exportación"
+  branding: "Marca en exportaciones"
+  brandLogo: "Logotipo"
+  uploadLogo: "Subir logotipo"
+  replaceLogo: "Reemplazar"
+  removeLogo: "Quitar logotipo"
+  footerLine: "Línea de pie de página"
+  footerLinePlaceholder: "p. ej. Confidencial — solo uso interno"
+  footerPresetConfidential: "Confidencial — solo uso interno"
+  footerPresetNoDistribute: "No distribuir"
+  attribution: 'Mostrar "Made with Ditto"'
+  saveSettings: Guardar ajustes
+  saved: Guardado
+  validatingKey: "Comprobando clave\u2026"
+  keyValid: Clave de API verificada.
+  keyInvalid: "Esa clave de API fue rechazada. Compru\xE9bala e int\xE9ntalo de nuevo."
+  keyModelRequired: Elige un modelo antes de comprobar esta clave.
+  keyModelInvalid: El modelo seleccionado no está disponible en este proveedor.
+  checkKey: Comprobar clave
+  keyCannotSpend: "Esta clave no tiene créditos, solo funcionarán los modelos gratuitos."
+  keyUnreachable: No se pudo conectar con el proveedor. Revisa tu conexión e inténtalo de nuevo.
+  modelsFound: "$1 modelos disponibles"
+  smartBlur: Desenfoque inteligente
+  privacyNotice: "Tus claves y tu audio solo van al proveedor que elijas. Nada más sale de tu navegador."
+  bugReport: "¿Encontraste un bug? Repórtalo en GitHub"
+  starCtaTitle: "¿Te gusta Ditto?"
+  starCtaMessage: "Una estrella en GitHub nos ayuda un montón y hace que más gente descubra Ditto."
+  starOnGithub: Dar estrella en GitHub
+
+blurPresets:
+  email: Correo electrónico
+  phoneNumbers: "Números de teléfono"
+  ssn: SSN
+  creditCard: "Tarjeta de crédito"
+  ipAddress: "Dirección IP"
+  macAddress: "Dirección MAC"
+
+fullview:
+  allGuides: Todas las guías
+  starred: Favoritos
+  trash: Papelera
+  searchPlaceholder: Buscar guías...
+  guideMe: "¡Guíame!"
+  untitledGuide: Guía sin título
+  writingTitle: Escribiendo un título con tus pasos capturados...
+  writingDescription: "Escribiendo una descripci\xF3n\u2026"
+  guideNotFound: "No se encontró la guía."
+  stepCount: "$1 paso"
+  stepCountPlural: "$1 pasos"
+  pageOf: "$1 / $2"
+
+sort:
+  recentFirst: Más recientes
+  oldestFirst: Más antiguas
+  alphaAZ: "A \u2014 Z"
+  mostSteps: Más pasos
+  gridView: Ver cuadrícula
+  listView: Ver lista
+
+search:
+  startTyping: Escribe para buscar una guía
+  noMatchingGuides: No se encontraron guías
+  noGuidesYet: No hay guías todavía
+
+keyboard:
+  navigate: navegar
+  open: abrir
+  close: cerrar
+
+confirmDelete:
+  title: "¿Eliminar esta guía?"
+  message: Se eliminará de forma permanente. No hay vuelta atrás.
+  confirm: Eliminar definitivamente
+
+editor:
+  backToLibrary: Volver a la biblioteca
+  openInDashboard: Abrir
+  openInDashboardHint: Ábrelo en el panel para editar o exportar
+  guideMe: "¡Guíame!"
+  guideMeUnavailable: Esta guía no tiene pasos que se puedan repetir
+  deleteThisStep: "¿Eliminar este paso?"
+  selectStep: Seleccionar paso
+  selectedCount: "$1 seleccionados"
+  deleteSelectedStep: "¿Eliminar $1 paso seleccionado?"
+  deleteSelectedSteps: "¿Eliminar $1 pasos seleccionados?"
+  copyScreenshot: Copiar captura
+  noScreenshot: Sin captura
+  edit: Editar
+  done: Listo
+  versionHistory: Historial de versiones
+  moreActions: Más acciones
+  generateDescription: Generar descripción
+  regenerateDescription: Regenerar descripción
+  generatingDescription: "Generando\u2026"
+  descriptionPlaceholder: Añadir una descripción
+  descriptionErrorNoApiKey: Añade una clave de API de IA en los ajustes para generar descripciones.
+  descriptionErrorNoSteps: Esta guía no tiene pasos descritos que resumir.
+  descriptionErrorFailed: No se pudo generar una descripción. Inténtalo de nuevo.
+  descriptionErrorSaveFailed: Se generó la descripción pero no se pudo guardar. Inténtalo de nuevo.
+  writingStepDescription: "Escribiendo descripci\xF3n\u2026"
+  transcribingStepDescription: "Transcribiendo lo que dijiste…"
+  rewriteAskAi: Preguntar a la IA
+  rewritePlaceholder: "Dile a la IA c\xF3mo editar este texto\u2026"
+  rewriteEnter: Intro
+  rewriteShorter: "M\xE1s corto"
+  rewriteDetail: "M\xE1s detalle"
+  rewriteGrammar: "Corregir gram\xE1tica"
+  rewriteFormal: "M\xE1s formal"
+  rewriteCasual: "M\xE1s informal"
+  rewriteReplace: Reemplazar
+  rewriteDiscard: Descartar
+  rewriteErrorNoApiKey: "A\xF1ade una clave de API de IA en los ajustes para reescribir texto."
+  rewriteErrorFailed: "No se pudo reescribir la selecci\xF3n. Int\xE9ntalo de nuevo."
+  rewriteErrorStale: "El texto cambi\xF3. Vuelve a seleccionarlo."
+
+capture:
+  recordSteps: Grabar pasos
+  moreStepsTitle: Capturar más pasos
+  moreStepsBody: "Los nuevos pasos se insertan aquí. Elige la pestaña que quieres grabar."
+  startCapture: Iniciar captura
+  noRecordableTabs: No hay pestañas grabables abiertas en esta ventana.
+
+blocks:
+  add: "Añadir bloque"
+  heading: Encabezado
+  callout: Nota
+  headingPlaceholder: "Título de sección"
+  calloutPlaceholder: Escribe una nota
+  deleteHeading: "¿Eliminar este encabezado?"
+  deleteCallout: "¿Eliminar esta nota?"
+  variantInfo: "Información"
+  variantWarning: Advertencia
+  variantError: Error
+  variantSuccess: "Éxito"
+  variantCustom: Personalizado
+
+history:
+  title: Historial de versiones
+  current: Actual
+  restore: Restaurar
+  unchangedVersions: "Versiones sin cambios ($1)"
+  readOnlyBanner: "Estás viendo una versión anterior. Cierra el historial de versiones para volver a la guía actual."
+  loadError: No se pudo cargar el historial de versiones. Inténtalo de nuevo.
+  restoreError: No se pudo restaurar. Inténtalo de nuevo en un momento.
+  storageFull: No hay espacio para guardar un punto de deshacer. Elimina una guía e inténtalo de nuevo.
+  empty: Todavía no hay versiones anteriores. Aparecerán aquí cuando edites esta guía.
+  nameVersion: Ponle nombre a esta versión
+  namePlaceholder: Nombre de la versión
+  allVersions: Todas las versiones
+  namedOnly: Solo versiones con nombre
+  emptyNamed: Todavía no hay versiones con nombre. Ponle nombre a una para encontrarla después.
+  renameError: No se pudo guardar el nombre. Inténtalo de nuevo.
+  changeTitle: Título cambiado
+  changeStepAdded: "$1 paso añadido"
+  changeStepsAdded: "$1 pasos añadidos"
+  changeStepRemoved: "$1 paso eliminado"
+  changeStepsRemoved: "$1 pasos eliminados"
+  changeStepEdited: "$1 paso editado"
+  changeStepsEdited: "$1 pasos editados"
+  changeStepReordered: Pasos reordenados
+  changeLink: "$1 enlace cambiado"
+  changeLinks: "$1 enlaces cambiados"
+  changeImageReplaced: "$1 imagen reemplazada"
+  changeImagesReplaced: "$1 imágenes reemplazadas"
+  changeImageCropped: "$1 imagen recortada"
+  changeImagesCropped: "$1 imágenes recortadas"
+  changeImageAnnotated: "$1 imagen anotada"
+  changeImagesAnnotated: "$1 imágenes anotadas"
+  changeImageBlurred: "$1 imagen desenfocada"
+  changeImagesBlurred: "$1 imágenes desenfocadas"
+  changeAltText: Texto alternativo editado
+
+emptyGuide:
+  title: Esta guía está vacía
+  subtitle: Graba algunos pasos para llenarla
+
+blurPanel:
+  title: Desenfoque inteligente
+  manualMode: Modo manual
+  selectElements: Selecciona elementos para desenfocar
+  done: Listo
+  doneResume: "Listo \xB7 Continuar grabación"
+  resetAll: Restablecer todo
+
+screenshotView:
+  zoomIn: Acercar
+  zoomOut: Alejar
+  saved: Guardado
+  editMenu: Editar captura
+  downloadEdited: "Imagen editada"
+  downloadOriginal: "Imagen original"
+  edit: "Editar"
+  addImage: Añadir imagen
+  replaceImage: Reemplazar imagen
+  replaceHint: "Elige una nueva imagen para este paso"
+  replaceDrop: "Haz clic para buscar o suelta una imagen aquí"
+  replaceFormats: "PNG, JPG o WebP"
+  download: Descargar
+  deleteImage: Eliminar imagen
+  deleteConfirm: "¿Eliminar esta captura? No hay vuelta atrás."
+  imageDeleted: Imagen eliminada
+  altButton: ALT
+  altLabel: Texto alternativo
+  altPlaceholder: Describe esta imagen para lectores de pantalla
+
+annotationEditor:
+  title: Editar captura
+  toolBox: Rectángulo
+  toolArrow: Flecha
+  toolText: Texto
+  toolSelect: "Seleccionar"
+  addTarget: "Añadir objetivo de clic"
+  toolRedact: Ocultar
+  toolCrop: Recortar
+  colorLabel: Color
+  textPlaceholder: Escribe algo...
+  targetBorder: Estilo del borde
+  modeAnnotate: "Anotar"
+  toolLine: "Línea"
+  duplicate: "Duplicar"
+  toolEllipse: "Elipse"
+  lineColor: "Color de línea"
+  fillColor: "Relleno"
+  lineWidth: "Grosor"
+  cornerRadius: "Radio"
+  font: "Fuente"
+  bold: "Negrita"
+  italic: "Cursiva"
+  lineHeight: "Interlineado"
+  width_none: "Sin contorno"
+  width_xs: "Muy fino"
+  width_sm: "Fino"
+  width_ms: "Medio fino"
+  width_md: "Medio"
+  width_ml: "Medio grueso"
+  width_lg: "Grueso"
+  width_xl: "Muy grueso"
+  zoom: "Zoom"
+  cropHint: "Arrastra para recortar o arrastra una esquina para redimensionar"
+  resetCrop: "Restablecer recorte"
+  arrowEnd: "Punta de flecha"
+  fontSize: "Tamaño"
+  undo: "Deshacer"
+  redo: "Rehacer"
+  end_none: "Ninguna"
+  end_bar: "Barra"
+  end_arrow: "Flecha"
+  end_arrow_solid: "Flecha sólida"
+  end_circle: "Círculo"
+  end_circle_solid: "Círculo sólido"
+  end_square: "Cuadrado"
+  end_square_solid: "Cuadrado sólido"
+  done: Listo
+
+exportPreview:
+  stepDescriptions: "Textos de paso"
+  stepDescriptionsHint: "Dibujar el texto del paso en cada fotograma"
+  resolution: "Calidad de vídeo"
+  gifQuality: "Calidad del GIF"
+  gif_low: "Baja"
+  gif_medium: "Media"
+  gif_high: "Alta"
+  res_720p: "720p"
+  res_1080p: "1080p"
+  title: "Vista previa de exportación"
+  cover: "Portada"
+  coverHint: "Una primera hoja con el título y los detalles"
+  screenshots: "Capturas"
+  screenshotsHint: "Desactiva para un documento compacto solo de texto"
+  stepUrls: "Enlaces de pasos"
+  stepUrlsHint: "Muestra la dirección de cada paso"
+  imageScale: "Tamaño de captura"
+  scale_small: "Pequeño"
+  scale_medium: "Medio"
+  scale_large: "Grande"
+  download: "Exportar $1"
+  rendering: "Actualizando vista previa"
+  videoReady: "$1 pasos · unos $2 min de vídeo"
+  videoReadyHint: "Las guías largas no se codifican automáticamente. La vista previa incluye todos los pasos."
+  videoGenerate: "Generar vista previa"
+  modeDocument: "Documento"
+  modeVideo: "Vídeo"
+  encodingVideo: "Codificando la vista previa del vídeo"
+  videoFailed: "No se pudo crear la vista previa del vídeo"
+videoPlayer:
+  stepCount: "$1 pasos"
+  previousStep: "Paso anterior"
+  nextStep: "Paso siguiente"
+  speed: "Velocidad de reproducción"
+
+exportMenu:
+  docx: DOCX
+  html: HTML
+  markdown: Markdown
+  pdf: PDF
+  gif: GIF
+  video: Vídeo
+  cancelProgress: "Cancelar · $1 %"
+
+onboarding:
+  welcomeBadge: Bienvenido
+  welcomeTitle: "¡Ya tienes Ditto instalado!"
+  welcomeMessage: "En unos pasos vas a poder capturar flujos de trabajo y generar guías automáticas. Sin cuenta, sin registros \u2014 todo se queda en tu navegador."
+  getStarted: Empezar
+  stepOf: "Paso $1 de $2"
+  aiTitle: Descripciones con IA
+  aiMessage: Conecta tu clave API para que la IA escriba las descripciones de cada paso. Es opcional y lo puedes cambiar después en Ajustes.
+  aiGenerated: Generado por IA
+  aiGeneratedDescription: "Descripción generada por IA"
+  voiceTitle: Habla y luego actúa
+  voiceMessage: "Di lo que vas a hacer y después hazlo. Ditto une tu narración con la acción que viene justo después, así que el orden es lo que más importa."
+  voiceRecordHint: "La narración permanece desactivada hasta que la actives. Usa el botón de micrófono en el panel lateral mientras grabas, así eliges guía por guía."
+  voiceDataNotice: "Tu audio se envía al proveedor que elijas aquí, con tu propia clave API. Nada más de Ditto sale de tu navegador."
+  voiceDemoLabel: "Cómo se asigna la narración"
+  voiceDemoSay: Dices
+  voiceDemoQuote: "Ahora voy a abrir los ajustes de facturación"
+  voiceDemoAct: Y luego haces clic
+  voiceDemoAction: Clic en la pestaña Facturación
+  voiceDemoBadge: De tu voz
+  blurTitle: Desenfoque inteligente
+  blurMessage: Detecta y desenfoca datos sensibles en tus capturas automáticamente. Elige qué patrones activar.
+  screenshotPreview: Vista previa
+  notEnabled: No activado
+  categoriesProtected: "$1 categorías protegidas"
+  pinTitle: Fija Ditto
+  pinMessage: Fija la extensión en tu barra para tenerla siempre a un clic. Busca el ícono de rompecabezas en Chrome y fija Ditto.
+  pinStep1Title: Haz clic en el ícono de rompecabezas
+  pinStep1Sub: Arriba a la derecha en tu barra del navegador
+  pinStep2Title: Busca Ditto
+  pinStep2Sub: En el desplegable de extensiones
+  pinStep3Title: Haz clic en el pin
+  pinStep3Sub: Ditto aparecerá en tu barra
+  pinScreenshotAlt: Fijar extensión Ditto
+  starTitle: "¿Nos das una estrella?"
+  starMessage: "Ditto es gratuito y de código abierto. Una estrella es la forma más fácil de dar las gracias, y ayuda a que otras personas lo encuentren."
+  starAction: Dar una estrella en GitHub
+  starLater: "Quizá más tarde"
+  doneTitle: "¡Ya estás listo!"
+  doneMessage: "Ditto está listo para capturar. Dale clic a \"Empezar a capturar\" en la extensión para grabar tu primera guía."
+  featureAutoCapture: Captura automática
+  featureAIAssist: Asistente de IA
+  featureVoice: "Narración por voz"
+  featureAnnotate: Anotar y ocultar
+  featureExports: Exportar a todo
+  featureSmartBlur: Desenfoque inteligente
+  openDitto: Abrir Ditto
+
+steps:
+  pressKey: "Presionar $1 en $2"
+  toggleCheckbox: "Marcar $1"
+  selectRadio: "Seleccionar $1"
+  toggleSwitch: "Alternar $1"
+  clickLink: 'Clic en enlace "$1"'
+  click: "Clic en $1"
+  typeIntoField: "Escribir en el campo $1 $2"
+  typeInto: "Escribir en $1"
+  typeSecret: "Escribir contraseña"
+  copyFrom: "Copiar de $1"
+  pasteInto: "Pegar en $1"
+  cutFrom: "Cortar de $1"
+  drag: "Arrastrar $1"
+  navigate: Ir a la página
+  defaultAction: "$1 $2"
+
+export:
+  guideLabel: "GUÍA"
+  endLabel: "GUÍA COMPLETADA"
+  stepsRange: "Pasos $1–$2 de $3"
+  stepOf: "Paso $1 de $2"
+  madeWith: "Made with Ditto"
+  created: Creado
+  source: Fuente
+  step: Paso
+  steps: Pasos
+  stepLabel: "Paso $1"
+  stepsCount: "$1 pasos"
+  createdLabel: "Creado $1"
+  sourceLabel: "Fuente: $1"
+
+background:
+  guideOnDomain: "Guía en $1"
+  newGuide: Nueva guía
+
+voice:
+  turnOn: "Activar narración por voz"
+  turnOff: "Desactivar narración por voz"
+  needsApiKey: "Añade una clave API de transcripción en Ajustes para narrar"
+  micStarting: "Iniciando el micrófono..."
+  micHearing: Te estamos oyendo
+  micQuiet: Sin sonido
+  nextRecording: "La narración por voz está activada y empieza en tu próxima grabación."
+  orderHint: "Di lo que vas a hacer y luego hazlo. Tus palabras se asignan a la siguiente acción."
+  transcribing: "Transcribiendo tu narración..."
+  transcribingHint: "Las descripciones de los pasos se actualizarán solas al terminar."
+  narrated: "Narración añadida a $1 paso."
+  narratedPlural: "Narración añadida a $1 pasos."
+  narratedNone: "Ninguna narración coincidió con tus pasos, así que las descripciones no cambiaron."
+  guideSafe: "Tu guía y tus capturas están intactas. Solo se perdió la narración."
+  openSettings: Abrir ajustes
+  errorPermissionDenied: "El navegador bloqueó el micrófono, así que no se narró nada."
+  errorNoDevice: "No se encontró ningún micrófono, así que no se narró nada."
+  errorNoAudio: "El micrófono no captó ningún sonido, así que no había nada que transcribir."
+  errorMissingApiKey: "La narración por voz necesita un proveedor de transcripción y una clave API."
+  errorStreamEnded: "El micrófono se detuvo a mitad de la grabación, así que la narración terminó antes."
+  errorNotRecording: "La narración por voz no estaba activa, así que no había nada que transcribir."
+  errorAlreadyRecording: "La narración por voz ya estaba en marcha, así que esta grabación no se narró."
+  errorUnsupported: "Este navegador no puede grabar narración por voz."
+  errorUnknown: "La narración por voz se detuvo de forma inesperada."
+
+micPermission:
+  title: Permitir acceso al micrófono
+  checkingMessage: Comprobando si Ditto ya tiene acceso al micrófono...
+  promptingMessage: Tu navegador está pidiendo permiso. Elige Permitir para que Ditto pueda grabar tu narración mientras capturas una guía. Esta pestaña se cierra sola.
+  grantedTitle: Micrófono listo
+  grantedMessage: Te devolvemos a lo que estabas haciendo.
+  deniedTitle: El acceso al micrófono está bloqueado
+  deniedMessage: Tu navegador está bloqueando el micrófono para Ditto, así que la narración por voz no puede grabar. Abre la configuración del sitio desde el icono a la izquierda de la barra de direcciones, pon Micrófono en Permitir y vuelve a intentarlo. Capturar guías sigue funcionando sin esto.
+  retry: Intentar de nuevo
+  privacy: El audio solo se guarda en memoria mientras grabas y se envía al proveedor de transcripción que hayas configurado. Ditto nunca lo almacena.
+
+aiStatus:
+  rejected: "$1 rechazó tu clave de API."
+  noCredits: "Tu cuenta de $1 no tiene créditos."
+  rateLimited: "$1 está limitando la frecuencia de las peticiones de Ditto."
+  modelInvalid: "$1 no ofrece ese modelo a tu cuenta."
+  quota: "Esa petición fue demasiado grande para este modelo."
+  network: "Ditto no pudo contactar con $1."
+  unknown: "$1 rechazó la petición."
+  actionCheckKey: "Revisa tu clave en Ajustes."
+  actionAddCredits: "Añade créditos y vuelve a comprobar la clave."
+  actionWait: "Espera un momento antes de seguir grabando."
+  actionPickModel: "Elige otro modelo en Ajustes."
+  actionConnection: "Revisa tu conexión."
+
+stepSource:
+  ai: "IA"
+  voice: "Voz"
+  basic: "Básica"
+  edited: "Editada"
+  hint: "De dónde viene esta descripción"
