@@ -19,7 +19,7 @@ You represent that you have the right to submit the contribution and that it doe
 ### Install
 
 ```bash
-git clone https://github.com/OWNER/ditto.git
+git clone https://github.com/tryskyforge/ditto.git
 cd ditto
 pnpm install
 ```

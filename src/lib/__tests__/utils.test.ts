@@ -3,7 +3,7 @@ import { extractDomain, getDomainInitial, getMostCommonDomain } from '../utils';
 
 describe('extractDomain', () => {
   it('extracts hostname from a full URL', () => {
-    expect(extractDomain('https://github.com/OWNER/ditto')).toBe('github.com');
+    expect(extractDomain('https://github.com/tryskyforge/ditto')).toBe('github.com');
   });
 
   it('strips www prefix', () => {

@@ -28,7 +28,7 @@ interface StepProps {
   total: number;
 }
 
-const REPO_URL = 'https://github.com/OWNER/ditto';
+const REPO_URL = 'https://github.com/tryskyforge/ditto';
 
 const BLUR_PRESET_I18N: Record<PresetKey, string> = {
   email: 'email',

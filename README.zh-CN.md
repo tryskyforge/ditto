@@ -74,7 +74,7 @@ Ditto 可以在几秒内把任何重复性的浏览器任务变成一份可分�
 >
 > **⭐️ 如果 Ditto 帮你节省了时间，请给仓库点个 star。** 这能帮助更多人发现它！
 
-<a href="https://github.com/OWNER/ditto">
+<a href="https://github.com/tryskyforge/ditto">
   <img width="100%" alt="在 GitHub 上给 Ditto 点 star" src="https://github.com/user-attachments/assets/80d304da-a765-4bde-bf49-b1bdcb4fe804" />
 </a>
 
@@ -220,16 +220,16 @@ MIT © [Skyforge AI](https://github.com/tryskyforge)。详情见 [LICENSE](./LIC
 [no-account-shield]: https://img.shields.io/badge/account-not%20required-4F46E5?style=flat-square&labelColor=1E1B4B
 [no-account-link]: #-隐私与存储
 
-[star-shield]: https://img.shields.io/github/stars/OWNER/ditto?style=flat-square&label=stars&color=4F46E5&labelColor=1E1B4B
-[star-link]: https://github.com/OWNER/ditto/stargazers
+[star-shield]: https://img.shields.io/github/stars/tryskyforge/ditto?style=flat-square&label=stars&color=4F46E5&labelColor=1E1B4B
+[star-link]: https://github.com/tryskyforge/ditto/stargazers
 
-[contributors-shield]: https://img.shields.io/github/contributors/OWNER/ditto?style=flat-square&labelColor=1E1B4B
-[contributors-link]: https://github.com/OWNER/ditto/graphs/contributors
+[contributors-shield]: https://img.shields.io/github/contributors/tryskyforge/ditto?style=flat-square&labelColor=1E1B4B
+[contributors-link]: https://github.com/tryskyforge/ditto/graphs/contributors
 
-[last-commit-shield]: https://img.shields.io/github/last-commit/OWNER/ditto?style=flat-square&label=commit&labelColor=1E1B4B
+[last-commit-shield]: https://img.shields.io/github/last-commit/tryskyforge/ditto?style=flat-square&label=commit&labelColor=1E1B4B
 
-[issues-shield]: https://img.shields.io/github/issues/OWNER/ditto?style=flat-square&labelColor=1E1B4B
-[issues-link]: https://github.com/OWNER/ditto/issues
+[issues-shield]: https://img.shields.io/github/issues/tryskyforge/ditto?style=flat-square&labelColor=1E1B4B
+[issues-link]: https://github.com/tryskyforge/ditto/issues
 
 [chrome-version-shield]: https://img.shields.io/chrome-web-store/v/jmfohdaflahliammccpiadmkcibohgha?label=Chrome%20Version&style=flat-square&logo=googlechrome&logoColor=C7D2FE&color=4F46E5&labelColor=1E1B4B
 [chrome-link]: https://chromewebstore.google.com/detail/ditto/EXTENSION_ID

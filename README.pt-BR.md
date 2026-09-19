@@ -74,7 +74,7 @@ Disponível em inglês, espanhol, português brasileiro, francês, alemão e chi
 >
 > **⭐️ Dá uma estrela no repo** se o Ditto te economiza tempo. Ajuda outras pessoas a descobrirem ele.
 
-<a href="https://github.com/OWNER/ditto">
+<a href="https://github.com/tryskyforge/ditto">
   <img width="100%" alt="Dê uma estrela ao Ditto no GitHub" src="https://github.com/user-attachments/assets/80d304da-a765-4bde-bf49-b1bdcb4fe804" />
 </a>
 
@@ -224,16 +224,16 @@ MIT © [Skyforge AI](https://github.com/tryskyforge). Olha o [LICENSE](./LICENSE
 [no-account-shield]: https://img.shields.io/badge/account-not%20required-4F46E5?style=flat-square&labelColor=1E1B4B
 [no-account-link]: #-armazenamento-100-local
 
-[star-shield]: https://img.shields.io/github/stars/OWNER/ditto?style=flat-square&label=stars&color=4F46E5&labelColor=1E1B4B
-[star-link]: https://github.com/OWNER/ditto/stargazers
+[star-shield]: https://img.shields.io/github/stars/tryskyforge/ditto?style=flat-square&label=stars&color=4F46E5&labelColor=1E1B4B
+[star-link]: https://github.com/tryskyforge/ditto/stargazers
 
-[contributors-shield]: https://img.shields.io/github/contributors/OWNER/ditto?style=flat-square&labelColor=1E1B4B
-[contributors-link]: https://github.com/OWNER/ditto/graphs/contributors
+[contributors-shield]: https://img.shields.io/github/contributors/tryskyforge/ditto?style=flat-square&labelColor=1E1B4B
+[contributors-link]: https://github.com/tryskyforge/ditto/graphs/contributors
 
-[last-commit-shield]: https://img.shields.io/github/last-commit/OWNER/ditto?style=flat-square&label=commit&labelColor=1E1B4B
+[last-commit-shield]: https://img.shields.io/github/last-commit/tryskyforge/ditto?style=flat-square&label=commit&labelColor=1E1B4B
 
-[issues-shield]: https://img.shields.io/github/issues/OWNER/ditto?style=flat-square&labelColor=1E1B4B
-[issues-link]: https://github.com/OWNER/ditto/issues
+[issues-shield]: https://img.shields.io/github/issues/tryskyforge/ditto?style=flat-square&labelColor=1E1B4B
+[issues-link]: https://github.com/tryskyforge/ditto/issues
 
 [chrome-version-shield]: https://img.shields.io/chrome-web-store/v/jmfohdaflahliammccpiadmkcibohgha?label=Chrome%20Version&style=flat-square&logo=googlechrome&logoColor=C7D2FE&color=4F46E5&labelColor=1E1B4B
 [chrome-link]: https://chromewebstore.google.com/detail/ditto/EXTENSION_ID

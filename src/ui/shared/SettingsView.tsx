@@ -658,7 +658,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
         </div>
 
         <a
-          href="https://github.com/OWNER/ditto/issues"
+          href="https://github.com/tryskyforge/ditto/issues"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg border border-border text-[11px] font-medium text-muted-foreground hover:text-foreground hover:border-accent transition-colors"
@@ -682,7 +682,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
               {i18n.t('settings.starCtaMessage')}
             </p>
             <a
-              href="https://github.com/OWNER/ditto"
+              href="https://github.com/tryskyforge/ditto"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary text-[10px] font-semibold text-accent hover:bg-accent hover:text-white transition-colors"
