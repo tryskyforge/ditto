@@ -200,7 +200,7 @@ Voir [CONTRIBUTING.md](./CONTRIBUTING.md) pour le setup dev, la structure du pro
 
 ## 📜 Licence
 
-MIT © [Akash Rajput](https://github.com/OWNER). Voir [LICENSE](./LICENSE) pour les détails.
+MIT © [Skyforge AI](https://github.com/tryskyforge). Voir [LICENSE](./LICENSE) pour les détails.
 
 <div align="right">
 

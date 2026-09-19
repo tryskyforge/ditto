@@ -217,7 +217,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup, project layout, 
 
 ## 📜 License
 
-MIT © [Akash Rajput](https://github.com/OWNER). See [LICENSE](./LICENSE) for details.
+MIT © [Skyforge AI](https://github.com/tryskyforge). See [LICENSE](./LICENSE) for details.
 
 <div align="right">
 

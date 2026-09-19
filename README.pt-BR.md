@@ -200,7 +200,7 @@ Olha o [CONTRIBUTING.md](./CONTRIBUTING.md) pro setup de dev, a estrutura do pro
 
 ## 📜 Licença
 
-MIT © [Akash Rajput](https://github.com/OWNER). Olha o [LICENSE](./LICENSE) pros detalhes.
+MIT © [Skyforge AI](https://github.com/tryskyforge). Olha o [LICENSE](./LICENSE) pros detalhes.
 
 <div align="right">
 

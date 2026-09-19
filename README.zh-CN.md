@@ -196,7 +196,7 @@ Ditto 会自动检测并模糊截图中的敏感数据：邮箱、电话号码�
 
 ## 📜 许可证
 
-MIT © [Akash Rajput](https://github.com/OWNER)。详情见 [LICENSE](./LICENSE)。
+MIT © [Skyforge AI](https://github.com/tryskyforge)。详情见 [LICENSE](./LICENSE)。
 
 <div align="right">
 
