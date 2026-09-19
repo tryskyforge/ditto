@@ -12,9 +12,9 @@ const STYLES = `
 
   .highlight {
     position: fixed;
-    border: 2px solid #4F46E5;
+    border: 2px solid #3D6B47;
     border-radius: 4px;
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15), 0 0 12px rgba(79, 70, 229, 0.2);
+    box-shadow: 0 0 0 3px rgba(61, 107, 71, 0.15), 0 0 12px rgba(61, 107, 71, 0.2);
     pointer-events: none;
     transition: all 0.3s ease;
   }
@@ -37,20 +37,20 @@ const STYLES = `
     width: 22px;
     height: 22px;
     border-radius: 50%;
-    background: #1E1B4B;
+    background: #23362B;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 10px;
     font-weight: 800;
-    color: #C7D2FE;
+    color: #CFE0C8;
     flex-shrink: 0;
   }
 
   .label .text {
     font-size: 12px;
     font-weight: 600;
-    color: #1E1B4B;
+    color: #23362B;
     line-height: 1.35;
   }
 `;

@@ -9,7 +9,7 @@ export default function App() {
         justifyContent: 'center',
         minHeight: '100vh',
         width: '100%',
-        background: 'radial-gradient(ellipse at center, #fafafc 0%, #f0f2fa 60%, #e5e8f4 100%)',
+        background: 'radial-gradient(ellipse at center, #FAFAF7 0%, #f0f2fa 60%, #e5e8f4 100%)',
       }}
     >
       <div
@@ -19,7 +19,7 @@ export default function App() {
           background: 'white',
           borderRadius: '16px',
           border: '1px solid var(--color-border)',
-          boxShadow: '0 8px 40px rgba(30,27,75,0.08)',
+          boxShadow: '0 8px 40px rgba(35, 54, 43,0.08)',
           overflow: 'hidden',
         }}
       >

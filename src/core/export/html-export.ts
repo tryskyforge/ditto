@@ -45,7 +45,7 @@ function blockSection(step: Step): string {
   if (step.blockType === 'heading') {
     return `
       <section data-block="heading" style="margin-bottom:26px;">
-        <h2 style="font-size:24px;font-weight:700;line-height:1.3;color:#1E1B4B;white-space:pre-wrap;padding-bottom:10px;border-bottom:2px solid #1E1B4B;">${escapeHtml(step.description)}</h2>
+        <h2 style="font-size:24px;font-weight:700;line-height:1.3;color:#23362B;white-space:pre-wrap;padding-bottom:10px;border-bottom:2px solid #23362B;">${escapeHtml(step.description)}</h2>
       </section>`;
   }
 
@@ -53,7 +53,7 @@ function blockSection(step: Step): string {
   const label = variantLabel(step.calloutVariant ?? 'info');
   return `
       <section data-block="callout" role="note" aria-label="${escapeHtml(label)}" style="margin-bottom:52px;padding:14px 18px;border-left:3px solid ${accent};border-radius:8px;background:${tint(accent)};">
-        <p style="margin:0;font-size:15px;line-height:1.6;color:#1E1B4B;white-space:pre-wrap;">${escapeHtml(step.description)}</p>
+        <p style="margin:0;font-size:15px;line-height:1.6;color:#23362B;white-space:pre-wrap;">${escapeHtml(step.description)}</p>
       </section>`;
 }
 
@@ -108,8 +108,8 @@ export async function exportGuideAsHTML(
     stepSections.push(`
       <section data-step="${number}" style="display:flex;gap:8mm;margin-bottom:13mm;">
         <div style="flex:0 0 22mm;font-size:34px;font-weight:700;color:${accent};line-height:.9;">${stepNumber}</div>
-        <div style="flex:1;min-width:0;border-top:1px solid #1E1B4B;padding-top:6px;">
-          <p style="margin:0;font-size:17px;font-weight:700;line-height:1.45;color:#1E1B4B;overflow-wrap:anywhere;">${escapeHtml(step.description)}${
+        <div style="flex:1;min-width:0;border-top:1px solid #23362B;padding-top:6px;">
+          <p style="margin:0;font-size:17px;font-weight:700;line-height:1.45;color:#23362B;overflow-wrap:anywhere;">${escapeHtml(step.description)}${
             urlHtml ? `<span style="color:#6B7280;font-weight:400;"> &nbsp;·&nbsp; </span>${urlHtml}` : ''
           }</p>
           ${imgHtml}
@@ -139,7 +139,7 @@ export async function exportGuideAsHTML(
   const metaCell = (label: string, value: string) => `
         <div style="flex:0 0 190px;">
           <div style="font-size:11px;font-weight:700;color:#6B7280;letter-spacing:0.06em;">${label}</div>
-          <div style="font-size:17px;color:#1E1B4B;${metaValue}">${value}</div>
+          <div style="font-size:17px;color:#23362B;${metaValue}">${value}</div>
         </div>`;
 
   const leadHtml =
@@ -159,7 +159,7 @@ export async function exportGuideAsHTML(
       </div>
       ${guide.description ? `<p style="font-size:16px;color:#6B7280;line-height:1.6;margin-top:14px;max-width:60ch;overflow-wrap:anywhere;${clamp(MAX_DESC_LINES)}">${escapeHtml(guide.description)}</p>` : ''}
     </div>
-    <div style="border-top:2px solid #1E1B4B;padding-top:18px;display:flex;align-items:baseline;">
+    <div style="border-top:2px solid #23362B;padding-top:18px;display:flex;align-items:baseline;">
       <div style="flex:0 0 190px;">
         <div style="font-size:11px;font-weight:700;color:#6B7280;letter-spacing:0.06em;">${i18n.t('export.steps').toUpperCase()}</div>
         <div style="font-size:38px;font-weight:700;color:${accent};line-height:1;${metaValue}">${String(actionSteps(steps).length).padStart(2, '0')}</div>
@@ -192,7 +192,7 @@ export async function exportGuideAsHTML(
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; max-width: 860px; margin: 0 auto; padding: 56px 28px; color: #1E1B4B; background: #fff; }
+    body { font-family: 'Poppins', sans-serif; max-width: 860px; margin: 0 auto; padding: 56px 28px; color: #23362B; background: #fff; }
     a { text-decoration: none; }
   </style>
 </head>

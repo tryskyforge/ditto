@@ -228,20 +228,22 @@ All colors are defined as CSS variables in `src/ui/global.css` and used via Tail
 
 | Token | Color | Usage |
 |-------|-------|-------|
-| `--color-foreground` | `#1E1B4B` | Primary text (deep navy) |
+| `--color-foreground` | `#23362B` | Primary text (deep pine) |
 | `--color-muted-foreground` | `#6B7280` | Secondary text |
-| `--color-border` | `#C7D2FE` | Borders, dividers (lavender) |
-| `--color-secondary` | `#EEF2FF` | Light wash backgrounds |
-| `--color-accent` | `#4F46E5` | Icons, links, focus rings, toggles, meters (indigo) — never a button fill |
-| `--color-primary` | `#1E1B4B` | Primary buttons, badges, dark backgrounds |
-| `--color-primary-foreground` | `#C7D2FE` | Text on dark backgrounds |
-| `--color-lavender` | `#C7D2FE` | Soft accent |
-| `--color-purple` | `#4F46E5` | Primary indigo |
-| `--color-deep` | `#1E1B4B` | Deepest navy |
-| `--color-violet` | `#38BDF8` | Sky blue accent |
+| `--color-border` | `#CFE0C8` | Borders, dividers (sage) |
+| `--color-secondary` | `#EEF4EA` | Light wash backgrounds |
+| `--color-accent` | `#3D6B47` | Icons, links, focus rings, toggles, meters (forest green) — never a button fill |
+| `--color-primary` | `#23362B` | Primary buttons, badges, dark backgrounds |
+| `--color-primary-foreground` | `#CFE0C8` | Text on dark backgrounds |
+| `--color-lavender` | `#CFE0C8` | Soft accent (legacy token name) |
+| `--color-purple` | `#3D6B47` | Forest green (legacy token name) |
+| `--color-deep` | `#23362B` | Deepest pine |
+| `--color-violet` | `#7FAE72` | Leaf green accent (legacy token name) |
 | `--color-success` | `#059669` | Success green |
 
 Font: Poppins (loaded via `@fontsource/poppins`).
+
+Mascot: a cosy panda with a green scarf and a coffee mug (`src/ui/shared/MascotIcon.tsx`, `public/icon.svg`, `public/mascot.svg`). The forest-green tile of the icon is the brand colour.
 
 ## Key Technical Details
 
@@ -249,7 +251,7 @@ Font: Poppins (loaded via `@fontsource/poppins`).
 - **Hover ring hidden when work is enqueued** (`CaptureController.enqueue`, instant `display:none`), and `show()` stays suppressed until the queue drains — a second click while the first capture is still in flight can't bring the ring back before the screenshot. `pointerdown` hides it earlier still, on top of `captureAction`'s 3-frame wait
 - **Input session** aggregates all typing on a field into one step — click creates it, keystrokes update description, finalize takes final screenshot
 - **DOM context** sent as text to AI instead of screenshots — 15-30x cheaper per step
-- **Hover ring** (`lib/hover-ring.ts`) is a closed-Shadow-DOM host marked `data-ditto-ignore`, shared by recording and the blur picker (purple). Recording reads the user's `targetColor` so the live ring matches the dashed target baked into screenshots. Never drawn on `iframe`/`embed`/`object` — a capture inside a subframe can't hide the top frame's ring
+- **Hover ring** (`lib/hover-ring.ts`) is a closed-Shadow-DOM host marked `data-ditto-ignore`, shared by recording and the blur picker (green). Recording reads the user's `targetColor` so the live ring matches the dashed target baked into screenshots. Never drawn on `iframe`/`embed`/`object` — a capture inside a subframe can't hide the top frame's ring
 - **Content script injection** pings first, falls back to `chrome.scripting.executeScript()` for tabs without the script
 - **xstate snapshot** persisted to sessionStorage so the state machine survives service worker restarts
 - **Recording notification** uses `animationend` event (not hardcoded delays) for timing

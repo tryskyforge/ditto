@@ -76,7 +76,7 @@ describe('drawAnnotation redact', () => {
     const r = recorder();
     drawAnnotation(r.ctx, { id: 'r1', type: 'redact', style: 'solid', x: 40, y: 50, w: 120, h: 30 }, 0, 0);
 
-    expect(r.first('set:fillStyle')).toEqual(['#1E1B4B']);
+    expect(r.first('set:fillStyle')).toEqual(['#23362B']);
     expect(r.first('fillRect')).toEqual([40, 50, 120, 30]);
     expect(r.count('drawImage')).toBe(0);
   });
@@ -186,7 +186,7 @@ describe('drawAnnotation ellipse', () => {
 });
 
 describe('drawAnnotation target', () => {
-  const base = { id: 't', type: 'target', x: 12, y: 14, w: 200, h: 90, color: '#4F46E5' } as const;
+  const base = { id: 't', type: 'target', x: 12, y: 14, w: 200, h: 90, color: '#3D6B47' } as const;
 
   it('dashes the outline when the border is dashed', () => {
     const r = recorder();

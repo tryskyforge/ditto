@@ -236,12 +236,12 @@ describe('diffSnapshots', () => {
   it('counts a changed click target as annotated', () => {
     const a = like([step('s1', 'Same', 'sc1')], {
       screenshots: [
-        shot('sc1', 's1', { target: { x: 1, y: 2, width: 3, height: 4, border: 'dashed', color: '#4F46E5' } }),
+        shot('sc1', 's1', { target: { x: 1, y: 2, width: 3, height: 4, border: 'dashed', color: '#3D6B47' } }),
       ],
     });
     const b = like([step('s1', 'Same', 'sc1')], {
       screenshots: [
-        shot('sc1', 's1', { target: { x: 1, y: 2, width: 3, height: 4, border: 'solid', color: '#4F46E5' } }),
+        shot('sc1', 's1', { target: { x: 1, y: 2, width: 3, height: 4, border: 'solid', color: '#3D6B47' } }),
       ],
     });
 
@@ -401,7 +401,7 @@ describe('diffSnapshots', () => {
   it('reports only the replacement when a fully edited screenshot is replaced', () => {
     const edited: ScreenshotEdits = {
       viewport: { x: 1, y: 2, width: 30, height: 40 },
-      target: { x: 0, y: 0, width: 5, height: 5, border: 'dashed', color: '#4F46E5' },
+      target: { x: 0, y: 0, width: 5, height: 5, border: 'dashed', color: '#3D6B47' },
       annotations: [box, redact],
       alt: 'hello',
     };
@@ -455,7 +455,7 @@ describe('diffSnapshots', () => {
           's1',
           {
             annotations: [],
-            target: { x: 4, y: 6, width: 8, height: 10, border: 'dashed', color: '#4F46E5' },
+            target: { x: 4, y: 6, width: 8, height: 10, border: 'dashed', color: '#3D6B47' },
           },
           captured,
         ),
@@ -480,7 +480,7 @@ describe('diffSnapshots', () => {
         shot(
           'sc1',
           's1',
-          { target: { x: 40, y: 6, width: 8, height: 10, border: 'dashed', color: '#4F46E5' } },
+          { target: { x: 40, y: 6, width: 8, height: 10, border: 'dashed', color: '#3D6B47' } },
           captured,
         ),
       ],

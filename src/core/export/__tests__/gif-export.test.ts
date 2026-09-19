@@ -12,7 +12,7 @@ const branding = vi.hoisted(() => ({
     logo: null as null | { dataUrl: string; width: number; height: number },
     footer: '',
     attribution: false,
-    accent: '#4F46E5',
+    accent: '#3D6B47',
     custom: false,
   },
 }));
@@ -113,7 +113,7 @@ const opts = (o = {}) => ({ ...DEFAULT_EXPORT_OPTIONS, cover: false, ...o });
 beforeEach(() => {
   rec.written = [];
   rec.finished = 0;
-  branding.value = { logo: null, footer: '', attribution: false, accent: '#4F46E5', custom: false };
+  branding.value = { logo: null, footer: '', attribution: false, accent: '#3D6B47', custom: false };
 
   class FakeOffscreen {
     constructor(

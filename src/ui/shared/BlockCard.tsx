@@ -106,7 +106,7 @@ export default function BlockCard({
                     style={{
                       background:
                         option === 'custom' && variant !== 'custom'
-                          ? 'linear-gradient(135deg,#DC2626,#4F46E5,#059669)'
+                          ? 'linear-gradient(135deg,#DC2626,#3D6B47,#059669)'
                           : calloutAccent({ ...step, calloutVariant: option }),
                     }}
                   />

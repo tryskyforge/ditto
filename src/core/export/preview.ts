@@ -35,7 +35,7 @@ const PREVIEW_CSS = `
     gap: 12px;
     font-size: 11px;
     font-weight: 700;
-    color: #1E1B4B;
+    color: #23362B;
     border-bottom: 1px solid #E5E7EB;
     overflow: hidden;
     white-space: nowrap;

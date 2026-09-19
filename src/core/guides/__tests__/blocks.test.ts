@@ -161,7 +161,7 @@ describe('calloutAccent', () => {
 
 describe('tint', () => {
   it('lightens every channel without passing white', () => {
-    const source = '#4F46E5';
+    const source = '#3D6B47';
     const result = tint(source);
 
     expect(result).toMatch(HEX);
@@ -176,14 +176,14 @@ describe('tint', () => {
   });
 
   it('scales between the original colour and white', () => {
-    expect(tint('#4F46E5', 1)).toBe('#4F46E5');
-    expect(tint('#4F46E5', 0)).toBe('#FFFFFF');
+    expect(tint('#3D6B47', 1)).toBe('#3D6B47');
+    expect(tint('#3D6B47', 0)).toBe('#FFFFFF');
     expect(tint('#000000', 0.12)).toBe('#E0E0E0');
   });
 
   it('leans further toward white as the ratio shrinks', () => {
-    const light = hexToRgb(tint('#4F46E5', 0.1))!;
-    const dark = hexToRgb(tint('#4F46E5', 0.5))!;
+    const light = hexToRgb(tint('#3D6B47', 0.1))!;
+    const dark = hexToRgb(tint('#3D6B47', 0.5))!;
 
     for (let i = 0; i < 3; i++) expect(light[i]).toBeGreaterThan(dark[i]);
   });

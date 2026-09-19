@@ -77,7 +77,7 @@ function buildMascotSVG(): string {
         </rect>
       </mask>
     </defs>
-    <g opacity="0.3">${pandaPaths('#0F0E2A', '#252360', '#1B2A1F', '#1B2A1F', false)}
+    <g opacity="0.3">${pandaPaths('#14201A', '#2A3D30', '#1B2A1F', '#1B2A1F', false)}
     </g>
     <g mask="url(#riseMask)">${pandaPaths('#22232B', '#FBF8F2', '#6E9A5E', '#4F7A45', true)}
     </g>

@@ -16,7 +16,7 @@ const branding = vi.hoisted(() => ({
     logo: null as null | { dataUrl: string; width: number; height: number },
     footer: '',
     attribution: false,
-    accent: '#4F46E5',
+    accent: '#3D6B47',
     custom: false,
   },
 }));
@@ -144,7 +144,7 @@ beforeEach(() => {
   state.calls = [];
   state.pages = 1;
   state.current = 1;
-  branding.value = { logo: null, footer: '', attribution: false, accent: '#4F46E5', custom: false };
+  branding.value = { logo: null, footer: '', attribution: false, accent: '#3D6B47', custom: false };
   vi.mocked(renderScreenshot).mockClear();
   vi.mocked(renderScreenshot).mockResolvedValue(new Blob(['jpeg']));
 });

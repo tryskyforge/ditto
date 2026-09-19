@@ -30,7 +30,7 @@ const shot = (target: ClickTarget | null | undefined, bounds = BOUNDS, pixelRati
     edits: { target },
   }) as Screenshot;
 
-const captured: ClickTarget = { x: 20, y: 40, width: 200, height: 80, border: 'dashed', color: '#4F46E5' };
+const captured: ClickTarget = { x: 20, y: 40, width: 200, height: 80, border: 'dashed', color: '#3D6B47' };
 
 describe('stepRequiresManual', () => {
   it('requires manual advance when the step has no element metadata', () => {

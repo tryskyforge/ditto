@@ -46,8 +46,8 @@ export default function SearchResults({ results, query, selected, onSelect, onHo
             style={
               i === selected
                 ? {
-                    background: 'rgba(199,210,254,0.15)',
-                    border: '1px solid rgba(199,210,254,0.2)',
+                    background: 'rgba(207, 224, 200,0.15)',
+                    border: '1px solid rgba(207, 224, 200,0.2)',
                     color: 'var(--color-lavender)',
                   }
                 : {
@@ -69,14 +69,14 @@ export default function SearchResults({ results, query, selected, onSelect, onHo
             {r.guide.description && (
               <p
                 className="text-[11px] mt-0.5 line-clamp-1"
-                style={{ color: i === selected ? 'rgba(199,210,254,0.6)' : 'var(--color-muted-foreground)' }}
+                style={{ color: i === selected ? 'rgba(207, 224, 200,0.6)' : 'var(--color-muted-foreground)' }}
               >
                 {r.guide.description}
               </p>
             )}
             <p
               className="text-[10px] mt-0.5"
-              style={{ color: i === selected ? 'rgba(199,210,254,0.6)' : 'var(--color-muted-foreground)' }}
+              style={{ color: i === selected ? 'rgba(207, 224, 200,0.6)' : 'var(--color-muted-foreground)' }}
             >
               {r.guide.stepIds.length !== 1
                 ? i18n.t('fullview_stepCountPlural', [String(r.guide.stepIds.length)])

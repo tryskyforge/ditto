@@ -20,7 +20,7 @@ const branding = vi.hoisted(() => ({
     logo: null as null | { dataUrl: string; width: number; height: number },
     footer: '',
     attribution: false,
-    accent: '#4F46E5',
+    accent: '#3D6B47',
     custom: false,
   },
 }));
@@ -159,7 +159,7 @@ beforeEach(() => {
   rec.finalized = 0;
   rec.cancelled = 0;
   rec.buffer = true;
-  branding.value = { logo: null, footer: '', attribution: false, accent: '#4F46E5', custom: false };
+  branding.value = { logo: null, footer: '', attribution: false, accent: '#3D6B47', custom: false };
   vi.mocked(renderScreenshot).mockClear();
   vi.mocked(renderScreenshot).mockResolvedValue(new Blob(['webp']));
 

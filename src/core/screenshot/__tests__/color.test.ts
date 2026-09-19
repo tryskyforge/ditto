@@ -7,7 +7,7 @@ describe('normalizeHex', () => {
   });
 
   it('accepts a value without the hash', () => {
-    expect(normalizeHex('4F46E5')).toBe('#4F46E5');
+    expect(normalizeHex('3D6B47')).toBe('#3D6B47');
   });
 
   it('rejects anything that is not a hex colour', () => {
@@ -17,7 +17,7 @@ describe('normalizeHex', () => {
 });
 
 describe('hsv round trip', () => {
-  it.each(['#4F46E5', '#FFFFFF', '#000000', '#22C55E', '#EAB308'])('survives %s', (hex) => {
+  it.each(['#3D6B47', '#FFFFFF', '#000000', '#22C55E', '#EAB308'])('survives %s', (hex) => {
     expect(hsvToHex(hexToHsv(hex))).toBe(hex);
   });
 
@@ -34,7 +34,7 @@ describe('rgbToHex', () => {
 
 describe('shadeOf', () => {
   it('darkens without shifting the hue', () => {
-    expect(hexToHsv(shadeOf('#4F46E5', 0.5)).h).toBeCloseTo(hexToHsv('#4F46E5').h, 0);
+    expect(hexToHsv(shadeOf('#3D6B47', 0.5)).h).toBeCloseTo(hexToHsv('#3D6B47').h, 0);
   });
 
   it('never exceeds full brightness', () => {

@@ -32,7 +32,7 @@ const ZOOM_PAD_RATIO = 0.15;
 const MAX_UPSCALE = 1.5;
 const RESERVE_PASSES = 3;
 
-const BACKDROP = '#1E1B4B';
+const BACKDROP = '#23362B';
 const MUTED = '#9CA3AF';
 const ON_DARK = '#FFFFFF';
 
@@ -70,8 +70,8 @@ const RENDER_OPTIONS = { format: 'image/webp', quality: 0.9 } as const;
 
 const BLOCK_BLUR = 'blur(24px)';
 const BLOCK_OVERSCAN = 1.12;
-const BLOCK_WASH = 'rgba(30, 27, 75, 0.7)';
-const BLOCK_WASH_FLAT = 'rgba(30, 27, 75, 0.86)';
+const BLOCK_WASH = 'rgba(35, 54, 43, 0.7)';
+const BLOCK_WASH_FLAT = 'rgba(35, 54, 43, 0.86)';
 const BLOCK_MAX_WIDTH_RATIO = 0.72;
 const HEADING_FONT_SIZE = 58;
 const HEADING_LINE_HEIGHT = 74;

@@ -88,7 +88,7 @@ describe('resolveTarget', () => {
   });
 
   it('reports no target rather than one pinned to the origin when the element vanished before measuring', () => {
-    const zeroed = { x: 0, y: 0, width: 0, height: 0, border: 'dashed' as const, color: '#4F46E5' };
+    const zeroed = { x: 0, y: 0, width: 0, height: 0, border: 'dashed' as const, color: '#3D6B47' };
     expect(resolveTarget(makeScreenshot({ edits: { target: zeroed } }))).toBe(null);
     expect(resolveTarget(makeScreenshot({ bounds: { x: 0, y: 0, width: 0, height: 0 }, pixelRatio: 2 }))).toBe(null);
   });
@@ -163,9 +163,9 @@ describe('cropTo', () => {
   });
 });
 
-const box: Annotation = { id: 'a', type: 'box', x: 100, y: 100, w: 200, h: 100, color: '#4F46E5' };
-const arrow: Annotation = { id: 'b', type: 'arrow', x1: 10, y1: 10, x2: 110, y2: 60, color: '#4F46E5' };
-const stroke: Annotation = { id: 'c', type: 'freehand', points: [0, 0, 50, 80, 20, 40], color: '#4F46E5' };
+const box: Annotation = { id: 'a', type: 'box', x: 100, y: 100, w: 200, h: 100, color: '#3D6B47' };
+const arrow: Annotation = { id: 'b', type: 'arrow', x1: 10, y1: 10, x2: 110, y2: 60, color: '#3D6B47' };
+const stroke: Annotation = { id: 'c', type: 'freehand', points: [0, 0, 50, 80, 20, 40], color: '#3D6B47' };
 
 describe('annotationBounds', () => {
   it('returns the rect for a box', () => {

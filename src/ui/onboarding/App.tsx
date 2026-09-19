@@ -93,7 +93,7 @@ function WelcomeStep({ onNext }: { onNext: () => void }) {
         </div>
       </div>
       <div className="w-1/2 bg-deep flex items-center justify-center relative overflow-hidden">
-        <div className="absolute w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(79,70,229,0.2),transparent_70%)] top-[10%] right-[-10%]" />
+        <div className="absolute w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(61, 107, 71,0.2),transparent_70%)] top-[10%] right-[-10%]" />
         <div className="absolute w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(56,189,248,0.1),transparent_70%)] bottom-[10%] left-[10%]" />
         <div className="animate-[float_3s_ease-in-out_infinite]">
           <MascotLarge size={280} />
@@ -372,7 +372,7 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
         </div>
       </div>
       <div className="w-1/2 bg-secondary flex items-center justify-center relative overflow-hidden">
-        <div className="absolute w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(79,70,229,0.06),transparent_70%)] top-[20%] left-[30%]" />
+        <div className="absolute w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(61, 107, 71,0.06),transparent_70%)] top-[20%] left-[30%]" />
         <div className="animate-[float_4s_ease-in-out_infinite] relative">
           <svg
             className="absolute -top-4 right-6 w-6 h-6 text-violet-light opacity-40"
@@ -558,7 +558,7 @@ function VoiceStep({ onNext, onSkip, onBack, index, total }: StepProps) {
         </div>
       </div>
       <div className="w-1/2 bg-deep flex items-center justify-center relative overflow-hidden">
-        <div className="absolute w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(79,70,229,0.22),transparent_70%)] top-[15%] right-[-5%]" />
+        <div className="absolute w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(61, 107, 71,0.22),transparent_70%)] top-[15%] right-[-5%]" />
         <div className="animate-[float_4s_ease-in-out_infinite] relative z-10">
           <div className="bg-white rounded-2xl p-7 shadow-lg" style={{ minWidth: 340 }}>
             <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mb-4">
@@ -696,7 +696,7 @@ function SmartBlurStep({ onNext, onBack, index, total }: StepProps) {
         </div>
       </div>
       <div className="w-1/2 bg-deep flex items-center justify-center relative overflow-hidden">
-        <div className="absolute w-[350px] h-[350px] bg-[radial-gradient(circle,rgba(79,70,229,0.25),transparent_70%)] bottom-[20%] right-[20%]" />
+        <div className="absolute w-[350px] h-[350px] bg-[radial-gradient(circle,rgba(61, 107, 71,0.25),transparent_70%)] bottom-[20%] right-[20%]" />
         <div className="animate-[float_4s_ease-in-out_infinite] relative z-10">
           <div className="bg-white rounded-2xl p-7 shadow-lg" style={{ minWidth: 320 }}>
             <p className="text-xs font-semibold text-foreground mb-4">{i18n.t('onboarding.screenshotPreview')}</p>
@@ -817,7 +817,7 @@ function PinExtensionStep({ onNext, onBack, index, total }: StepProps) {
         </div>
       </div>
       <div className="w-1/2 bg-deep flex items-center justify-center relative overflow-hidden">
-        <div className="absolute w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(79,70,229,0.2),transparent_70%)] top-[10%] right-[-10%]" />
+        <div className="absolute w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(61, 107, 71,0.2),transparent_70%)] top-[10%] right-[-10%]" />
         <div className="animate-[float_4s_ease-in-out_infinite] relative z-10">
           <img
             src="/pin-screenshot.png"
@@ -888,7 +888,7 @@ function GitHubStarStep({ onSkip, onBack, index, total }: StepProps) {
         </div>
       </div>
       <div className="w-1/2 bg-deep flex items-center justify-center relative overflow-hidden">
-        <div className="absolute w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(79,70,229,0.2),transparent_70%)] top-[10%] right-[-10%]" />
+        <div className="absolute w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(61, 107, 71,0.2),transparent_70%)] top-[10%] right-[-10%]" />
         <div className="absolute w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(250,204,21,0.08),transparent_70%)] bottom-[14%] left-[8%]" />
         <div className="animate-[float_3s_ease-in-out_infinite] relative z-10">
           <MascotWithStar size={300} />

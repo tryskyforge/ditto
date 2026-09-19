@@ -3,18 +3,18 @@ import { changedSettings } from '../settings-autosave';
 
 describe('changedSettings', () => {
   it('writes nothing when a render changed no value', () => {
-    const snapshot = { targetColor: '#4F46E5', voiceEnabled: true };
+    const snapshot = { targetColor: '#3D6B47', voiceEnabled: true };
     expect(changedSettings({ ...snapshot }, snapshot)).toBeNull();
   });
 
   it('writes only the field the user touched', () => {
-    const previous = { targetColor: '#4F46E5', voiceEnabled: true, aiModel: 'gpt-4o-mini' };
+    const previous = { targetColor: '#3D6B47', voiceEnabled: true, aiModel: 'gpt-4o-mini' };
     const next = { ...previous, targetColor: '#059669' };
     expect(changedSettings(next, previous)).toEqual({ targetColor: '#059669' });
   });
 
   it('never rewrites a value another surface owns', () => {
-    const previous = { targetColor: '#4F46E5', voiceEnabled: false };
+    const previous = { targetColor: '#3D6B47', voiceEnabled: false };
     const next = { targetColor: '#059669', voiceEnabled: false };
     expect(changedSettings(next, previous)).not.toHaveProperty('voiceEnabled');
   });

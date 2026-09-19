@@ -136,7 +136,7 @@ export function drawAnnotation(ctx: Ctx, a: Annotation, originX: number, originY
       break;
     case 'redact':
       if (a.style === 'solid') {
-        ctx.fillStyle = '#1E1B4B';
+        ctx.fillStyle = '#23362B';
         ctx.fillRect(a.x, a.y, a.w, a.h);
       } else {
         ctx.filter = 'blur(12px)';

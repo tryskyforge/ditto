@@ -91,8 +91,8 @@ type DragState =
   | { mode: 'cropMove'; rect: ScreenshotBounds; lastX: number; lastY: number }
   | { mode: 'draw'; start: { x: number; y: number }; shape: Annotation };
 
-const COLORS = ['#4F46E5', '#DC2626', '#059669', '#F59E0B', '#1E1B4B'];
-const SELECTION_COLOR = '#4F46E5';
+const COLORS = ['#3D6B47', '#DC2626', '#059669', '#F59E0B', '#23362B'];
+const SELECTION_COLOR = '#3D6B47';
 const BRACKET_ARM = 26;
 const BRACKET_THICKNESS = 4;
 const MIN_SHAPE_SIZE = 6;
@@ -525,7 +525,7 @@ export default function AnnotationEditor({ screenshot, tool, onDone, onCancel }:
     if (mode === 'crop') {
       const frame = cropDraft ?? viewport ?? { x: 0, y: 0, width: canvas.width, height: canvas.height };
       ctx.save();
-      ctx.fillStyle = 'rgba(30, 27, 75, 0.55)';
+      ctx.fillStyle = 'rgba(35, 54, 43, 0.55)';
       ctx.beginPath();
       ctx.rect(0, 0, canvas.width, canvas.height);
       ctx.rect(frame.x, frame.y, frame.width, frame.height);

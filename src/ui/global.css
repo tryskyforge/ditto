@@ -8,34 +8,34 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: #fafafc;
-  --color-foreground: #1E1B4B;
+  --color-background: #FAFAF7;
+  --color-foreground: #23362B;
   --color-card: #fff;
-  --color-card-foreground: #1E1B4B;
+  --color-card-foreground: #23362B;
   --color-popover: #fff;
-  --color-popover-foreground: #1E1B4B;
-  --color-primary: #1E1B4B;
-  --color-primary-foreground: #C7D2FE;
-  --color-secondary: #EEF2FF;
-  --color-secondary-foreground: #1E1B4B;
-  --color-muted: #EEF2FF;
+  --color-popover-foreground: #23362B;
+  --color-primary: #23362B;
+  --color-primary-foreground: #CFE0C8;
+  --color-secondary: #EEF4EA;
+  --color-secondary-foreground: #23362B;
+  --color-muted: #EEF4EA;
   --color-muted-foreground: #6B7280;
-  --color-accent: #4F46E5;
-  --color-accent-foreground: #EEF2FF;
+  --color-accent: #3D6B47;
+  --color-accent-foreground: #EEF4EA;
   --color-destructive: #DC2626;
   --color-destructive-foreground: #fff;
-  --color-border: #C7D2FE;
-  --color-input: #C7D2FE;
-  --color-ring: #4F46E5;
+  --color-border: #CFE0C8;
+  --color-input: #CFE0C8;
+  --color-ring: #3D6B47;
   --radius: 0.5rem;
 
-  --color-violet: #818CF8;
-  --color-violet-light: #A78BFA;
-  --color-violet-dark: #3730A3;
-  --color-violet-mid: #3730A3;
-  --color-lavender: #C7D2FE;
-  --color-purple: #4F46E5;
-  --color-deep: #1E1B4B;
+  --color-violet: #7FAE72;
+  --color-violet-light: #9DBB8F;
+  --color-violet-dark: #2F4F3A;
+  --color-violet-mid: #2F4F3A;
+  --color-lavender: #CFE0C8;
+  --color-purple: #3D6B47;
+  --color-deep: #23362B;
   --color-success: #059669;
 }
 

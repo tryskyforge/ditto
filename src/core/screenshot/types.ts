@@ -3,7 +3,7 @@ import type { ScreenshotBounds } from '@/core/guides/types';
 export type TargetBorder = 'dashed' | 'solid';
 
 export const TARGET_COLORS = [
-  '#4F46E5',
+  '#3D6B47',
   '#F43F5E',
   '#EC4899',
   '#A855F7',
@@ -13,7 +13,7 @@ export const TARGET_COLORS = [
   '#EAB308',
 ] as const;
 
-export const DEFAULT_TARGET_COLOR = '#4F46E5';
+export const DEFAULT_TARGET_COLOR = '#3D6B47';
 
 export interface ClickTarget extends ScreenshotBounds {
   border: TargetBorder;
@@ -70,7 +70,7 @@ export const SHAPE_COLORS = [
   '#D4D4D8',
   '#71717A',
   '#000000',
-  '#1E1B4B',
+  '#23362B',
   '#2563EB',
   '#7DD3FC',
   '#2DD4BF',
