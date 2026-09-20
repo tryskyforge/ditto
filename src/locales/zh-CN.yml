@@ -92,6 +92,8 @@ settings:
   selfHostedNoKeyNeeded: "多数自建服务器无需密钥。除非你的服务器要求，否则留空即可。"
   serverUrl: "服务器地址"
   selfHostedServerHint: "任何 OpenAI 兼容接口 —— 本机的 Ollama 或 LM Studio，或你自建的 vLLM、LiteLLM 与网关。"
+  selfHostedProvider: "你自己的服务器"
+  voiceSelfHostedHint: "任何 OpenAI 兼容的转写接口 —— Speaches、faster-whisper-server、whisper.cpp 或 LocalAI。它必须返回带逐词时间戳的 verbose_json。"
   useOwnServer: 使用自己的服务器
   ownServerHintOpenai: "支持 Ollama、LM Studio、vLLM 或任何兼容 OpenAI 的服务器。"
   ownServerHintAnthropic: "支持 LiteLLM 代理或任何兼容 Anthropic 的服务器。"

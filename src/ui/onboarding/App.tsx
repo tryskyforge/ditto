@@ -17,7 +17,13 @@ import {
   SELF_HOSTED_AI_PROVIDER,
 } from '@/core/capture/ai/models';
 import { AI_LANGUAGES, type AILanguageCode } from '@/core/capture/ai/prompts';
-import type { VoiceProvider } from '@/core/capture/voice/transcribe';
+import { normalizeVoiceProvider } from '@/core/capture/voice/api-key';
+import {
+  type VoiceProvider,
+  WHISPER_SERVER_DEFAULT_BASE_URL,
+  WHISPER_SERVER_DEFAULT_MODEL,
+  WHISPER_SERVER_PROVIDER,
+} from '@/core/capture/voice/transcribe';
 import { localStorage, openSidebar, requestHostPermissions } from '@/lib/browser-api';
 import { Input } from '@/ui/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/ui/components/ui/select';
@@ -461,15 +467,21 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
 function VoiceStep({ onNext, onSkip, onBack, index, total }: StepProps) {
   const [provider, setProvider] = useState<VoiceProvider>('openai');
   const [apiKey, setApiKey] = useState('');
+  const [voiceBaseUrl, setVoiceBaseUrl] = useState('');
+  const [voiceModel, setVoiceModel] = useState('');
   const [microphoneId, setMicrophoneId] = useState('');
 
   useEffect(() => {
     const load = () =>
-      localStorage.get(['voiceProvider', 'voiceApiKey', 'voiceMicrophoneId']).then((stored) => {
-        if (stored.voiceProvider === 'openai' || stored.voiceProvider === 'groq') setProvider(stored.voiceProvider);
-        if (typeof stored.voiceApiKey === 'string') setApiKey(stored.voiceApiKey);
-        if (typeof stored.voiceMicrophoneId === 'string') setMicrophoneId(stored.voiceMicrophoneId);
-      });
+      localStorage
+        .get(['voiceProvider', 'voiceApiKey', 'voiceBaseUrl', 'voiceModel', 'voiceMicrophoneId'])
+        .then((stored) => {
+          setProvider(normalizeVoiceProvider(stored.voiceProvider));
+          if (typeof stored.voiceApiKey === 'string') setApiKey(stored.voiceApiKey);
+          if (typeof stored.voiceBaseUrl === 'string') setVoiceBaseUrl(stored.voiceBaseUrl);
+          if (typeof stored.voiceModel === 'string') setVoiceModel(stored.voiceModel);
+          if (typeof stored.voiceMicrophoneId === 'string') setMicrophoneId(stored.voiceMicrophoneId);
+        });
 
     void load();
     const onVisible = () => {
@@ -493,6 +505,18 @@ function VoiceStep({ onNext, onSkip, onBack, index, total }: StepProps) {
     setApiKey(nextKey);
     void localStorage.set({ voiceApiKey: nextKey });
   };
+
+  const handleVoiceBaseUrlChange = (nextUrl: string) => {
+    setVoiceBaseUrl(nextUrl);
+    void localStorage.set({ voiceBaseUrl: nextUrl });
+  };
+
+  const handleVoiceModelChange = (nextModel: string) => {
+    setVoiceModel(nextModel);
+    void localStorage.set({ voiceModel: nextModel });
+  };
+
+  const voiceIsSelfHosted = provider === WHISPER_SERVER_PROVIDER;
 
   return (
     <div className="flex h-screen">
@@ -519,6 +543,7 @@ function VoiceStep({ onNext, onSkip, onBack, index, total }: StepProps) {
                   <SelectContent>
                     <SelectItem value="openai">OpenAI</SelectItem>
                     <SelectItem value="groq">Groq</SelectItem>
+                    <SelectItem value={WHISPER_SERVER_PROVIDER}>{i18n.t('settings.selfHostedProvider')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -529,11 +554,44 @@ function VoiceStep({ onNext, onSkip, onBack, index, total }: StepProps) {
                 <SecretInput
                   value={apiKey}
                   onChange={handleApiKeyChange}
-                  placeholder={provider === 'groq' ? 'gsk_...' : 'sk-...'}
+                  placeholder={
+                    voiceIsSelfHosted ? i18n.t('settings.apiKeyOptional') : provider === 'groq' ? 'gsk_...' : 'sk-...'
+                  }
                   className="w-full h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10"
                 />
               </div>
             </div>
+
+            {voiceIsSelfHosted && (
+              <div className="flex gap-3">
+                <div className="flex-1">
+                  <label className="block text-xs font-semibold text-foreground mb-1.5">
+                    {i18n.t('settings.serverUrl')}
+                  </label>
+                  <Input
+                    type="text"
+                    value={voiceBaseUrl}
+                    onChange={(e) => handleVoiceBaseUrlChange(e.target.value)}
+                    placeholder={WHISPER_SERVER_DEFAULT_BASE_URL}
+                    aria-label={i18n.t('settings.serverUrl')}
+                    className="w-full h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10"
+                  />
+                </div>
+                <div className="flex-1">
+                  <label className="block text-xs font-semibold text-foreground mb-1.5">
+                    {i18n.t('settings.model')}
+                  </label>
+                  <Input
+                    type="text"
+                    value={voiceModel}
+                    onChange={(e) => handleVoiceModelChange(e.target.value)}
+                    placeholder={WHISPER_SERVER_DEFAULT_MODEL}
+                    aria-label={i18n.t('settings.model')}
+                    className="w-full h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10"
+                  />
+                </div>
+              </div>
+            )}
 
             <MicrophonePicker
               value={microphoneId}

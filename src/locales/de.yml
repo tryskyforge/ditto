@@ -102,6 +102,8 @@ settings:
   selfHostedNoKeyNeeded: "Viele selbst gehostete Server brauchen keinen Schlüssel. Lass das Feld leer, außer deiner verlangt einen."
   serverUrl: "Server-URL"
   selfHostedServerHint: "Jeder OpenAI-kompatible Endpunkt — Ollama oder LM Studio auf diesem Rechner, oder vLLM, LiteLLM oder ein selbst gehostetes Gateway."
+  selfHostedProvider: "Dein eigener Server"
+  voiceSelfHostedHint: "Jeder OpenAI-kompatible Transkriptions-Endpunkt — Speaches, faster-whisper-server, whisper.cpp oder LocalAI. Er muss verbose_json mit Wort-Zeitstempeln liefern."
   useOwnServer: Eigenen Server verwenden
   ownServerHintOpenai: "Funktioniert mit Ollama, LM Studio, vLLM oder jedem OpenAI-kompatiblen Server."
   ownServerHintAnthropic: "Funktioniert mit einem LiteLLM-Proxy oder jedem Anthropic-kompatiblen Server."

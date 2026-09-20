@@ -169,3 +169,28 @@ Step descriptions are short and the prompt is small, so a 7-8B instruction-tuned
 is usually enough and fast enough to keep up with recording. Larger models mostly buy
 better phrasing, not better accuracy about what you clicked. If descriptions lag behind
 your clicks, drop to a smaller model before changing anything else.
+
+## Voice narration on your own server
+
+Transcription is a separate provider from descriptions, under **Settings → Voice
+Narration**. Pick **Your own server** there and set its own Server URL and model — voice
+and descriptions can point at different machines, and a keyless transcription server
+never borrows the key from the descriptions provider.
+
+Ditto needs `POST {base}/audio/transcriptions` returning `verbose_json` **with word-level
+timestamps**. This is not optional: narration is matched to steps by when each word was
+spoken, so a server that returns plain text or segment-only timing will fail with a
+"response has no segments" error rather than silently producing bad guides.
+
+Known-good options, all OpenAI-compatible:
+
+- **Speaches** (formerly faster-whisper-server) — `http://localhost:8000/v1`,
+  model `Systran/faster-whisper-small` or similar.
+- **LocalAI** — `http://localhost:8080/v1`, whichever whisper model you configured.
+- **whisper.cpp server** — check your build supports word timestamps before relying on it.
+
+Default in Ditto is `http://localhost:8000/v1` with model `whisper-1`; change the model
+to whatever your server reports from `/v1/models`.
+
+The origin rule from the top of this page applies here too — if the transcription server
+filters on `Origin`, allow the extension.

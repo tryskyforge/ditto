@@ -33,8 +33,13 @@ import {
   SELF_HOSTED_AI_PROVIDER,
 } from '@/core/capture/ai/models';
 import { AI_LANGUAGES, type AILanguageCode } from '@/core/capture/ai/prompts';
-import { resolveVoiceApiKey } from '@/core/capture/voice/api-key';
-import type { VoiceProvider } from '@/core/capture/voice/transcribe';
+import { resolveVoiceApiKey, voiceKeyRequired } from '@/core/capture/voice/api-key';
+import {
+  type VoiceProvider,
+  WHISPER_SERVER_DEFAULT_BASE_URL,
+  WHISPER_SERVER_DEFAULT_MODEL,
+  WHISPER_SERVER_PROVIDER,
+} from '@/core/capture/voice/transcribe';
 import { type BrandLogo, defaultFooterLine, makeBrandLogo } from '@/core/export/branding';
 import { DEFAULT_TARGET_COLOR, TARGET_COLORS } from '@/core/screenshot/types';
 import { localStorage } from '@/lib/browser-api';
@@ -80,6 +85,8 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
   const [aiLanguage, setAiLanguage] = useState<AILanguageCode>('en');
   const [voiceProvider, setVoiceProvider] = useState<VoiceProvider>('openai');
   const [voiceApiKey, setVoiceApiKey] = useState('');
+  const [voiceBaseUrl, setVoiceBaseUrl] = useState('');
+  const [voiceModel, setVoiceModel] = useState('');
   const [voiceMicrophoneId, setVoiceMicrophoneId] = useState('');
   const [targetColor, setTargetColor] = useState<string>(DEFAULT_TARGET_COLOR);
   const [brandLogo, setBrandLogo] = useState<BrandLogo | null>(null);
@@ -107,6 +114,8 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
         'blurPresets',
         'voiceProvider',
         'voiceApiKey',
+        'voiceBaseUrl',
+        'voiceModel',
         'voiceMicrophoneId',
         'targetColor',
         'brandLogo',
@@ -128,6 +137,8 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
         if (result.blurPresets) setBlurPresets(result.blurPresets as Record<PresetKey, boolean>);
         setVoiceProvider((result.voiceProvider as VoiceProvider) || 'openai');
         if (result.voiceApiKey) setVoiceApiKey(result.voiceApiKey as string);
+        if (result.voiceBaseUrl) setVoiceBaseUrl(result.voiceBaseUrl as string);
+        if (result.voiceModel) setVoiceModel(result.voiceModel as string);
         if (result.voiceMicrophoneId) setVoiceMicrophoneId(result.voiceMicrophoneId as string);
         if (result.targetColor) setTargetColor(result.targetColor as string);
         if (result.brandLogo) setBrandLogo(result.brandLogo as BrandLogo);
@@ -147,6 +158,8 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
     blurPresets,
     voiceProvider,
     voiceApiKey,
+    voiceBaseUrl,
+    voiceModel,
     voiceMicrophoneId,
     targetColor,
     brandLogo,
@@ -239,6 +252,8 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
   const keyRequired = requiresApiKey(provider);
   const serverUrlOpen = ownServer || isSelfHosted;
   const voiceKey = resolveVoiceApiKey({ voiceProvider, voiceApiKey, aiProvider: provider, aiApiKey: apiKey });
+  const voiceIsSelfHosted = voiceProvider === WHISPER_SERVER_PROVIDER;
+  const voiceKeyNeeded = voiceKeyRequired(voiceProvider);
 
   const BLUR_PRESET_I18N: Record<PresetKey, string> = {
     email: 'blurPresets.email',
@@ -594,6 +609,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
               <SelectContent>
                 <SelectItem value="openai">OpenAI</SelectItem>
                 <SelectItem value="groq">Groq</SelectItem>
+                <SelectItem value={WHISPER_SERVER_PROVIDER}>{i18n.t('settings.selfHostedProvider')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -607,14 +623,20 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
                   setVoiceApiKey(next);
                   voiceKeyCheck.reset();
                 }}
-                placeholder={voiceProvider === 'groq' ? 'gsk_...' : 'sk-...'}
+                placeholder={
+                  voiceIsSelfHosted
+                    ? i18n.t('settings.apiKeyOptional')
+                    : voiceProvider === 'groq'
+                      ? 'gsk_...'
+                      : 'sk-...'
+                }
                 className="h-8 text-[13px] rounded-lg border-border"
               />
               <Button
                 variant="outline"
                 size="sm"
-                disabled={!voiceApiKey || voiceKeyCheck.status === 'checking'}
-                onClick={() => void voiceKeyCheck.check(voiceProvider, voiceApiKey)}
+                disabled={(voiceKeyNeeded && !voiceApiKey) || voiceKeyCheck.status === 'checking'}
+                onClick={() => void voiceKeyCheck.check(voiceProvider, voiceApiKey, voiceBaseUrl)}
                 className="h-8 shrink-0 rounded-lg bg-card text-[11px] font-semibold"
               >
                 {i18n.t('settings.checkKey')}
@@ -628,13 +650,63 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
                 <span>{i18n.t('settings.voiceUsingAiKey')}</span>
               </p>
             )}
-            {voiceKey.source === 'none' && (
-              <p className="mt-1.5 flex items-start gap-1.5 text-[10px] text-destructive leading-relaxed" role="alert">
-                <TriangleAlert size={11} className="shrink-0 mt-0.5" />
-                <span>{i18n.t('settings.voiceNoKey')}</span>
-              </p>
-            )}
+            {voiceKey.source === 'none' &&
+              (voiceKeyNeeded ? (
+                <p
+                  className="mt-1.5 flex items-start gap-1.5 text-[10px] text-destructive leading-relaxed"
+                  role="alert"
+                >
+                  <TriangleAlert size={11} className="shrink-0 mt-0.5" />
+                  <span>{i18n.t('settings.voiceNoKey')}</span>
+                </p>
+              ) : (
+                <p className="mt-1.5 text-[10px] text-muted-foreground leading-relaxed">
+                  {i18n.t('settings.selfHostedNoKeyNeeded')}
+                </p>
+              ))}
           </div>
+
+          {voiceIsSelfHosted && (
+            <>
+              <div>
+                <label className="block text-[11px] font-semibold text-foreground mb-1 flex items-center gap-1">
+                  <Globe size={11} className="-mt-px" />
+                  {i18n.t('settings.serverUrl')}
+                </label>
+                <Input
+                  type="text"
+                  value={voiceBaseUrl}
+                  onChange={(e) => {
+                    setVoiceBaseUrl(e.target.value);
+                    voiceKeyCheck.reset();
+                  }}
+                  placeholder={WHISPER_SERVER_DEFAULT_BASE_URL}
+                  aria-label={i18n.t('settings.serverUrl')}
+                  className="h-8 text-[13px] rounded-lg border-border"
+                />
+                <p className="mt-1.5 text-[10px] text-muted-foreground leading-relaxed">
+                  {i18n.t('settings.voiceSelfHostedHint')}
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-foreground mb-1">
+                  {i18n.t('settings.model')}
+                </label>
+                <Input
+                  type="text"
+                  value={voiceModel}
+                  onChange={(e) => {
+                    setVoiceModel(e.target.value);
+                    voiceKeyCheck.reset();
+                  }}
+                  placeholder={WHISPER_SERVER_DEFAULT_MODEL}
+                  aria-label={i18n.t('settings.model')}
+                  className="h-8 text-[13px] rounded-lg border-border"
+                />
+              </div>
+            </>
+          )}
 
           {import.meta.env.BROWSER !== 'firefox' && (
             <MicrophonePicker value={voiceMicrophoneId} onChange={setVoiceMicrophoneId} triggerClassName="h-8" />

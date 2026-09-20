@@ -1,3 +1,4 @@
+import { WHISPER_SERVER_PROVIDER, whisperServerBase } from '@/core/capture/voice/transcribe';
 import { logger } from '@/lib/logger';
 import {
   type AIProtocol,
@@ -25,10 +26,17 @@ const PROTOCOL_HEADERS: Record<AIProtocol, (key: string) => Record<string, strin
   }),
 };
 
-const VOICE_ENDPOINTS: Record<string, { url: string; headers: (key: string) => Record<string, string> }> = {
+const VOICE_ENDPOINTS: Record<
+  string,
+  { url: (baseUrl?: string) => string; headers: (key: string) => Record<string, string> }
+> = {
   groq: {
-    url: 'https://api.groq.com/openai/v1/models',
+    url: () => 'https://api.groq.com/openai/v1/models',
     headers: (key) => ({ Authorization: `Bearer ${key}` }),
+  },
+  [WHISPER_SERVER_PROVIDER]: {
+    url: (baseUrl) => `${whisperServerBase(baseUrl)}/models`,
+    headers: (key) => PROTOCOL_HEADERS.openai(key),
   },
 };
 
@@ -155,7 +163,7 @@ export async function validateApiKey(
       logger.error('No API key validation endpoint for provider', provider);
       return { valid: false, reason: 'network' };
     }
-    return checkCatalog(endpoint.url, endpoint.headers(apiKey));
+    return checkCatalog(endpoint.url(baseUrl), endpoint.headers(apiKey));
   }
 
   if (isCustomBaseUrl(config, baseUrl)) return validateCustomServer(config, apiKey, baseUrl as string, model);
