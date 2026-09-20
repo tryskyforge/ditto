@@ -104,6 +104,8 @@ Bring your own API key (OpenAI or Anthropic) and Ditto generates human-readable 
 
 Descriptions are generated from a lightweight DOM context (~50-100 tokens), not screenshots. Roughly 15-30x cheaper than vision models. Choose the language you want descriptions in (English, Spanish, Portuguese, French, German, Chinese).
 
+Prefer to keep everything on your own hardware? Pick **Your own server** and point Ditto at Ollama, LM Studio, vLLM, llama.cpp or a LiteLLM gateway — see [Using your own model server](docs/self-hosted-ai.md).
+
 <img src="https://github.com/user-attachments/assets/3540cbd5-133f-46fd-a9b6-ffce9b4d422a" alt="AI descriptions" width="800" />
 
 <div align="right">
