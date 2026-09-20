@@ -26,7 +26,7 @@ export default function GuideStepRail({ steps }: GuideStepRailProps) {
   const numbers = stepNumbers(steps);
 
   return (
-    <nav className="hidden xl:block w-[220px] shrink-0 sticky top-6 self-start max-h-[calc(100vh-96px)] overflow-y-auto">
+    <nav className="hidden rail:block w-[220px] shrink-0 sticky top-6 self-start max-h-[calc(100vh-96px)] overflow-y-auto">
       <p className="text-[10px] font-semibold uppercase tracking-wider mb-2.5 text-muted-foreground">
         {i18n.t('fullview.steps')}
       </p>

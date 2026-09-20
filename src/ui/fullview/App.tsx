@@ -49,7 +49,7 @@ export default function FullViewApp() {
                 historyOpen
                   ? 'max-w-[1032px]'
                   : guideStepCount >= STEP_RAIL_MIN_STEPS
-                    ? 'max-w-[720px] xl:max-w-[980px]'
+                    ? 'max-w-[720px] rail:max-w-[980px]'
                     : 'max-w-[720px]'
               }`}
             >

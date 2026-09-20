@@ -7,6 +7,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --breakpoint-rail: 1100px;
+}
+
 @theme inline {
   --color-background: #FAFAF7;
   --color-foreground: #23362B;
