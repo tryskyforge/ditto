@@ -8,6 +8,8 @@
 
 Click record, do the thing, get a polished guide with annotated screenshots. Narrate it as you go, edit it after, then replay or export.
 
+**[tryskyforge.github.io/ditto](https://tryskyforge.github.io/ditto/)** · [Install](https://tryskyforge.github.io/ditto/install.html) · [Privacy](https://tryskyforge.github.io/ditto/privacy.html)
+
 <!-- SHIELD GROUP -->
 
 [![Website][website-shield]][website-link]
@@ -55,6 +57,8 @@ Click record, do the thing, get a polished guide with annotated screenshots. Nar
 ## 👋 Getting Started
 
 Ditto turns any repetitive browser task into a documented, shareable guide in seconds. It runs entirely in your browser. No backend, no account, no telemetry, and nothing ever leaves your device.
+
+Write an SOP once instead of screenshotting each step by hand. Hand a process to a new teammate without sitting next to them. Attach a real repro to a bug report. Turn a support answer you have given five times into a link.
 
 Whether you're documenting internal tools, writing product tutorials, or onboarding a teammate, Ditto captures every click, keystroke, and navigation automatically so you can focus on the work.
 
@@ -234,7 +238,7 @@ MIT © [Skyforge AI](https://github.com/tryskyforge). See [LICENSE](./LICENSE) f
 
 [back-to-top]: https://img.shields.io/badge/-BACK_TO_TOP-23362B?style=flat-square
 
-[website-shield]: https://img.shields.io/badge/website-tryskyforge.github.io%2Fditto-3D6B47?style=flat-square&labelColor=23362B
+[website-shield]: https://img.shields.io/badge/website-online-3D6B47?style=flat-square&labelColor=23362B
 [website-link]: https://tryskyforge.github.io/ditto/
 [license-shield]: https://img.shields.io/badge/license-MIT-3D6B47?style=flat-square&labelColor=23362B
 [license-link]: ./LICENSE
