@@ -660,7 +660,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary text-[10px] font-semibold text-accent hover:bg-accent hover:text-white transition-colors"
             >
-              <Star size={11} fill="#FBBF24" className="text-[#FBBF24]" />
+              <Star size={11} className="fill-star text-star" />
               {i18n.t('settings.starOnGithub')}
               <ChevronRight size={11} />
             </a>
