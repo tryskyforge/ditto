@@ -73,7 +73,7 @@ Each step gets a screenshot with the clicked element highlighted and zoomed in. 
 > **⭐️ Star the repo** if Ditto saves you time. It helps other people discover it!
 
 <a href="https://github.com/tryskyforge/ditto">
-  <img width="100%" alt="Star Ditto on GitHub" src="https://github.com/user-attachments/assets/80d304da-a765-4bde-bf49-b1bdcb4fe804" />
+  <img width="100%" alt="Star Ditto on GitHub" src="public/star-banner.png" />
 </a>
 
 <div align="right">
