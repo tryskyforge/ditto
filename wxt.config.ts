@@ -18,6 +18,9 @@ export default defineConfig({
     excludeSources: [
       "mockups/**",
       "docs/**",
+      "site/**",
+      "store/**",
+      "public/*.gif",
       ".claude/**",
       ".planning/**",
       ".worktrees/**",
