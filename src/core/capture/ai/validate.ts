@@ -136,7 +136,7 @@ async function validateCustomServer(
   const selectedModel = model?.trim();
   if (!selectedModel) {
     const models = await fetchModelsFromUrl(catalogUrl, headers);
-    return models ? { valid: false, reason: 'model-required', models } : { valid: false, reason: 'model-required' };
+    return models ? { valid: true, models } : { valid: false, reason: 'model-required' };
   }
 
   if (await probeWithInference(config.protocol, base, selectedModel, headers)) {
