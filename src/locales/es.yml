@@ -165,6 +165,7 @@ fullview:
   stepCount: "$1 paso"
   stepCountPlural: "$1 pasos"
   pageOf: "$1 / $2"
+  steps: Pasos
 
 sort:
   recentFirst: Más recientes

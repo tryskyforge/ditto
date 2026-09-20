@@ -164,6 +164,7 @@ fullview:
   stepCount: "$1 Schritt"
   stepCountPlural: "$1 Schritte"
   pageOf: "$1 / $2"
+  steps: Schritte
   writingDescription: "Beschreibung wird geschrieben…"
 
 sort:
