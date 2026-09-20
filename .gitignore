@@ -4,7 +4,8 @@ node_modules/
 dist/
 coverage/
 .planning/
-docs/
+docs/*
+!docs/self-hosted-ai.md
 .source/
 .claude/
 mockups/
