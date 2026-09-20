@@ -10,11 +10,12 @@ import {
   DEFAULT_AI_PROVIDER,
   hasPresetModels,
   isCustomBaseUrl,
-  isCustomModel,
+  modelOptions,
   modelPlaceholder,
   providerOrDefault,
   requiresApiKey,
   SELF_HOSTED_AI_PROVIDER,
+  selectableModelIds,
 } from '@/core/capture/ai/models';
 import { AI_LANGUAGES, type AILanguageCode } from '@/core/capture/ai/prompts';
 import { normalizeVoiceProvider } from '@/core/capture/voice/api-key';
@@ -149,7 +150,10 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
   }, []);
 
   const providerConfig = AI_PROVIDERS[provider] ?? AI_PROVIDERS[DEFAULT_AI_PROVIDER];
-  const usingCustomModel = customModel || isCustomModel(model, providerConfig) || !hasPresetModels(providerConfig);
+  const availableModels = modelOptions(providerConfig, aiKeyCheck.models);
+  const selectableModels = selectableModelIds(availableModels);
+  const usingCustomModel =
+    customModel || selectableModels.length === 0 || (model.trim() !== '' && !selectableModels.includes(model.trim()));
   const isSelfHosted = provider === SELF_HOSTED_AI_PROVIDER;
   const keyRequired = requiresApiKey(provider);
   const serverUrlOpen = ownServer || isSelfHosted;
@@ -158,7 +162,7 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
     const nextModel = AI_PROVIDERS[newProvider].defaultModel;
     setProvider(newProvider);
     setModel(nextModel);
-    setCustomModel(!hasPresetModels(AI_PROVIDERS[newProvider]));
+    setCustomModel(false);
     setOwnServer(false);
     setBaseUrl('');
     const nextKey = keyFor(apiKeys, newProvider);
@@ -242,10 +246,10 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
               <label className="block text-xs font-semibold text-foreground mb-1.5">{i18n.t('settings.model')}</label>
               <Select value={usingCustomModel ? CUSTOM_MODEL_VALUE : model} onValueChange={handleModelChange}>
                 <SelectTrigger className="w-full h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10">
-                  <SelectValue />
+                  <SelectValue placeholder={modelPlaceholder(providerConfig)} />
                 </SelectTrigger>
                 <SelectContent>
-                  {providerConfig.models.map((m) => (
+                  {availableModels.map((m) => (
                     <SelectItem key={m.id} value={m.id}>
                       {m.label}
                     </SelectItem>
@@ -297,7 +301,7 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
                   <KeyWarningNote warning={aiKeyCheck.warning} />
                 </div>
               </div>
-              {aiKeyCheck.models && <ModelList models={aiKeyCheck.models} />}
+              {aiKeyCheck.models && hasPresetModels(providerConfig) && <ModelList models={aiKeyCheck.models} />}
             </div>
 
             <div>

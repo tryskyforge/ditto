@@ -9,9 +9,11 @@ import {
   isCustomBaseUrl,
   isCustomModel,
   isProviderKey,
+  modelOptions,
   modelPlaceholder,
   requiresApiKey,
   resolveBaseUrl,
+  selectableModelIds,
 } from '../models';
 
 const LOCALES = ['en', 'de', 'es', 'fr', 'pt-BR', 'zh-CN'];
@@ -49,6 +51,26 @@ describe('isCustomModel', () => {
   it('falls back to the curated list when nothing is stored', () => {
     expect(isCustomModel('', AI_PROVIDERS.openai)).toBe(false);
     expect(isCustomModel('   ', AI_PROVIDERS.openai)).toBe(false);
+  });
+});
+
+describe('modelOptions', () => {
+  it('ignores a discovered list for a provider that curates its own', () => {
+    expect(modelOptions(AI_PROVIDERS.openai, ['whatever'])).toEqual(AI_PROVIDERS.openai.models);
+  });
+
+  it('offers what the server reported, with Custom still last', () => {
+    const options = modelOptions(AI_PROVIDERS.selfHosted, ['llama3.1', 'qwen2.5:7b']);
+    expect(options.map((o) => o.id)).toEqual(['llama3.1', 'qwen2.5:7b', CUSTOM_MODEL_VALUE]);
+  });
+
+  it('leaves only Custom before anything has been discovered', () => {
+    expect(modelOptions(AI_PROVIDERS.selfHosted, null).map((o) => o.id)).toEqual([CUSTOM_MODEL_VALUE]);
+    expect(selectableModelIds(modelOptions(AI_PROVIDERS.selfHosted, null))).toEqual([]);
+  });
+
+  it('never counts the Custom sentinel as a selectable model', () => {
+    expect(selectableModelIds(modelOptions(AI_PROVIDERS.selfHosted, ['llama3.1']))).toEqual(['llama3.1']);
   });
 });
 

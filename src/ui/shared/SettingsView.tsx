@@ -26,11 +26,12 @@ import {
   DEFAULT_AI_PROVIDER,
   hasPresetModels,
   isCustomBaseUrl,
-  isCustomModel,
+  modelOptions,
   modelPlaceholder,
   providerOrDefault,
   requiresApiKey,
   SELF_HOSTED_AI_PROVIDER,
+  selectableModelIds,
 } from '@/core/capture/ai/models';
 import { AI_LANGUAGES, type AILanguageCode } from '@/core/capture/ai/prompts';
 import { resolveVoiceApiKey, voiceKeyRequired } from '@/core/capture/voice/api-key';
@@ -220,7 +221,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
     setProvider(newProvider);
     setApiKey(keyFor(apiKeys, newProvider));
     aiKeyCheck.reset();
-    setCustomModel(!hasPresetModels(AI_PROVIDERS[newProvider]));
+    setCustomModel(false);
     setModel(AI_PROVIDERS[newProvider].defaultModel);
     setOwnServer(false);
     setBaseUrl('');
@@ -247,7 +248,10 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
   };
 
   const providerConfig = AI_PROVIDERS[provider] ?? AI_PROVIDERS[DEFAULT_AI_PROVIDER];
-  const usingCustomModel = customModel || isCustomModel(model, providerConfig) || !hasPresetModels(providerConfig);
+  const availableModels = modelOptions(providerConfig, aiKeyCheck.models);
+  const selectableModels = selectableModelIds(availableModels);
+  const usingCustomModel =
+    customModel || selectableModels.length === 0 || (model.trim() !== '' && !selectableModels.includes(model.trim()));
   const isSelfHosted = provider === SELF_HOSTED_AI_PROVIDER;
   const keyRequired = requiresApiKey(provider);
   const serverUrlOpen = ownServer || isSelfHosted;
@@ -319,10 +323,10 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
             <label className="block text-[11px] font-semibold text-foreground mb-1">{i18n.t('settings.model')}</label>
             <Select value={usingCustomModel ? CUSTOM_MODEL_VALUE : model} onValueChange={handleModelChange}>
               <SelectTrigger className="h-8">
-                <SelectValue />
+                <SelectValue placeholder={modelPlaceholder(providerConfig)} />
               </SelectTrigger>
               <SelectContent>
-                {providerConfig.models.map((m) => (
+                {availableModels.map((m) => (
                   <SelectItem key={m.id} value={m.id}>
                     {m.label}
                   </SelectItem>
@@ -370,7 +374,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
             </div>
             <KeyStatusNote status={aiKeyCheck.status} />
             <KeyWarningNote warning={aiKeyCheck.warning} />
-            {aiKeyCheck.models && <ModelList models={aiKeyCheck.models} />}
+            {aiKeyCheck.models && hasPresetModels(providerConfig) && <ModelList models={aiKeyCheck.models} />}
             {!apiKey.trim() &&
               (keyRequired ? (
                 <p

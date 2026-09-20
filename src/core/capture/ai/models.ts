@@ -116,6 +116,17 @@ export function hasPresetModels(config: AIProviderConfig): boolean {
   return config.models.some((option) => option.id !== CUSTOM_MODEL_VALUE);
 }
 
+export function modelOptions(config: AIProviderConfig, discovered?: string[] | null): AIModelOption[] {
+  if (hasPresetModels(config)) return config.models;
+  const custom = config.models.find((option) => option.id === CUSTOM_MODEL_VALUE);
+  const found = (discovered ?? []).map((id) => ({ id, label: id }));
+  return custom ? [...found, custom] : found;
+}
+
+export function selectableModelIds(options: AIModelOption[]): string[] {
+  return options.filter((option) => option.id !== CUSTOM_MODEL_VALUE).map((option) => option.id);
+}
+
 export function modelPlaceholder(config: AIProviderConfig): string {
   return config.modelPlaceholder ?? config.defaultModel;
 }
