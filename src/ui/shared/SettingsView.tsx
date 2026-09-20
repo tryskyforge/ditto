@@ -24,9 +24,13 @@ import {
   type AIProviderKey,
   CUSTOM_MODEL_VALUE,
   DEFAULT_AI_PROVIDER,
+  hasPresetModels,
   isCustomBaseUrl,
   isCustomModel,
+  LOCAL_AI_PROVIDER,
+  modelPlaceholder,
   providerOrDefault,
+  requiresApiKey,
 } from '@/core/capture/ai/models';
 import { AI_LANGUAGES, type AILanguageCode } from '@/core/capture/ai/prompts';
 import { resolveVoiceApiKey } from '@/core/capture/voice/api-key';
@@ -203,7 +207,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
     setProvider(newProvider);
     setApiKey(keyFor(apiKeys, newProvider));
     aiKeyCheck.reset();
-    setCustomModel(false);
+    setCustomModel(!hasPresetModels(AI_PROVIDERS[newProvider]));
     setModel(AI_PROVIDERS[newProvider].defaultModel);
     setOwnServer(false);
     setBaseUrl('');
@@ -230,7 +234,10 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
   };
 
   const providerConfig = AI_PROVIDERS[provider] ?? AI_PROVIDERS[DEFAULT_AI_PROVIDER];
-  const usingCustomModel = customModel || isCustomModel(model, providerConfig);
+  const usingCustomModel = customModel || isCustomModel(model, providerConfig) || !hasPresetModels(providerConfig);
+  const isLocal = provider === LOCAL_AI_PROVIDER;
+  const keyRequired = requiresApiKey(provider);
+  const serverUrlOpen = ownServer || isLocal;
   const voiceKey = resolveVoiceApiKey({ voiceProvider, voiceApiKey, aiProvider: provider, aiApiKey: apiKey });
 
   const BLUR_PRESET_I18N: Record<PresetKey, string> = {
@@ -314,7 +321,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
                   setModel(e.target.value);
                   aiKeyCheck.reset();
                 }}
-                placeholder={providerConfig.defaultModel}
+                placeholder={modelPlaceholder(providerConfig)}
                 aria-label={i18n.t('settings.modelCustom')}
                 className="mt-1.5 h-8 text-[13px] rounded-lg border-border"
               />
@@ -331,13 +338,13 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
                   setApiKeys((prev) => withKeyFor(prev, provider, next));
                   aiKeyCheck.reset();
                 }}
-                placeholder="sk-..."
+                placeholder={keyRequired ? 'sk-...' : i18n.t('settings.apiKeyOptional')}
                 className="h-8 text-[13px] rounded-lg border-border"
               />
               <Button
                 variant="outline"
                 size="sm"
-                disabled={!apiKey || aiKeyCheck.status === 'checking'}
+                disabled={(keyRequired && !apiKey) || aiKeyCheck.status === 'checking'}
                 onClick={() => {
                   if (aiKeyCheck.status !== 'checking') void aiKeyCheck.check(provider, apiKey, baseUrl, model);
                 }}
@@ -349,39 +356,54 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
             <KeyStatusNote status={aiKeyCheck.status} />
             <KeyWarningNote warning={aiKeyCheck.warning} />
             {aiKeyCheck.models && <ModelList models={aiKeyCheck.models} />}
-            {!apiKey.trim() && (
-              <p className="mt-1.5 flex items-start gap-1.5 text-[10px] text-destructive leading-relaxed" role="alert">
-                <TriangleAlert size={11} className="shrink-0 mt-0.5" />
-                <span>{i18n.t('settings.aiNoKey')}</span>
-              </p>
-            )}
+            {!apiKey.trim() &&
+              (keyRequired ? (
+                <p
+                  className="mt-1.5 flex items-start gap-1.5 text-[10px] text-destructive leading-relaxed"
+                  role="alert"
+                >
+                  <TriangleAlert size={11} className="shrink-0 mt-0.5" />
+                  <span>{i18n.t('settings.aiNoKey')}</span>
+                </p>
+              ) : (
+                <p className="mt-1.5 text-[10px] text-muted-foreground leading-relaxed">
+                  {i18n.t('settings.localNoKeyNeeded')}
+                </p>
+              ))}
           </div>
 
           <div>
-            <div className="flex items-center justify-between gap-3 py-0.5">
-              <span className="text-[11px] font-semibold text-foreground flex items-center gap-1">
+            {isLocal ? (
+              <label className="block text-[11px] font-semibold text-foreground mb-1 flex items-center gap-1">
                 <Globe size={11} className="-mt-px" />
-                {i18n.t('settings.useOwnServer')}
-              </span>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={ownServer}
-                aria-label={i18n.t('settings.useOwnServer')}
-                onClick={handleOwnServerToggle}
-                className={`w-9 h-5 rounded-full transition-colors relative shrink-0 ${
-                  ownServer ? 'bg-accent' : 'bg-border'
-                }`}
-              >
-                <span
-                  className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${
-                    ownServer ? 'translate-x-4' : 'translate-x-0'
+                {i18n.t('settings.serverUrl')}
+              </label>
+            ) : (
+              <div className="flex items-center justify-between gap-3 py-0.5">
+                <span className="text-[11px] font-semibold text-foreground flex items-center gap-1">
+                  <Globe size={11} className="-mt-px" />
+                  {i18n.t('settings.useOwnServer')}
+                </span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={ownServer}
+                  aria-label={i18n.t('settings.useOwnServer')}
+                  onClick={handleOwnServerToggle}
+                  className={`w-9 h-5 rounded-full transition-colors relative shrink-0 ${
+                    ownServer ? 'bg-accent' : 'bg-border'
                   }`}
-                />
-              </button>
-            </div>
-            {ownServer && (
-              <div className="mt-2 space-y-1.5">
+                >
+                  <span
+                    className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${
+                      ownServer ? 'translate-x-4' : 'translate-x-0'
+                    }`}
+                  />
+                </button>
+              </div>
+            )}
+            {serverUrlOpen && (
+              <div className={isLocal ? 'space-y-1.5' : 'mt-2 space-y-1.5'}>
                 <Input
                   type="text"
                   value={baseUrl}
@@ -390,14 +412,16 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
                     aiKeyCheck.reset();
                   }}
                   placeholder={providerConfig.defaultBaseUrl}
-                  aria-label={i18n.t('settings.baseUrl')}
+                  aria-label={i18n.t(isLocal ? 'settings.serverUrl' : 'settings.baseUrl')}
                   className="h-8 text-[13px] rounded-lg border-border"
                 />
                 <p className="text-[10px] text-muted-foreground leading-relaxed">
                   {i18n.t(
-                    providerConfig.protocol === 'anthropic'
-                      ? 'settings.ownServerHintAnthropic'
-                      : 'settings.ownServerHintOpenai',
+                    isLocal
+                      ? 'settings.localServerHint'
+                      : providerConfig.protocol === 'anthropic'
+                        ? 'settings.ownServerHintAnthropic'
+                        : 'settings.ownServerHintOpenai',
                   )}
                 </p>
               </div>

@@ -5,9 +5,12 @@ import {
   AI_PROVIDERS,
   CUSTOM_MODEL_VALUE,
   findProvider,
+  hasPresetModels,
   isCustomBaseUrl,
   isCustomModel,
   isProviderKey,
+  modelPlaceholder,
+  requiresApiKey,
   resolveBaseUrl,
 } from '../models';
 
@@ -64,15 +67,27 @@ describe('custom model sentinel', () => {
 
 describe('every provider default is selectable', () => {
   it.each(Object.entries(AI_PROVIDERS))('%s lists its own default model', (_key, config) => {
-    if (config.models.length === 0) return;
+    if (!hasPresetModels(config)) return;
     expect(config.models.some((option) => option.id === config.defaultModel)).toBe(true);
+  });
+
+  it.each(Object.entries(AI_PROVIDERS))('%s without preset models leaves the choice open', (_key, config) => {
+    if (hasPresetModels(config)) return;
+    expect(config.defaultModel).toBe('');
+    expect(modelPlaceholder(config)).toBeTruthy();
   });
 });
 
 describe('every provider takes a custom server', () => {
   it.each(Object.entries(AI_PROVIDERS))('%s carries a default base URL and a protocol', (_key, config) => {
-    expect(config.defaultBaseUrl).toMatch(/^https:\/\//);
+    expect(config.defaultBaseUrl).toMatch(/^https?:\/\//);
     expect(['openai', 'anthropic']).toContain(config.protocol);
+  });
+
+  it.each(Object.entries(AI_PROVIDERS))('%s only drops to plain http for a keyless local server', (key, config) => {
+    if (config.defaultBaseUrl.startsWith('https://')) return;
+    expect(requiresApiKey(key)).toBe(false);
+    expect(config.defaultBaseUrl).toMatch(/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//);
   });
 
   it('carries the custom server copy in every locale', () => {

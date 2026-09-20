@@ -9,8 +9,8 @@ import { broadcastAiToPanel } from '@/lib/port';
 
 export async function generateAiDescription(domContext: DOMContext): Promise<string | undefined> {
   const settings = await localStorage.get(['aiApiKeys', 'aiApiKey', 'aiProvider', 'aiModel', 'aiBaseUrl']);
-  const { provider, apiKey } = resolveAiKey(settings);
-  if (!apiKey) return undefined;
+  const { provider, apiKey, ready } = resolveAiKey(settings);
+  if (!ready) return undefined;
 
   const model = (settings.aiModel as string) || AI_PROVIDERS[provider].defaultModel;
   try {

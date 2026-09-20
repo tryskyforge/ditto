@@ -14,6 +14,8 @@ export interface AIProviderConfig {
   defaultBaseUrl: string;
   keyCheckPath?: string;
   defaultModel: string;
+  modelPlaceholder?: string;
+  keyOptional?: boolean;
   models: AIModelOption[];
 }
 
@@ -76,11 +78,23 @@ export const AI_PROVIDERS = {
       { id: CUSTOM_MODEL_VALUE, label: 'Custom' },
     ],
   },
+  local: {
+    label: 'Local model',
+    protocol: 'openai',
+    transport: 'chat',
+    keyOptional: true,
+    defaultBaseUrl: 'http://localhost:11434/v1',
+    defaultModel: '',
+    modelPlaceholder: 'llama3.1',
+    models: [{ id: CUSTOM_MODEL_VALUE, label: 'Custom' }],
+  },
 } satisfies Record<string, AIProviderConfig>;
 
 export type AIProviderKey = keyof typeof AI_PROVIDERS;
 
 export const DEFAULT_AI_PROVIDER: AIProviderKey = 'openai';
+
+export const LOCAL_AI_PROVIDER: AIProviderKey = 'local';
 
 export function isProviderKey(value: unknown): value is AIProviderKey {
   return typeof value === 'string' && value in AI_PROVIDERS;
@@ -92,6 +106,18 @@ export function findProvider(provider: string): AIProviderConfig | undefined {
 
 export function providerOrDefault(value: unknown): AIProviderKey {
   return isProviderKey(value) ? value : DEFAULT_AI_PROVIDER;
+}
+
+export function requiresApiKey(provider: string): boolean {
+  return findProvider(provider)?.keyOptional !== true;
+}
+
+export function hasPresetModels(config: AIProviderConfig): boolean {
+  return config.models.some((option) => option.id !== CUSTOM_MODEL_VALUE);
+}
+
+export function modelPlaceholder(config: AIProviderConfig): string {
+  return config.modelPlaceholder ?? config.defaultModel;
 }
 
 export function normalizeBaseUrl(url: string): string {

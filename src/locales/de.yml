@@ -98,6 +98,10 @@ settings:
   aiDescriptions: KI-Beschreibungen
   modelCustom: Eigenes Modell
   baseUrl: Basis-URL
+  apiKeyOptional: "Für lokale Modelle nicht nötig"
+  localNoKeyNeeded: "Lokale Server brauchen meist keinen Schlüssel. Lass das Feld leer, außer deiner verlangt einen."
+  serverUrl: "Server-URL"
+  localServerHint: "Der OpenAI-kompatible Endpunkt eines Modells auf deinem Rechner — Ollama, LM Studio, llama.cpp oder vLLM."
   useOwnServer: Eigenen Server verwenden
   ownServerHintOpenai: "Funktioniert mit Ollama, LM Studio, vLLM oder jedem OpenAI-kompatiblen Server."
   ownServerHintAnthropic: "Funktioniert mit einem LiteLLM-Proxy oder jedem Anthropic-kompatiblen Server."

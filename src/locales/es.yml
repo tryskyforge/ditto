@@ -88,6 +88,10 @@ settings:
   model: Modelo
   modelCustom: Modelo personalizado
   baseUrl: URL base
+  apiKeyOptional: "No necesaria para modelos locales"
+  localNoKeyNeeded: "Los servidores locales no suelen necesitar clave. Déjalo vacío salvo que el tuyo la pida."
+  serverUrl: "URL del servidor"
+  localServerHint: "El endpoint compatible con OpenAI de un modelo que se ejecuta en tu equipo: Ollama, LM Studio, llama.cpp o vLLM."
   useOwnServer: Usar mi propio servidor
   ownServerHintOpenai: "Funciona con Ollama, LM Studio, vLLM o cualquier servidor compatible con OpenAI."
   ownServerHintAnthropic: "Funciona con un proxy LiteLLM o cualquier servidor compatible con Anthropic."

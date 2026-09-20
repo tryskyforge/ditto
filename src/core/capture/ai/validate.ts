@@ -17,7 +17,7 @@ export type KeyValidation =
 const REQUEST_TIMEOUT_MS = 10_000;
 
 const PROTOCOL_HEADERS: Record<AIProtocol, (key: string) => Record<string, string>> = {
-  openai: (key) => ({ Authorization: `Bearer ${key}` }),
+  openai: (key) => (key ? { Authorization: `Bearer ${key}` } : ({} as Record<string, string>)),
   anthropic: (key) => ({
     'x-api-key': key,
     'anthropic-version': '2023-06-01',

@@ -58,20 +58,29 @@ describe('keyFor and withKeyFor', () => {
 });
 
 describe('resolveAiKey', () => {
+  it('counts a keyless local provider as ready with no key stored', () => {
+    expect(resolveAiKey({ aiApiKeys: {}, aiProvider: 'local' })).toEqual({
+      provider: 'local',
+      apiKey: '',
+      ready: true,
+    });
+  });
+
   it('hands back the key belonging to the selected provider, never another', () => {
     const stored = { aiApiKeys: { openai: 'sk-openai', anthropic: 'ak-anthropic' }, aiProvider: 'anthropic' };
-    expect(resolveAiKey(stored)).toEqual({ provider: 'anthropic', apiKey: 'ak-anthropic' });
+    expect(resolveAiKey(stored)).toEqual({ provider: 'anthropic', apiKey: 'ak-anthropic', ready: true });
   });
 
   it('reports no key rather than a neighbour key when the selected provider has none', () => {
     const stored = { aiApiKeys: { openai: 'sk-openai' }, aiProvider: 'openrouter' };
-    expect(resolveAiKey(stored)).toEqual({ provider: 'openrouter', apiKey: '' });
+    expect(resolveAiKey(stored)).toEqual({ provider: 'openrouter', apiKey: '', ready: false });
   });
 
   it('falls back to openai for an unknown stored provider', () => {
     expect(resolveAiKey({ aiApiKeys: { openai: 'sk-a' }, aiProvider: 'nope' })).toEqual({
       provider: 'openai',
       apiKey: 'sk-a',
+      ready: true,
     });
   });
 });
