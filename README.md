@@ -48,7 +48,7 @@ Click record, do the thing, get a polished guide with annotated screenshots. Nar
 ## 📺 Demo
 
 <div align="center">
-<img src="https://github.com/user-attachments/assets/9de20b45-2256-4127-8242-141cf1802f39" alt="Ditto demo" width="800" />
+<video src="https://github.com/user-attachments/assets/33cfa162-7530-4aa0-84ad-f2e1a688abd3" controls width="800"></video>
 </div>
 
 ## 👋 Getting Started
@@ -66,6 +66,10 @@ Each step gets a screenshot with the clicked element highlighted and zoomed in. 
 | Chrome  | [![Chrome Version][chrome-version-shield]][chrome-link]   | [Chrome Web Store][chrome-link] |
 | Firefox | [![Firefox Version][firefox-version-shield]][firefox-link] | [Firefox Add-ons][firefox-link]  |
 | Edge    | [![Edge Version][edge-version-shield]][edge-link]          | [Microsoft Edge Add-ons][edge-link] |
+
+Once it's installed, a short setup walks you through pinning the extension, turning on voice narration, and connecting a model if you want AI-written step descriptions. All of it is optional and can be skipped.
+
+<video src="https://github.com/user-attachments/assets/0379929d-5c7c-40a1-a9e9-36fa6493bbea" controls width="800"></video>
 
 
 > \[!IMPORTANT]
@@ -90,7 +94,7 @@ Ditto automatically detects and blurs sensitive data in your screenshots: emails
 
 Need to blur something custom? The manual blur picker lets you select any DOM element and mask it across every screenshot where it appears.
 
-<img src="https://github.com/user-attachments/assets/968d2518-c561-4d68-92a6-3d5f569fe38a" alt="Smart Blur" width="800" />
+<img src="public/smart-blur.gif" alt="Smart Blur masking emails, cards and IDs during a recording" width="800" />
 
 <div align="right">
 
@@ -100,13 +104,13 @@ Need to blur something custom? The manual blur picker lets you select any DOM el
 
 ### 🧠 AI descriptions (optional)
 
-Bring your own API key (OpenAI or Anthropic) and Ditto generates human-readable step descriptions like *"Click the **Submit** button to save changes"* instead of the rule-based `Click Submit`.
+Bring your own API key, or point Ditto at a model you run yourself, and it generates human-readable step descriptions like *"Click the **Submit** button to save changes"* instead of the rule-based `Click Submit`.
 
 Descriptions are generated from a lightweight DOM context (~50-100 tokens), not screenshots. Roughly 15-30x cheaper than vision models. Choose the language you want descriptions in (English, Spanish, Portuguese, French, German, Chinese).
 
 Prefer to keep everything on your own hardware? Pick **Your own server** and point Ditto at Ollama, LM Studio, vLLM, llama.cpp or a LiteLLM gateway — see [Using your own model server](docs/self-hosted-ai.md).
 
-<img src="https://github.com/user-attachments/assets/3540cbd5-133f-46fd-a9b6-ffce9b4d422a" alt="AI descriptions" width="800" />
+<img src="public/ai-descriptions.gif" alt="Rewriting a guide description with AI" width="800" />
 
 <div align="right">
 
@@ -118,7 +122,7 @@ Prefer to keep everything on your own hardware? Pick **Your own server** and poi
 
 Replay any guide live on a real page. Ditto highlights the next element to click, tracks your progress step by step, and advances automatically as you interact. Perfect for onboarding teammates or walking through a process yourself.
 
-<img src="https://github.com/user-attachments/assets/56ffca1d-5074-491f-8571-dd70782d4b05" alt="Guide Me replay" width="800" />
+<img src="public/guide-me.gif" alt="Guide Me highlighting each next element on a live page" width="800" />
 
 <div align="right">
 
@@ -129,10 +133,9 @@ Replay any guide live on a real page. Ditto highlights the next element to click
 ### 🎙️ Voice narration (optional)
 
 Talk through the workflow out loud while you record and Ditto turns what you said into the step
-descriptions. Audio is transcribed with your own key (OpenAI or Groq) and matched to the steps it
+descriptions. Audio is transcribed by OpenAI, Groq or your own whisper server, and matched to the steps it
 belongs to, so you narrate once instead of writing every step by hand.
 
-<img src="https://github.com/user-attachments/assets/061fddc7-da65-4641-8b39-d30b80c36531" alt="Voice narration" width="800" />
 
 <div align="right">
 
@@ -146,7 +149,7 @@ Fix a guide after the fact without re-recording. Crop, annotate and redact any s
 step with AI inline, drop headings and notes between steps, reorder or bulk-delete, and roll back
 through version history.
 
-<img src="https://github.com/user-attachments/assets/62d3a01e-b129-44c8-8ba3-e9b97ff08d7e" alt="Guide editor" width="800" />
+<img src="public/guide-editor.gif" alt="Annotating a screenshot in the guide editor" width="800" />
 
 <div align="right">
 
@@ -166,7 +169,7 @@ Share guides in whatever format fits your workflow:
 
 All exports are generated client-side. Nothing touches a server.
 
-<img src="https://github.com/user-attachments/assets/e7584527-7d68-4f3f-9261-8380ee08dfb4" alt="Multi-format export" width="800" />
+<img src="public/export-formats.gif" alt="Export preview with PDF, DOCX, HTML, Markdown and GIF options" width="800" />
 
 <div align="right">
 
