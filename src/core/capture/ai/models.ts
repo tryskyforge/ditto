@@ -14,6 +14,8 @@ export interface AIProviderConfig {
   defaultBaseUrl: string;
   keyCheckPath?: string;
   defaultModel: string;
+  modelPlaceholder?: string;
+  keyOptional?: boolean;
   models: AIModelOption[];
 }
 
@@ -76,11 +78,23 @@ export const AI_PROVIDERS = {
       { id: CUSTOM_MODEL_VALUE, label: 'Custom' },
     ],
   },
+  selfHosted: {
+    label: 'Your own server',
+    protocol: 'openai',
+    transport: 'chat',
+    keyOptional: true,
+    defaultBaseUrl: 'http://localhost:11434/v1',
+    defaultModel: '',
+    modelPlaceholder: 'llama3.1',
+    models: [{ id: CUSTOM_MODEL_VALUE, label: 'Custom' }],
+  },
 } satisfies Record<string, AIProviderConfig>;
 
 export type AIProviderKey = keyof typeof AI_PROVIDERS;
 
 export const DEFAULT_AI_PROVIDER: AIProviderKey = 'openai';
+
+export const SELF_HOSTED_AI_PROVIDER: AIProviderKey = 'selfHosted';
 
 export function isProviderKey(value: unknown): value is AIProviderKey {
   return typeof value === 'string' && value in AI_PROVIDERS;
@@ -92,6 +106,29 @@ export function findProvider(provider: string): AIProviderConfig | undefined {
 
 export function providerOrDefault(value: unknown): AIProviderKey {
   return isProviderKey(value) ? value : DEFAULT_AI_PROVIDER;
+}
+
+export function requiresApiKey(provider: string): boolean {
+  return findProvider(provider)?.keyOptional !== true;
+}
+
+export function hasPresetModels(config: AIProviderConfig): boolean {
+  return config.models.some((option) => option.id !== CUSTOM_MODEL_VALUE);
+}
+
+export function modelOptions(config: AIProviderConfig, discovered?: string[] | null): AIModelOption[] {
+  if (hasPresetModels(config)) return config.models;
+  const custom = config.models.find((option) => option.id === CUSTOM_MODEL_VALUE);
+  const found = (discovered ?? []).map((id) => ({ id, label: id }));
+  return custom ? [...found, custom] : found;
+}
+
+export function selectableModelIds(options: AIModelOption[]): string[] {
+  return options.filter((option) => option.id !== CUSTOM_MODEL_VALUE).map((option) => option.id);
+}
+
+export function modelPlaceholder(config: AIProviderConfig): string {
+  return config.modelPlaceholder ?? config.defaultModel;
 }
 
 export function normalizeBaseUrl(url: string): string {

@@ -12,6 +12,8 @@ export interface TranscriptionSettings {
   provider: VoiceProvider;
   apiKey: string;
   language?: string;
+  baseUrl?: string;
+  model?: string;
 }
 
 export interface VoiceRecording {
@@ -42,6 +44,8 @@ export async function readTranscriptionSettings(): Promise<TranscriptionSettings
     provider,
     apiKey,
     language: locale ? locale.split('-')[0] : undefined,
+    baseUrl: stored.voiceBaseUrl as string | undefined,
+    model: stored.voiceModel as string | undefined,
   };
 }
 

@@ -1,7 +1,7 @@
 import { Mic, MicOff } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { browser, i18n } from '#imports';
-import { hasVoiceApiKey, VOICE_KEY_SETTINGS } from '@/core/capture/voice/api-key';
+import { isVoiceReady, VOICE_KEY_SETTINGS } from '@/core/capture/voice/api-key';
 import { getActiveTab, localStorage } from '@/lib/browser-api';
 import { logger } from '@/lib/logger';
 import { sendMessage } from '@/lib/messaging';
@@ -32,7 +32,7 @@ export default function MicToggle({ enabled, live, onChange }: MicToggleProps) {
     let active = true;
     const read = () =>
       localStorage.get([...VOICE_KEY_SETTINGS]).then((stored) => {
-        if (active) setKeyed(hasVoiceApiKey(stored));
+        if (active) setKeyed(isVoiceReady(stored));
       });
 
     void read();

@@ -88,6 +88,12 @@ settings:
   model: Modelo
   modelCustom: Modelo personalizado
   baseUrl: URL base
+  apiKeyOptional: "Só se o seu servidor exigir"
+  selfHostedNoKeyNeeded: "Muitos servidores próprios não precisam de chave. Deixe vazio, a menos que o seu peça uma."
+  serverUrl: "URL do servidor"
+  selfHostedServerHint: "Qualquer endpoint compatível com OpenAI — Ollama ou LM Studio nesta máquina, ou vLLM, LiteLLM ou um gateway hospedado por você."
+  selfHostedProvider: "Seu próprio servidor"
+  voiceSelfHostedHint: "Qualquer endpoint de transcrição compatível com OpenAI — Speaches, faster-whisper-server, whisper.cpp ou LocalAI. Ele precisa retornar verbose_json com marcações de tempo por palavra."
   useOwnServer: Usar meu próprio servidor
   ownServerHintOpenai: "Funciona com Ollama, LM Studio, vLLM ou qualquer servidor compatível com OpenAI."
   ownServerHintAnthropic: "Funciona com um proxy LiteLLM ou qualquer servidor compatível com Anthropic."

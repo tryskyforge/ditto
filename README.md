@@ -73,7 +73,7 @@ Each step gets a screenshot with the clicked element highlighted and zoomed in. 
 > **⭐️ Star the repo** if Ditto saves you time. It helps other people discover it!
 
 <a href="https://github.com/tryskyforge/ditto">
-  <img width="100%" alt="Star Ditto on GitHub" src="https://github.com/user-attachments/assets/80d304da-a765-4bde-bf49-b1bdcb4fe804" />
+  <img width="100%" alt="Star Ditto on GitHub" src="public/star-banner.png" />
 </a>
 
 <div align="right">
@@ -103,6 +103,8 @@ Need to blur something custom? The manual blur picker lets you select any DOM el
 Bring your own API key (OpenAI or Anthropic) and Ditto generates human-readable step descriptions like *"Click the **Submit** button to save changes"* instead of the rule-based `Click Submit`.
 
 Descriptions are generated from a lightweight DOM context (~50-100 tokens), not screenshots. Roughly 15-30x cheaper than vision models. Choose the language you want descriptions in (English, Spanish, Portuguese, French, German, Chinese).
+
+Prefer to keep everything on your own hardware? Pick **Your own server** and point Ditto at Ollama, LM Studio, vLLM, llama.cpp or a LiteLLM gateway — see [Using your own model server](docs/self-hosted-ai.md).
 
 <img src="https://github.com/user-attachments/assets/3540cbd5-133f-46fd-a9b6-ffce9b4d422a" alt="AI descriptions" width="800" />
 

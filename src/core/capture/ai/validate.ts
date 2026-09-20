@@ -1,3 +1,4 @@
+import { WHISPER_SERVER_PROVIDER, whisperServerBase } from '@/core/capture/voice/transcribe';
 import { logger } from '@/lib/logger';
 import {
   type AIProtocol,
@@ -17,7 +18,7 @@ export type KeyValidation =
 const REQUEST_TIMEOUT_MS = 10_000;
 
 const PROTOCOL_HEADERS: Record<AIProtocol, (key: string) => Record<string, string>> = {
-  openai: (key) => ({ Authorization: `Bearer ${key}` }),
+  openai: (key) => (key ? { Authorization: `Bearer ${key}` } : ({} as Record<string, string>)),
   anthropic: (key) => ({
     'x-api-key': key,
     'anthropic-version': '2023-06-01',
@@ -25,10 +26,17 @@ const PROTOCOL_HEADERS: Record<AIProtocol, (key: string) => Record<string, strin
   }),
 };
 
-const VOICE_ENDPOINTS: Record<string, { url: string; headers: (key: string) => Record<string, string> }> = {
+const VOICE_ENDPOINTS: Record<
+  string,
+  { url: (baseUrl?: string) => string; headers: (key: string) => Record<string, string> }
+> = {
   groq: {
-    url: 'https://api.groq.com/openai/v1/models',
+    url: () => 'https://api.groq.com/openai/v1/models',
     headers: (key) => ({ Authorization: `Bearer ${key}` }),
+  },
+  [WHISPER_SERVER_PROVIDER]: {
+    url: (baseUrl) => `${whisperServerBase(baseUrl)}/models`,
+    headers: (key) => PROTOCOL_HEADERS.openai(key),
   },
 };
 
@@ -128,7 +136,7 @@ async function validateCustomServer(
   const selectedModel = model?.trim();
   if (!selectedModel) {
     const models = await fetchModelsFromUrl(catalogUrl, headers);
-    return models ? { valid: false, reason: 'model-required', models } : { valid: false, reason: 'model-required' };
+    return models ? { valid: true, models } : { valid: false, reason: 'model-required' };
   }
 
   if (await probeWithInference(config.protocol, base, selectedModel, headers)) {
@@ -155,7 +163,7 @@ export async function validateApiKey(
       logger.error('No API key validation endpoint for provider', provider);
       return { valid: false, reason: 'network' };
     }
-    return checkCatalog(endpoint.url, endpoint.headers(apiKey));
+    return checkCatalog(endpoint.url(baseUrl), endpoint.headers(apiKey));
   }
 
   if (isCustomBaseUrl(config, baseUrl)) return validateCustomServer(config, apiKey, baseUrl as string, model);

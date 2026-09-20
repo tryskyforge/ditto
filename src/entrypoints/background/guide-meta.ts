@@ -31,8 +31,8 @@ type GuideMetaInputs =
 
 async function resolveGuideMetaInputs(guideId: string): Promise<GuideMetaInputs> {
   const settings = await localStorage.get(['aiApiKeys', 'aiApiKey', 'aiProvider', 'aiModel', 'aiBaseUrl']);
-  const { provider, apiKey } = resolveAiKey(settings);
-  if (!apiKey) return { ok: false, reason: 'no-api-key' };
+  const { provider, apiKey, ready } = resolveAiKey(settings);
+  if (!ready) return { ok: false, reason: 'no-api-key' };
 
   const steps = actionSteps(await getStepsForGuide(guideId));
   const described = steps.filter((s) => s.description).map((s) => ({ description: s.description, url: s.url }));

@@ -24,13 +24,23 @@ import {
   type AIProviderKey,
   CUSTOM_MODEL_VALUE,
   DEFAULT_AI_PROVIDER,
+  hasPresetModels,
   isCustomBaseUrl,
-  isCustomModel,
+  modelOptions,
+  modelPlaceholder,
   providerOrDefault,
+  requiresApiKey,
+  SELF_HOSTED_AI_PROVIDER,
+  selectableModelIds,
 } from '@/core/capture/ai/models';
 import { AI_LANGUAGES, type AILanguageCode } from '@/core/capture/ai/prompts';
-import { resolveVoiceApiKey } from '@/core/capture/voice/api-key';
-import type { VoiceProvider } from '@/core/capture/voice/transcribe';
+import { resolveVoiceApiKey, voiceKeyRequired } from '@/core/capture/voice/api-key';
+import {
+  type VoiceProvider,
+  WHISPER_SERVER_DEFAULT_BASE_URL,
+  WHISPER_SERVER_DEFAULT_MODEL,
+  WHISPER_SERVER_PROVIDER,
+} from '@/core/capture/voice/transcribe';
 import { type BrandLogo, defaultFooterLine, makeBrandLogo } from '@/core/export/branding';
 import { DEFAULT_TARGET_COLOR, TARGET_COLORS } from '@/core/screenshot/types';
 import { localStorage } from '@/lib/browser-api';
@@ -76,6 +86,8 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
   const [aiLanguage, setAiLanguage] = useState<AILanguageCode>('en');
   const [voiceProvider, setVoiceProvider] = useState<VoiceProvider>('openai');
   const [voiceApiKey, setVoiceApiKey] = useState('');
+  const [voiceBaseUrl, setVoiceBaseUrl] = useState('');
+  const [voiceModel, setVoiceModel] = useState('');
   const [voiceMicrophoneId, setVoiceMicrophoneId] = useState('');
   const [targetColor, setTargetColor] = useState<string>(DEFAULT_TARGET_COLOR);
   const [brandLogo, setBrandLogo] = useState<BrandLogo | null>(null);
@@ -103,6 +115,8 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
         'blurPresets',
         'voiceProvider',
         'voiceApiKey',
+        'voiceBaseUrl',
+        'voiceModel',
         'voiceMicrophoneId',
         'targetColor',
         'brandLogo',
@@ -124,6 +138,8 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
         if (result.blurPresets) setBlurPresets(result.blurPresets as Record<PresetKey, boolean>);
         setVoiceProvider((result.voiceProvider as VoiceProvider) || 'openai');
         if (result.voiceApiKey) setVoiceApiKey(result.voiceApiKey as string);
+        if (result.voiceBaseUrl) setVoiceBaseUrl(result.voiceBaseUrl as string);
+        if (result.voiceModel) setVoiceModel(result.voiceModel as string);
         if (result.voiceMicrophoneId) setVoiceMicrophoneId(result.voiceMicrophoneId as string);
         if (result.targetColor) setTargetColor(result.targetColor as string);
         if (result.brandLogo) setBrandLogo(result.brandLogo as BrandLogo);
@@ -143,6 +159,8 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
     blurPresets,
     voiceProvider,
     voiceApiKey,
+    voiceBaseUrl,
+    voiceModel,
     voiceMicrophoneId,
     targetColor,
     brandLogo,
@@ -230,8 +248,16 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
   };
 
   const providerConfig = AI_PROVIDERS[provider] ?? AI_PROVIDERS[DEFAULT_AI_PROVIDER];
-  const usingCustomModel = customModel || isCustomModel(model, providerConfig);
+  const availableModels = modelOptions(providerConfig, aiKeyCheck.models);
+  const selectableModels = selectableModelIds(availableModels);
+  const usingCustomModel =
+    customModel || selectableModels.length === 0 || (model.trim() !== '' && !selectableModels.includes(model.trim()));
+  const isSelfHosted = provider === SELF_HOSTED_AI_PROVIDER;
+  const keyRequired = requiresApiKey(provider);
+  const serverUrlOpen = ownServer || isSelfHosted;
   const voiceKey = resolveVoiceApiKey({ voiceProvider, voiceApiKey, aiProvider: provider, aiApiKey: apiKey });
+  const voiceIsSelfHosted = voiceProvider === WHISPER_SERVER_PROVIDER;
+  const voiceKeyNeeded = voiceKeyRequired(voiceProvider);
 
   const BLUR_PRESET_I18N: Record<PresetKey, string> = {
     email: 'blurPresets.email',
@@ -297,10 +323,10 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
             <label className="block text-[11px] font-semibold text-foreground mb-1">{i18n.t('settings.model')}</label>
             <Select value={usingCustomModel ? CUSTOM_MODEL_VALUE : model} onValueChange={handleModelChange}>
               <SelectTrigger className="h-8">
-                <SelectValue />
+                <SelectValue placeholder={modelPlaceholder(providerConfig)} />
               </SelectTrigger>
               <SelectContent>
-                {providerConfig.models.map((m) => (
+                {availableModels.map((m) => (
                   <SelectItem key={m.id} value={m.id}>
                     {m.label}
                   </SelectItem>
@@ -314,7 +340,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
                   setModel(e.target.value);
                   aiKeyCheck.reset();
                 }}
-                placeholder={providerConfig.defaultModel}
+                placeholder={modelPlaceholder(providerConfig)}
                 aria-label={i18n.t('settings.modelCustom')}
                 className="mt-1.5 h-8 text-[13px] rounded-lg border-border"
               />
@@ -331,13 +357,13 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
                   setApiKeys((prev) => withKeyFor(prev, provider, next));
                   aiKeyCheck.reset();
                 }}
-                placeholder="sk-..."
+                placeholder={keyRequired ? 'sk-...' : i18n.t('settings.apiKeyOptional')}
                 className="h-8 text-[13px] rounded-lg border-border"
               />
               <Button
                 variant="outline"
                 size="sm"
-                disabled={!apiKey || aiKeyCheck.status === 'checking'}
+                disabled={(keyRequired && !apiKey) || aiKeyCheck.status === 'checking'}
                 onClick={() => {
                   if (aiKeyCheck.status !== 'checking') void aiKeyCheck.check(provider, apiKey, baseUrl, model);
                 }}
@@ -348,40 +374,55 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
             </div>
             <KeyStatusNote status={aiKeyCheck.status} />
             <KeyWarningNote warning={aiKeyCheck.warning} />
-            {aiKeyCheck.models && <ModelList models={aiKeyCheck.models} />}
-            {!apiKey.trim() && (
-              <p className="mt-1.5 flex items-start gap-1.5 text-[10px] text-destructive leading-relaxed" role="alert">
-                <TriangleAlert size={11} className="shrink-0 mt-0.5" />
-                <span>{i18n.t('settings.aiNoKey')}</span>
-              </p>
-            )}
+            {aiKeyCheck.models && hasPresetModels(providerConfig) && <ModelList models={aiKeyCheck.models} />}
+            {!apiKey.trim() &&
+              (keyRequired ? (
+                <p
+                  className="mt-1.5 flex items-start gap-1.5 text-[10px] text-destructive leading-relaxed"
+                  role="alert"
+                >
+                  <TriangleAlert size={11} className="shrink-0 mt-0.5" />
+                  <span>{i18n.t('settings.aiNoKey')}</span>
+                </p>
+              ) : (
+                <p className="mt-1.5 text-[10px] text-muted-foreground leading-relaxed">
+                  {i18n.t('settings.selfHostedNoKeyNeeded')}
+                </p>
+              ))}
           </div>
 
           <div>
-            <div className="flex items-center justify-between gap-3 py-0.5">
-              <span className="text-[11px] font-semibold text-foreground flex items-center gap-1">
+            {isSelfHosted ? (
+              <label className="block text-[11px] font-semibold text-foreground mb-1 flex items-center gap-1">
                 <Globe size={11} className="-mt-px" />
-                {i18n.t('settings.useOwnServer')}
-              </span>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={ownServer}
-                aria-label={i18n.t('settings.useOwnServer')}
-                onClick={handleOwnServerToggle}
-                className={`w-9 h-5 rounded-full transition-colors relative shrink-0 ${
-                  ownServer ? 'bg-accent' : 'bg-border'
-                }`}
-              >
-                <span
-                  className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${
-                    ownServer ? 'translate-x-4' : 'translate-x-0'
+                {i18n.t('settings.serverUrl')}
+              </label>
+            ) : (
+              <div className="flex items-center justify-between gap-3 py-0.5">
+                <span className="text-[11px] font-semibold text-foreground flex items-center gap-1">
+                  <Globe size={11} className="-mt-px" />
+                  {i18n.t('settings.useOwnServer')}
+                </span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={ownServer}
+                  aria-label={i18n.t('settings.useOwnServer')}
+                  onClick={handleOwnServerToggle}
+                  className={`w-9 h-5 rounded-full transition-colors relative shrink-0 ${
+                    ownServer ? 'bg-accent' : 'bg-border'
                   }`}
-                />
-              </button>
-            </div>
-            {ownServer && (
-              <div className="mt-2 space-y-1.5">
+                >
+                  <span
+                    className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${
+                      ownServer ? 'translate-x-4' : 'translate-x-0'
+                    }`}
+                  />
+                </button>
+              </div>
+            )}
+            {serverUrlOpen && (
+              <div className={isSelfHosted ? 'space-y-1.5' : 'mt-2 space-y-1.5'}>
                 <Input
                   type="text"
                   value={baseUrl}
@@ -390,14 +431,16 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
                     aiKeyCheck.reset();
                   }}
                   placeholder={providerConfig.defaultBaseUrl}
-                  aria-label={i18n.t('settings.baseUrl')}
+                  aria-label={i18n.t(isSelfHosted ? 'settings.serverUrl' : 'settings.baseUrl')}
                   className="h-8 text-[13px] rounded-lg border-border"
                 />
                 <p className="text-[10px] text-muted-foreground leading-relaxed">
                   {i18n.t(
-                    providerConfig.protocol === 'anthropic'
-                      ? 'settings.ownServerHintAnthropic'
-                      : 'settings.ownServerHintOpenai',
+                    isSelfHosted
+                      ? 'settings.selfHostedServerHint'
+                      : providerConfig.protocol === 'anthropic'
+                        ? 'settings.ownServerHintAnthropic'
+                        : 'settings.ownServerHintOpenai',
                   )}
                 </p>
               </div>
@@ -570,6 +613,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
               <SelectContent>
                 <SelectItem value="openai">OpenAI</SelectItem>
                 <SelectItem value="groq">Groq</SelectItem>
+                <SelectItem value={WHISPER_SERVER_PROVIDER}>{i18n.t('settings.selfHostedProvider')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -583,14 +627,20 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
                   setVoiceApiKey(next);
                   voiceKeyCheck.reset();
                 }}
-                placeholder={voiceProvider === 'groq' ? 'gsk_...' : 'sk-...'}
+                placeholder={
+                  voiceIsSelfHosted
+                    ? i18n.t('settings.apiKeyOptional')
+                    : voiceProvider === 'groq'
+                      ? 'gsk_...'
+                      : 'sk-...'
+                }
                 className="h-8 text-[13px] rounded-lg border-border"
               />
               <Button
                 variant="outline"
                 size="sm"
-                disabled={!voiceApiKey || voiceKeyCheck.status === 'checking'}
-                onClick={() => void voiceKeyCheck.check(voiceProvider, voiceApiKey)}
+                disabled={(voiceKeyNeeded && !voiceApiKey) || voiceKeyCheck.status === 'checking'}
+                onClick={() => void voiceKeyCheck.check(voiceProvider, voiceApiKey, voiceBaseUrl)}
                 className="h-8 shrink-0 rounded-lg bg-card text-[11px] font-semibold"
               >
                 {i18n.t('settings.checkKey')}
@@ -604,13 +654,63 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
                 <span>{i18n.t('settings.voiceUsingAiKey')}</span>
               </p>
             )}
-            {voiceKey.source === 'none' && (
-              <p className="mt-1.5 flex items-start gap-1.5 text-[10px] text-destructive leading-relaxed" role="alert">
-                <TriangleAlert size={11} className="shrink-0 mt-0.5" />
-                <span>{i18n.t('settings.voiceNoKey')}</span>
-              </p>
-            )}
+            {voiceKey.source === 'none' &&
+              (voiceKeyNeeded ? (
+                <p
+                  className="mt-1.5 flex items-start gap-1.5 text-[10px] text-destructive leading-relaxed"
+                  role="alert"
+                >
+                  <TriangleAlert size={11} className="shrink-0 mt-0.5" />
+                  <span>{i18n.t('settings.voiceNoKey')}</span>
+                </p>
+              ) : (
+                <p className="mt-1.5 text-[10px] text-muted-foreground leading-relaxed">
+                  {i18n.t('settings.selfHostedNoKeyNeeded')}
+                </p>
+              ))}
           </div>
+
+          {voiceIsSelfHosted && (
+            <>
+              <div>
+                <label className="block text-[11px] font-semibold text-foreground mb-1 flex items-center gap-1">
+                  <Globe size={11} className="-mt-px" />
+                  {i18n.t('settings.serverUrl')}
+                </label>
+                <Input
+                  type="text"
+                  value={voiceBaseUrl}
+                  onChange={(e) => {
+                    setVoiceBaseUrl(e.target.value);
+                    voiceKeyCheck.reset();
+                  }}
+                  placeholder={WHISPER_SERVER_DEFAULT_BASE_URL}
+                  aria-label={i18n.t('settings.serverUrl')}
+                  className="h-8 text-[13px] rounded-lg border-border"
+                />
+                <p className="mt-1.5 text-[10px] text-muted-foreground leading-relaxed">
+                  {i18n.t('settings.voiceSelfHostedHint')}
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-foreground mb-1">
+                  {i18n.t('settings.model')}
+                </label>
+                <Input
+                  type="text"
+                  value={voiceModel}
+                  onChange={(e) => {
+                    setVoiceModel(e.target.value);
+                    voiceKeyCheck.reset();
+                  }}
+                  placeholder={WHISPER_SERVER_DEFAULT_MODEL}
+                  aria-label={i18n.t('settings.model')}
+                  className="h-8 text-[13px] rounded-lg border-border"
+                />
+              </div>
+            </>
+          )}
 
           {import.meta.env.BROWSER !== 'firefox' && (
             <MicrophonePicker value={voiceMicrophoneId} onChange={setVoiceMicrophoneId} triggerClassName="h-8" />

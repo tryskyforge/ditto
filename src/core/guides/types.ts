@@ -72,6 +72,8 @@ export interface Settings {
   voiceEnabled: boolean;
   voiceProvider: VoiceProvider;
   voiceApiKey: string;
+  voiceBaseUrl: string;
+  voiceModel: string;
   voiceMicrophoneId: string;
   voiceLanguage: string;
   blurPresets: Record<string, boolean>;

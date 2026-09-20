@@ -31,8 +31,8 @@ export async function rewriteSelection(text: string, instruction: string): Promi
     'aiBaseUrl',
     'aiLanguage',
   ]);
-  const { provider, apiKey } = resolveAiKey(settings);
-  if (!apiKey) return { error: 'no-api-key' };
+  const { provider, apiKey, ready } = resolveAiKey(settings);
+  if (!ready) return { error: 'no-api-key' };
 
   try {
     const { text: raw } = await generateText({

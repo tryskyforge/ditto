@@ -1,4 +1,4 @@
-import { type AIProviderKey, isProviderKey, providerOrDefault } from './models';
+import { type AIProviderKey, isProviderKey, providerOrDefault, requiresApiKey } from './models';
 
 export type AIApiKeys = Partial<Record<AIProviderKey, string>>;
 
@@ -38,7 +38,9 @@ export const AI_KEY_SETTINGS = ['aiApiKeys', 'aiApiKey', 'aiProvider'] as const;
 export function resolveAiKey(stored: { aiApiKeys?: unknown; aiApiKey?: unknown; aiProvider?: unknown }): {
   provider: AIProviderKey;
   apiKey: string;
+  ready: boolean;
 } {
   const provider = providerOrDefault(stored.aiProvider);
-  return { provider, apiKey: keyFor(migrateApiKeys(stored), provider) };
+  const apiKey = keyFor(migrateApiKeys(stored), provider);
+  return { provider, apiKey, ready: Boolean(apiKey) || !requiresApiKey(provider) };
 }
