@@ -10,7 +10,11 @@ store/
   icons/                  listing icons
   screenshots/            1280x800, 24-bit RGB, no alpha
   promo/                  Chrome promo tiles, 24-bit RGB, no alpha
+  firefox/                AMO-specific: plain-text privacy policy, reviewer notes
 ```
+
+AMO differs enough from the Chromium stores to need its own notes — see
+[`firefox/README.md`](firefox/README.md).
 
 ## Where each file goes
 
