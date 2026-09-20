@@ -222,8 +222,6 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup, project layout, 
 
 MIT © [Skyforge AI](https://github.com/tryskyforge). See [LICENSE](./LICENSE) for details.
 
-Ditto began as a fork of [Mimik](https://github.com/westpoint-io/mimik) by Westpoint, also MIT licensed. Thanks to them for the foundation.
-
 <div align="right">
 
 [![Back to top][back-to-top]](#readme-top)
