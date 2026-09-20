@@ -1,0 +1,84 @@
+@import "@fontsource/poppins/400.css";
+@import "@fontsource/poppins/500.css";
+@import "@fontsource/poppins/600.css";
+@import "@fontsource/poppins/700.css";
+@import "@fontsource/poppins/800.css";
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --breakpoint-rail: 1100px;
+  --color-star: #F5C24C;
+}
+
+@theme inline {
+  --color-background: #FAFAF7;
+  --color-foreground: #23362B;
+  --color-card: #fff;
+  --color-card-foreground: #23362B;
+  --color-popover: #fff;
+  --color-popover-foreground: #23362B;
+  --color-primary: #23362B;
+  --color-primary-foreground: #CFE0C8;
+  --color-secondary: #EEF4EA;
+  --color-secondary-foreground: #23362B;
+  --color-muted: #EEF4EA;
+  --color-muted-foreground: #6B7280;
+  --color-accent: #3D6B47;
+  --color-accent-foreground: #EEF4EA;
+  --color-destructive: #DC2626;
+  --color-destructive-foreground: #fff;
+  --color-border: #CFE0C8;
+  --color-input: #CFE0C8;
+  --color-ring: #3D6B47;
+  --radius: 0.5rem;
+
+  --color-violet: #7FAE72;
+  --color-violet-light: #9DBB8F;
+  --color-violet-dark: #2F4F3A;
+  --color-violet-mid: #2F4F3A;
+  --color-lavender: #CFE0C8;
+  --color-purple: #3D6B47;
+  --color-deep: #23362B;
+  --color-success: #059669;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+button:not(:disabled):not([aria-disabled="true"]),
+[role="button"]:not([aria-disabled="true"]),
+label:has(> input[type="checkbox"]),
+input[type="checkbox"]:not(:disabled) {
+  cursor: pointer;
+}
+
+@keyframes gradient-text {
+  0% { background-position: 100% 50%; }
+  100% { background-position: -100% 50%; }
+}
+
+@utility animate-gradient-text {
+  animation: gradient-text 3s ease infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+@keyframes cam-flash {
+  0%, 88%, 100% { opacity: 0; }
+  92% { opacity: 0.7; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@utility animate-blink {
+  animation: blink 0.7s step-end infinite;
+}

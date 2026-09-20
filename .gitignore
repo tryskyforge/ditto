@@ -1,0 +1,11 @@
+node_modules/
+.output/
+.wxt/
+dist/
+coverage/
+.planning/
+.source/
+.claude/
+mockups/
+.worktrees/
+public/transformers/

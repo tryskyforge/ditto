@@ -1,0 +1,61 @@
+name: Feature request
+description: Suggest something Ditto should do
+title: "[Feature] "
+labels: [enhancement, needs-triage]
+body:
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Before you begin
+      options:
+        - label: I searched existing issues to avoid a duplicate.
+          required: true
+        - label: I am willing to open a PR for this.
+          required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        Reporting something broken instead? Use the [bug report form](https://github.com/tryskyforge/ditto/issues/new?template=bug_report.yml).
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What are you trying to do that Ditto makes hard today?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: What you would want
+      description: Rough is fine. Say what it should do, not how to build it.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: areas
+    attributes:
+      label: Which areas would this affect?
+      multiple: true
+      options:
+        - Recording and capture
+        - Guide editor
+        - Screenshot editor, annotation or crop
+        - Smart Blur
+        - Export (PDF, DOCX, HTML, Markdown)
+        - Export (video)
+        - Guide Me replay
+        - Voice narration
+        - AI descriptions
+        - Onboarding or settings
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Screenshots, mockups, or how other tools solve it. If you used an AI tool to write this, say so here.

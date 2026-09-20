@@ -1,0 +1,30 @@
+import SettingsView from '@/ui/shared/SettingsView';
+
+export default function App() {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        width: '100%',
+        background: 'radial-gradient(ellipse at center, #FAFAF7 0%, #EEF4EA 60%, #CFE0C8 100%)',
+      }}
+    >
+      <div
+        style={{
+          width: '100%',
+          maxWidth: '28rem',
+          background: 'white',
+          borderRadius: '16px',
+          border: '1px solid var(--color-border)',
+          boxShadow: '0 8px 40px rgba(35, 54, 43,0.08)',
+          overflow: 'hidden',
+        }}
+      >
+        <SettingsView />
+      </div>
+    </div>
+  );
+}

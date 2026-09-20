@@ -1,0 +1,6 @@
+allowBuilds:
+  core-js: true
+  esbuild: true
+  spawn-sync: true
+patchedDependencies:
+  jspdf: patches/jspdf.patch

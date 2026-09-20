@@ -1,0 +1,63 @@
+Ditto — Privacy Policy
+
+Last updated 20 September 2026
+
+Ditto has no backend, no accounts and no analytics. Your guides, screenshots and settings are stored on your own device and are never uploaded anywhere. Three things can leave your browser, all listed below, and two of them only if you switch them on.
+
+What Ditto stores, and where
+
+Everything lives in your browser's own storage on your computer:
+
+Guides, steps and screenshots — in an IndexedDB database named ditto.
+
+Settings — including any API keys you enter — in chrome.storage.local.
+
+Recording state — briefly, in sessionStorage, so an interrupted recording can resume.
+
+None of this is transmitted to us or to anyone else. We operate no servers that receive your data, because Ditto has no servers at all. Uninstalling the extension, or clearing its storage from your browser, removes everything.
+
+What leaves your browser
+
+What — When — What is sent
+Site icons — Always, when a guide is displayed or exported — The domain name of the site in your guide is sent to Google's favicon service at t1.gstatic.com to fetch its icon. Not the page URL, not the page content.
+AI step descriptions — Only if you enable it and supply a provider — A short text snippet describing the clicked element and its surrounding page context — roughly 50–100 tokens. Screenshots are never sent. It goes to the provider you chose, using your own API key.
+Voice narration — Only if you turn the microphone on for a recording — The audio you recorded, sent to the transcription provider you chose, using your own API key.
+
+For the AI and voice features you choose the provider yourself. Built-in options connect to OpenAI, Anthropic, Groq, DeepSeek or OpenRouter. You can also point Ditto at a model server you run yourself — on your own machine or your own infrastructure — in which case nothing goes to a third party at all. Whichever you pick, that provider's own privacy policy governs what they do with the data, and we are not a party to it.
+
+Guides exported as HTML reference the Poppins webfont from Google Fonts. That request happens when the exported file is opened, by whoever opens it, not by Ditto.
+
+What Ditto never does
+
+No analytics, telemetry, crash reporting or usage tracking of any kind.
+
+No account, sign-up, licence check or phone-home.
+
+No selling, sharing or transfer of your data — we never receive it.
+
+No advertising, and no use of your data to train any model.
+
+Permissions, and why each is needed
+
+Permission — Why
+<all_urls> — You choose which site to document, so Ditto cannot know in advance which hosts it needs. It only acts on a tab while you are recording or replaying a guide on it.
+tabs, activeTab, webNavigation — To know which tab you are recording and to keep capturing across page navigations.
+scripting — To place the capture and replay overlays on the page.
+storage, unlimitedStorage — To keep your guides and screenshots on your device. Screenshots are large, hence unlimited.
+sidebar_action — The main Ditto interface.
+
+On Firefox, host access is requested optionally at the point you start a recording, rather than granted at install time.
+
+Children
+
+Ditto is a general-purpose developer and documentation tool, is not directed at children, and collects no personal information from anyone.
+
+Changes
+
+If this policy changes, the date above changes with it. Because Ditto is open source, every change is also visible in the repository's commit history.
+
+Contact
+
+Questions or concerns: open an issue at github.com/tryskyforge/ditto/issues.
+
+Ditto is open source. You can verify everything above by reading the source at github.com/tryskyforge/ditto — also published at https://tryskyforge.github.io/ditto/privacy.html
