@@ -231,10 +231,13 @@ key or point the extension at their own model server. Everything else works full
 ## After the first upload
 
 Chrome shows the extension ID in the dashboard URL immediately, before review completes.
-Four placeholders in README.md need it:
 
-- `CHROME_EXTENSION_ID` (version badge)
-- `EXTENSION_ID` (Chrome store link)
-- `EDGE_EXTENSION_ID` (twice — Edge badge query and store link)
+- Chrome: `ipcgbegaacaepfkmfllmaojdlenhedao` — filled into README.md
+- Edge: `EDGE_EXTENSION_ID` still a placeholder in README.md (twice — badge query and
+  store link)
+- Firefox: uses the slug `ditto` in its URL, which the existing badge already assumes
+
+The Chrome id is also needed as the `CHROME_EXTENSION_ID` repository secret for
+`.github/workflows/submit.yml`.
 
 Firefox uses the slug `ditto` in its URL, which the existing badge already assumes.

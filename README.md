@@ -257,8 +257,8 @@ MIT © [Skyforge AI](https://github.com/tryskyforge). See [LICENSE](./LICENSE) f
 [issues-shield]: https://img.shields.io/github/issues/tryskyforge/ditto?style=flat-square&labelColor=23362B
 [issues-link]: https://github.com/tryskyforge/ditto/issues
 
-[chrome-version-shield]: https://img.shields.io/chrome-web-store/v/CHROME_EXTENSION_ID?label=Chrome%20Version&style=flat-square&logo=googlechrome&logoColor=CFE0C8&color=3D6B47&labelColor=23362B
-[chrome-link]: https://chromewebstore.google.com/detail/ditto/EXTENSION_ID
+[chrome-version-shield]: https://img.shields.io/chrome-web-store/v/ipcgbegaacaepfkmfllmaojdlenhedao?label=Chrome%20Version&style=flat-square&logo=googlechrome&logoColor=CFE0C8&color=3D6B47&labelColor=23362B
+[chrome-link]: https://chromewebstore.google.com/detail/ditto/ipcgbegaacaepfkmfllmaojdlenhedao
 [firefox-version-shield]: https://img.shields.io/amo/v/ditto?label=Firefox%20Version&style=flat-square&logo=firefoxbrowser&logoColor=CFE0C8&color=3D6B47&labelColor=23362B
 [firefox-link]: https://addons.mozilla.org/en-US/firefox/addon/ditto/
 [edge-version-shield]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2FEDGE_EXTENSION_ID&query=%24.version&label=Edge%20Version&style=flat-square&logo=microsoftedge&logoColor=CFE0C8&color=3D6B47&labelColor=23362B
