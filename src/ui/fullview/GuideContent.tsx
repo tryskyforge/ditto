@@ -277,7 +277,7 @@ export default function GuideContent({ guideId, initialStepId, initialTool }: Gu
           {[0, 1, 2].map((i) => (
             <div key={i} className="rounded-xl border border-border/50 p-4">
               <div
-                className="aspect-video rounded-lg bg-[#f2f4fa] animate-pulse mb-3"
+                className="aspect-video rounded-lg bg-secondary animate-pulse mb-3"
                 style={{ animationDelay: `${i * 150}ms` }}
               />
               <div

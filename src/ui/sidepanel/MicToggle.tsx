@@ -85,7 +85,7 @@ export default function MicToggle({ enabled, live, onChange }: MicToggleProps) {
           aria-pressed={enabled}
           aria-disabled={locked}
           aria-label={label}
-          className={`w-10 h-10 rounded-full border flex items-center justify-center transition-colors ${
+          className={`w-12 h-12 rounded-xl border flex items-center justify-center transition-colors ${
             locked
               ? 'border-dashed border-border text-muted-foreground opacity-60 cursor-not-allowed'
               : enabled
