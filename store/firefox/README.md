@@ -89,7 +89,9 @@ personal data. Do not soften it to look better.
 
 ## Slug
 
-The README badge assumes `https://addons.mozilla.org/en-US/firefox/addon/ditto/`. AMO
-auto-suggests a slug from the add-on name and may append a suffix if `ditto` is taken. If
-the final slug is not `ditto`, update `[firefox-link]` and `[firefox-version-shield]` in
-README.md to match.
+AMO assigned **`ditto-skyforgeai`** — `ditto` was unavailable. The listing lives at
+https://addons.mozilla.org/en-US/firefox/addon/ditto-skyforgeai/ and both
+`[firefox-link]` and `[firefox-version-shield]` in README.md point at it.
+
+The slug is fixed once the add-on is published; changing it later breaks any link already
+shared.
