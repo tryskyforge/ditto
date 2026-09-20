@@ -9,6 +9,7 @@
 
 @theme {
   --breakpoint-rail: 1100px;
+  --color-star: #F5C24C;
 }
 
 @theme inline {

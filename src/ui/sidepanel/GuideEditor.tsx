@@ -74,12 +74,15 @@ export default function GuideEditor({ guideId, onBack, onGuideMe }: GuideEditorP
     });
   }, []);
 
-  if (loading) return <p className="text-sm text-purple p-4">{i18n.t('common.loading')}</p>;
+  if (loading) return <p className="text-sm text-muted-foreground p-5">{i18n.t('common.loading')}</p>;
 
   if (notFound || !data) {
     return (
       <div className="p-4">
-        <button onClick={onBack} className="flex items-center gap-1 text-sm text-purple hover:text-foreground mb-4">
+        <button
+          onClick={onBack}
+          className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4"
+        >
           <ArrowLeft size={18} />
           {i18n.t('common.back')}
         </button>
@@ -94,11 +97,11 @@ export default function GuideEditor({ guideId, onBack, onGuideMe }: GuideEditorP
 
   return (
     <div className="min-h-screen bg-card flex flex-col">
-      <div className="px-4 pt-3 pb-2">
+      <div className="px-5 pt-4 pb-2">
         <div className="flex items-center gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
-              <button onClick={onBack} className="shrink-0 p-1 rounded text-purple hover:text-foreground">
+              <button onClick={onBack} className="shrink-0 p-1 rounded text-muted-foreground hover:text-foreground">
                 <ArrowLeft size={18} />
               </button>
             </TooltipTrigger>
@@ -143,7 +146,7 @@ export default function GuideEditor({ guideId, onBack, onGuideMe }: GuideEditorP
                       }}
                       aria-disabled={!replayable}
                       aria-label={label}
-                      className="shrink-0 p-1.5 rounded-md transition-colors text-purple hover:text-accent hover:bg-secondary aria-disabled:opacity-30 aria-disabled:cursor-not-allowed aria-disabled:hover:text-purple aria-disabled:hover:bg-transparent"
+                      className="shrink-0 p-1.5 rounded-md transition-colors text-muted-foreground hover:text-accent hover:bg-secondary aria-disabled:opacity-30 aria-disabled:cursor-not-allowed aria-disabled:hover:text-muted-foreground aria-disabled:hover:bg-transparent"
                     >
                       <Play size={15} />
                     </button>
@@ -157,7 +160,7 @@ export default function GuideEditor({ guideId, onBack, onGuideMe }: GuideEditorP
             <TooltipTrigger asChild>
               <button
                 onClick={() => openInFullView(guideId)}
-                className="shrink-0 flex items-center gap-1 rounded-lg border border-border px-2 py-1 text-[11px] font-semibold text-purple transition-colors hover:border-accent hover:text-accent"
+                className="shrink-0 flex items-center gap-1 rounded-lg border border-border px-2 py-1 text-[11px] font-semibold text-muted-foreground transition-colors hover:border-accent hover:text-accent"
               >
                 <Maximize2 size={12} />
                 {i18n.t('editor.openInDashboard')}
@@ -168,7 +171,7 @@ export default function GuideEditor({ guideId, onBack, onGuideMe }: GuideEditorP
         </div>
       </div>
 
-      <div className="px-4 pt-1 pb-4 flex-1 flex flex-col">
+      <div className="px-5 pt-1 pb-4 flex-1 flex flex-col">
         {data.steps.length === 0 ? (
           <EmptyGuideState />
         ) : (
