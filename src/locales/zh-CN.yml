@@ -165,6 +165,7 @@ fullview:
   stepCount: "$1 个步骤"
   stepCountPlural: "$1 个步骤"
   pageOf: "$1 / $2"
+  steps: 步骤
 
 sort:
   recentFirst: 最近优先

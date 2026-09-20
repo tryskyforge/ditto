@@ -148,7 +148,7 @@ export default function RecordingView({ guideId, onStop, voice, aiFailure }: Rec
           <div>
             {steps.map((liveStep, idx) => (
               <div key={liveStep.step.id}>
-                <div className="px-4 pb-4 group">
+                <div className="px-5 pb-4 group">
                   {liveStep.screenshot && (
                     <div className="mb-2">
                       <ScreenshotView
@@ -177,7 +177,7 @@ export default function RecordingView({ guideId, onStop, voice, aiFailure }: Rec
                           {liveStep.step.description}
                         </p>
                       )}
-                      <span className="flex items-baseline gap-1.5 text-[10px] text-purple">
+                      <span className="flex items-baseline gap-1.5 mt-1 text-[10px] text-muted-foreground">
                         {!liveStep.step.aiPending && <StepSourceBadge source={liveStep.step.descriptionSource} />}
                         <span>
                           {timeAgo(liveStep.step.timestamp)} · {extractDomain(liveStep.step.url || siteUrl)}
@@ -197,7 +197,7 @@ export default function RecordingView({ guideId, onStop, voice, aiFailure }: Rec
                     </Tooltip>
                   </div>
                 </div>
-                {idx < steps.length - 1 && <div className="mx-4 mb-4 h-px bg-border" />}
+                {idx < steps.length - 1 && <div className="mx-5 mb-4 h-px bg-border" />}
               </div>
             ))}
           </div>
@@ -209,8 +209,8 @@ export default function RecordingView({ guideId, onStop, voice, aiFailure }: Rec
       <div className="shrink-0 border-t border-border">
         <AiStatus update={aiFailure} />
         {import.meta.env.BROWSER !== 'firefox' && <VoiceStatus update={voice} enabled={voiceEnabled} />}
-        <div className="px-4 py-2.5 flex items-center gap-2">
-          <Button onClick={onStop} className="flex-1 h-10 rounded-full font-semibold text-[13px]">
+        <div className="px-5 py-3 flex items-center gap-2">
+          <Button onClick={onStop} className="flex-1 h-12 rounded-xl font-semibold text-[13px]">
             <Check size={16} strokeWidth={3} />
             {i18n.t('recording.finishRecording')}
           </Button>
@@ -223,7 +223,7 @@ export default function RecordingView({ guideId, onStop, voice, aiFailure }: Rec
                 <button
                   onClick={handleBlur}
                   disabled={isBlurring}
-                  className="w-10 h-10 rounded-full border border-border flex items-center justify-center transition-colors text-muted-foreground hover:border-accent hover:text-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-12 h-12 rounded-xl border border-border flex items-center justify-center transition-colors text-muted-foreground hover:border-accent hover:text-accent disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <EyeOff size={16} />
                 </button>
@@ -235,7 +235,7 @@ export default function RecordingView({ guideId, onStop, voice, aiFailure }: Rec
             <TooltipTrigger asChild>
               <button
                 onClick={onStop}
-                className="w-10 h-10 rounded-full border border-border flex items-center justify-center transition-colors text-purple hover:border-destructive/30 hover:text-destructive"
+                className="w-12 h-12 rounded-xl border border-border flex items-center justify-center transition-colors text-muted-foreground hover:border-destructive/30 hover:text-destructive"
               >
                 <X size={16} />
               </button>

@@ -9,7 +9,7 @@ export default function App() {
         justifyContent: 'center',
         minHeight: '100vh',
         width: '100%',
-        background: 'radial-gradient(ellipse at center, #FAFAF7 0%, #f0f2fa 60%, #e5e8f4 100%)',
+        background: 'radial-gradient(ellipse at center, #FAFAF7 0%, #EEF4EA 60%, #CFE0C8 100%)',
       }}
     >
       <div

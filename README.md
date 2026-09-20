@@ -67,7 +67,6 @@ Each step gets a screenshot with the clicked element highlighted and zoomed in. 
 | Firefox | [![Firefox Version][firefox-version-shield]][firefox-link] | [Firefox Add-ons][firefox-link]  |
 | Edge    | [![Edge Version][edge-version-shield]][edge-link]          | [Microsoft Edge Add-ons][edge-link] |
 
-Available in English, Spanish, Brazilian Portuguese, French, German, and Simplified Chinese. The AI description language is set separately, so you can run Ditto in English and generate guides in Spanish, or any combination.
 
 > \[!IMPORTANT]
 >

@@ -211,9 +211,12 @@ export default function App() {
     return (
       <div className="min-h-screen bg-card flex flex-col">
         {/* Header */}
-        <div className="px-6 pt-6 pb-7 border-b border-border">
-          <div className="flex items-center justify-between mb-5">
-            <span className="text-[17px] font-bold tracking-tight text-foreground">{i18n.t('app.name')}</span>
+        <div className="px-5 pt-5 pb-5 border-b border-border">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <MascotIcon size={22} />
+              <span className="text-[17px] font-bold tracking-tight text-foreground">{i18n.t('app.name')}</span>
+            </div>
             <div className="flex items-center gap-2">
               <span className="flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground">
                 <span
@@ -231,25 +234,22 @@ export default function App() {
             </div>
           </div>
 
-          <div className="text-center mb-5">
-            <div className="flex justify-center mb-2">
-              <MascotIcon size={56} coffee />
-            </div>
-            <h3 className="text-base font-medium text-foreground">{i18n.t('sidepanel.heroTitle')}</h3>
-            <p className="text-xs mt-1 text-muted-foreground">{i18n.t('sidepanel.heroSubtitle')}</p>
+          <div className="text-center mb-4">
+            <h3 className="text-[15px] font-semibold text-foreground">{i18n.t('sidepanel.heroTitle')}</h3>
+            <p className="text-[11px] mt-1 text-muted-foreground">{i18n.t('sidepanel.heroSubtitle')}</p>
           </div>
 
           {isRecordableUrl(activeUrl) ? (
             <Button
               onClick={handleStartRecording}
               disabled={!isAlive}
-              className="w-full py-3 px-4 h-auto rounded-lg font-semibold text-sm hover:-translate-y-px shadow-sm"
+              className="w-full h-12 px-4 rounded-xl font-semibold text-sm hover:-translate-y-px shadow-sm"
             >
               <Video size={18} />
               {i18n.t('sidepanel.startCapture')}
             </Button>
           ) : (
-            <p className="flex items-center justify-center gap-1.5 rounded-lg border border-border py-2.5 text-xs font-medium text-muted-foreground">
+            <p className="flex items-center justify-center gap-1.5 rounded-xl border border-border h-12 text-xs font-medium text-muted-foreground">
               <Globe size={14} className="shrink-0 text-accent" />
               {i18n.t('sidepanel.notRecordable')}
             </p>
@@ -257,10 +257,10 @@ export default function App() {
         </div>
 
         {/* Body */}
-        <div className="flex-1 px-5 pt-5">
+        <div className="flex-1 px-5 pt-4">
           <UpdateNotice className="mb-4" />
 
-          <div className="relative mb-5">
+          <div className="relative mb-4">
             <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple" />
             <Input
               type="text"
@@ -271,7 +271,7 @@ export default function App() {
             />
           </div>
 
-          <p className="text-[11px] font-semibold uppercase tracking-wider mb-2.5 text-muted-foreground">
+          <p className="text-[10px] font-semibold uppercase tracking-wider mb-2 text-muted-foreground">
             {i18n.t('sidepanel.recentLabel')}
           </p>
 

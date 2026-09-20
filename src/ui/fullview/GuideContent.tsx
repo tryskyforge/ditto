@@ -28,6 +28,7 @@ import FaviconImg from '@/ui/shared/FaviconImg';
 import { guideDescriptionErrorMessage } from '@/ui/shared/guide-description-error';
 import Toast from '@/ui/shared/Toast';
 import GuideStepList from './components/GuideStepList';
+import GuideStepRail from './components/GuideStepRail';
 import VersionHistoryPanel from './components/VersionHistoryPanel';
 
 interface GuideContentProps {
@@ -276,7 +277,7 @@ export default function GuideContent({ guideId, initialStepId, initialTool }: Gu
           {[0, 1, 2].map((i) => (
             <div key={i} className="rounded-xl border border-border/50 p-4">
               <div
-                className="aspect-video rounded-lg bg-[#f2f4fa] animate-pulse mb-3"
+                className="aspect-video rounded-lg bg-secondary animate-pulse mb-3"
                 style={{ animationDelay: `${i * 150}ms` }}
               />
               <div
@@ -312,8 +313,9 @@ export default function GuideContent({ guideId, initialStepId, initialTool }: Gu
         />
       )}
 
-      <div className={historyOpen ? 'flex items-start gap-6' : ''}>
-        <div className={historyOpen ? 'flex-1 min-w-0' : ''}>
+      <div className={historyOpen ? 'flex items-start gap-6' : 'flex items-start gap-10'}>
+        {!historyOpen && <GuideStepRail steps={viewSteps} />}
+        <div className="flex-1 min-w-0">
           {preview && (
             <div className="flex items-center gap-2 rounded-lg bg-secondary border border-border px-4 py-3 mb-4">
               <History size={15} className="text-accent shrink-0" />
