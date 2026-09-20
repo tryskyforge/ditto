@@ -68,6 +68,8 @@ Each step gets a screenshot with the clicked element highlighted and zoomed in. 
 | Firefox | [![Firefox Version][firefox-version-shield]][firefox-link] | [Firefox Add-ons][firefox-link] *(pending)* |
 | Edge    | [![Edge Version][edge-version-shield]][edge-link]          | [Microsoft Edge Add-ons][edge-link] *(pending)* |
 
+All three listings are in review. In the meantime you can [install from source](docs/install-from-source.md) — download a build from the [latest release](https://github.com/tryskyforge/ditto/releases/latest) and load it in about a minute.
+
 Once it's installed, a short setup walks you through pinning the extension, turning on voice narration, and connecting a model if you want AI-written step descriptions. All of it is optional and can be skipped.
 
 <video src="https://github.com/user-attachments/assets/0379929d-5c7c-40a1-a9e9-36fa6493bbea" controls width="800"></video>
