@@ -181,7 +181,7 @@ All exports are generated client-side. Nothing touches a server.
 
 Guides, steps, and screenshots live on your device. There's no backend, no account, no telemetry. Your API keys (if you bring one) never leave your browser — they're stored locally and used to call the provider you chose directly.
 
-Two things do leave the browser, both documented in the [privacy policy](https://ditto.example.com/privacy/): site icons are fetched from Google's favicon service, which sends that site's domain, and the optional AI and voice features send text or audio to the provider you configured.
+Two things do leave the browser, both documented in the [privacy policy](https://tryskyforge.github.io/ditto/privacy.html): site icons are fetched from Google's favicon service, which sends that site's domain, and the optional AI and voice features send text or audio to the provider you configured.
 
 <div align="right">
 

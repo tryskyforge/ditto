@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ditto — turn any browser workflow into a step-by-step guide</title>
+<meta name="description" content="Open-source browser extension that records what you do and turns it into an annotated, shareable guide. Local-first: no backend, no account, no telemetry.">
+<link rel="icon" href="mascot.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#23362B; --muted:#6B7280; --line:#CFE0C8; --bg:#FAFAF7; --accent:#3D6B47; --soft:#EEF4EA; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Poppins', system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.7; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 72px 24px 80px; }
+  .hero { text-align: center; margin-bottom: 56px; }
+  .hero img { width: 104px; height: 104px; margin-bottom: 18px; }
+  h1 { font-size: 40px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 14px; }
+  .sub { font-size: 17px; color: var(--muted); max-width: 540px; margin: 0 auto 26px; }
+  .btn { display: inline-block; background: var(--ink); color: var(--soft); padding: 12px 22px; border-radius: 12px;
+         font-size: 14px; font-weight: 600; text-decoration: none; }
+  .btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); margin-left: 8px; }
+  h2 { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; margin: 40px 0 14px; }
+  p { font-size: 15px; margin-bottom: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 10px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; }
+  .card h3 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .card p { font-size: 13.5px; color: var(--muted); margin: 0; }
+  a { color: var(--accent); }
+  footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+  footer a { margin-right: 16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <img src="mascot.svg" alt="Ditto mascot">
+    <h1>Do it once.<br>Hand it over forever.</h1>
+    <p class="sub">Ditto records what you do in the browser and turns it into a step-by-step guide with annotated screenshots. Record, edit, then replay or export.</p>
+    <a class="btn" href="https://github.com/tryskyforge/ditto">View on GitHub</a>
+    <a class="btn ghost" href="privacy.html">Privacy policy</a>
+  </div>
+
+  <h2>What it does</h2>
+  <div class="grid">
+    <div class="card"><h3>Auto-capture</h3><p>Every click, keystroke and navigation becomes a step with its own annotated screenshot.</p></div>
+    <div class="card"><h3>Smart blur</h3><p>Emails, cards, IDs and IP addresses masked before the screenshot is taken. Pick any other element by hand.</p></div>
+    <div class="card"><h3>Guide Me</h3><p>Replay a guide live on the real page, highlighting each next element as you go.</p></div>
+    <div class="card"><h3>Export anywhere</h3><p>PDF, DOCX, HTML, Markdown, video or GIF — all generated in the browser.</p></div>
+  </div>
+
+  <h2>Local-first, genuinely</h2>
+  <p>No backend, no account, no telemetry. Guides and screenshots stay in your browser's own storage. The optional AI and voice features use a provider you choose with your own key — or a model server you run yourself, in which case nothing leaves your machine at all.</p>
+  <p>Everything on this page is verifiable: <a href="https://github.com/tryskyforge/ditto">read the source</a>.</p>
+
+  <footer>
+    <a href="https://github.com/tryskyforge/ditto">GitHub</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="https://github.com/tryskyforge/ditto/issues">Report an issue</a>
+  </footer>
+</div>
+</body>
+</html>

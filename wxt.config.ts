@@ -75,7 +75,7 @@ export default defineConfig({
             },
             browser_specific_settings: {
               gecko: {
-                id: "ditto@example.com",
+                id: "ditto@skyforgeai.app",
                 strict_min_version: "128.0",
                 data_collection_permissions: {
                   required: ["websiteActivity"],

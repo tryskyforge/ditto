@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — Ditto</title>
+<meta name="description" content="What Ditto stores, what leaves your browser, and what never does.">
+<link rel="icon" href="mascot.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#23362B; --muted:#6B7280; --line:#CFE0C8; --bg:#FAFAF7; --accent:#3D6B47; --soft:#EEF4EA; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Poppins', system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.7; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 56px 24px 80px; }
+  header { display: flex; align-items: center; gap: 10px; margin-bottom: 40px; }
+  header img { width: 34px; height: 34px; }
+  header a { font-size: 18px; font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -0.02em; }
+  h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 8px; }
+  .updated { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+  h2 { font-size: 18px; font-weight: 600; letter-spacing: -0.015em; margin: 36px 0 10px; }
+  p { margin-bottom: 14px; font-size: 15px; }
+  ul { margin: 0 0 14px 20px; font-size: 15px; }
+  li { margin-bottom: 8px; }
+  a { color: var(--accent); }
+  .lead { font-size: 16px; background: var(--soft); border-radius: 12px; padding: 18px 20px; margin-bottom: 8px; }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 18px; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); font-weight: 600; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; background: var(--soft); padding: 1px 5px; border-radius: 4px; }
+  footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img src="mascot.svg" alt="">
+    <a href="./">Ditto</a>
+  </header>
+
+  <h1>Privacy Policy</h1>
+  <p class="updated">Last updated 20 September 2026</p>
+
+  <p class="lead">Ditto has no backend, no accounts and no analytics. Your guides, screenshots and settings are stored on your own device and are never uploaded anywhere. Three things can leave your browser, all listed below, and two of them only if you switch them on.</p>
+
+  <h2>What Ditto stores, and where</h2>
+  <p>Everything lives in your browser's own storage on your computer:</p>
+  <ul>
+    <li><strong>Guides, steps and screenshots</strong> — in an IndexedDB database named <code>ditto</code>.</li>
+    <li><strong>Settings</strong> — including any API keys you enter — in <code>chrome.storage.local</code>.</li>
+    <li><strong>Recording state</strong> — briefly, in <code>sessionStorage</code>, so an interrupted recording can resume.</li>
+  </ul>
+  <p>None of this is transmitted to us or to anyone else. We operate no servers that receive your data, because Ditto has no servers at all. Uninstalling the extension, or clearing its storage from your browser, removes everything.</p>
+
+  <h2>What leaves your browser</h2>
+  <table>
+    <tr><th>What</th><th>When</th><th>What is sent</th></tr>
+    <tr>
+      <td><strong>Site icons</strong></td>
+      <td>Always, when a guide is displayed or exported</td>
+      <td>The domain name of the site in your guide is sent to Google's favicon service at <code>t1.gstatic.com</code> to fetch its icon. Not the page URL, not the page content.</td>
+    </tr>
+    <tr>
+      <td><strong>AI step descriptions</strong></td>
+      <td>Only if you enable it and supply a provider</td>
+      <td>A short text snippet describing the clicked element and its surrounding page context — roughly 50–100 tokens. <strong>Screenshots are never sent.</strong> It goes to the provider you chose, using your own API key.</td>
+    </tr>
+    <tr>
+      <td><strong>Voice narration</strong></td>
+      <td>Only if you turn the microphone on for a recording</td>
+      <td>The audio you recorded, sent to the transcription provider you chose, using your own API key.</td>
+    </tr>
+  </table>
+
+  <p>For the AI and voice features you choose the provider yourself. Built-in options connect to OpenAI, Anthropic, Groq, DeepSeek or OpenRouter. You can also point Ditto at a model server you run yourself — on your own machine or your own infrastructure — in which case nothing goes to a third party at all. Whichever you pick, that provider's own privacy policy governs what they do with the data, and we are not a party to it.</p>
+
+  <p>Guides exported as HTML reference the Poppins webfont from Google Fonts. That request happens when the exported file is opened, by whoever opens it, not by Ditto.</p>
+
+  <h2>What Ditto never does</h2>
+  <ul>
+    <li>No analytics, telemetry, crash reporting or usage tracking of any kind.</li>
+    <li>No account, sign-up, licence check or phone-home.</li>
+    <li>No selling, sharing or transfer of your data — we never receive it.</li>
+    <li>No advertising, and no use of your data to train any model.</li>
+  </ul>
+
+  <h2>Permissions, and why each is needed</h2>
+  <table>
+    <tr><th>Permission</th><th>Why</th></tr>
+    <tr><td><code>&lt;all_urls&gt;</code></td><td>You choose which site to document, so Ditto cannot know in advance which hosts it needs. It only acts on a tab while you are recording or replaying a guide on it.</td></tr>
+    <tr><td><code>tabs</code>, <code>activeTab</code>, <code>webNavigation</code></td><td>To know which tab you are recording and to keep capturing across page navigations.</td></tr>
+    <tr><td><code>scripting</code></td><td>To place the capture and replay overlays on the page.</td></tr>
+    <tr><td><code>storage</code>, <code>unlimitedStorage</code></td><td>To keep your guides and screenshots on your device. Screenshots are large, hence unlimited.</td></tr>
+    <tr><td><code>sidePanel</code></td><td>The main Ditto interface.</td></tr>
+    <tr><td><code>offscreen</code></td><td>To record microphone audio and encode video exports.</td></tr>
+  </table>
+
+  <h2>Children</h2>
+  <p>Ditto is a general-purpose developer and documentation tool, is not directed at children, and collects no personal information from anyone.</p>
+
+  <h2>Changes</h2>
+  <p>If this policy changes, the date above changes with it. Because Ditto is open source, every change is also visible in the repository's commit history.</p>
+
+  <h2>Contact</h2>
+  <p>Questions or concerns: open an issue at <a href="https://github.com/tryskyforge/ditto/issues">github.com/tryskyforge/ditto/issues</a>.</p>
+
+  <footer>
+    Ditto is open source. You can verify everything on this page by reading the source at
+    <a href="https://github.com/tryskyforge/ditto">github.com/tryskyforge/ditto</a>.
+  </footer>
+</div>
+</body>
+</html>
