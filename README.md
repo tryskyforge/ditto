@@ -10,6 +10,7 @@ Click record, do the thing, get a polished guide with annotated screenshots. Nar
 
 <!-- SHIELD GROUP -->
 
+[![Website][website-shield]][website-link]
 [![License][license-shield]][license-link]
 [![Manifest V3][mv3-shield]][mv3-link]
 [![100% Local][local-shield]][local-link]
@@ -229,36 +230,38 @@ MIT © [Skyforge AI](https://github.com/tryskyforge). See [LICENSE](./LICENSE) f
 
 <!-- LINK GROUP -->
 
-[back-to-top]: https://img.shields.io/badge/-BACK_TO_TOP-1E1B4B?style=flat-square
+[back-to-top]: https://img.shields.io/badge/-BACK_TO_TOP-23362B?style=flat-square
 
-[license-shield]: https://img.shields.io/badge/license-MIT-4F46E5?style=flat-square&labelColor=1E1B4B
+[website-shield]: https://img.shields.io/badge/website-tryskyforge.github.io%2Fditto-3D6B47?style=flat-square&labelColor=23362B
+[website-link]: https://tryskyforge.github.io/ditto/
+[license-shield]: https://img.shields.io/badge/license-MIT-3D6B47?style=flat-square&labelColor=23362B
 [license-link]: ./LICENSE
 
-[mv3-shield]: https://img.shields.io/badge/manifest-v3-3730A3?style=flat-square&labelColor=1E1B4B
+[mv3-shield]: https://img.shields.io/badge/manifest-v3-3D6B47?style=flat-square&labelColor=23362B
 [mv3-link]: https://developer.chrome.com/docs/extensions/mv3/intro/
 
-[local-shield]: https://img.shields.io/badge/storage-100%25%20local-4F46E5?style=flat-square&labelColor=1E1B4B
+[local-shield]: https://img.shields.io/badge/storage-100%25%20local-3D6B47?style=flat-square&labelColor=23362B
 [local-link]: #-100-local-storage
 
-[no-account-shield]: https://img.shields.io/badge/account-not%20required-4F46E5?style=flat-square&labelColor=1E1B4B
+[no-account-shield]: https://img.shields.io/badge/account-not%20required-3D6B47?style=flat-square&labelColor=23362B
 [no-account-link]: #-100-local-storage
 
-[star-shield]: https://img.shields.io/github/stars/tryskyforge/ditto?style=flat-square&label=stars&color=4F46E5&labelColor=1E1B4B
+[star-shield]: https://img.shields.io/github/stars/tryskyforge/ditto?style=flat-square&label=stars&color=3D6B47&labelColor=23362B
 [star-link]: https://github.com/tryskyforge/ditto/stargazers
 
-[contributors-shield]: https://img.shields.io/github/contributors/tryskyforge/ditto?style=flat-square&labelColor=1E1B4B
+[contributors-shield]: https://img.shields.io/github/contributors/tryskyforge/ditto?style=flat-square&labelColor=23362B
 [contributors-link]: https://github.com/tryskyforge/ditto/graphs/contributors
 
-[last-commit-shield]: https://img.shields.io/github/last-commit/tryskyforge/ditto?style=flat-square&label=commit&labelColor=1E1B4B
+[last-commit-shield]: https://img.shields.io/github/last-commit/tryskyforge/ditto?style=flat-square&label=commit&labelColor=23362B
 
-[issues-shield]: https://img.shields.io/github/issues/tryskyforge/ditto?style=flat-square&labelColor=1E1B4B
+[issues-shield]: https://img.shields.io/github/issues/tryskyforge/ditto?style=flat-square&labelColor=23362B
 [issues-link]: https://github.com/tryskyforge/ditto/issues
 
-[chrome-version-shield]: https://img.shields.io/chrome-web-store/v/jmfohdaflahliammccpiadmkcibohgha?label=Chrome%20Version&style=flat-square&logo=googlechrome&logoColor=C7D2FE&color=4F46E5&labelColor=1E1B4B
+[chrome-version-shield]: https://img.shields.io/chrome-web-store/v/CHROME_EXTENSION_ID?label=Chrome%20Version&style=flat-square&logo=googlechrome&logoColor=CFE0C8&color=3D6B47&labelColor=23362B
 [chrome-link]: https://chromewebstore.google.com/detail/ditto/EXTENSION_ID
-[firefox-version-shield]: https://img.shields.io/amo/v/ditto?label=Firefox%20Version&style=flat-square&logo=firefoxbrowser&logoColor=C7D2FE&color=4F46E5&labelColor=1E1B4B
+[firefox-version-shield]: https://img.shields.io/amo/v/ditto?label=Firefox%20Version&style=flat-square&logo=firefoxbrowser&logoColor=CFE0C8&color=3D6B47&labelColor=23362B
 [firefox-link]: https://addons.mozilla.org/en-US/firefox/addon/ditto/
-[edge-version-shield]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fhgjemhfoffebbollleajkpefblppleai&query=%24.version&label=Edge%20Version&style=flat-square&logo=microsoftedge&logoColor=C7D2FE&color=4F46E5&labelColor=1E1B4B
-[edge-link]: https://microsoftedge.microsoft.com/addons/detail/hgjemhfoffebbollleajkpefblppleai
+[edge-version-shield]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2FEDGE_EXTENSION_ID&query=%24.version&label=Edge%20Version&style=flat-square&logo=microsoftedge&logoColor=CFE0C8&color=3D6B47&labelColor=23362B
+[edge-link]: https://microsoftedge.microsoft.com/addons/detail/EDGE_EXTENSION_ID
 </content>
 </invoke>
