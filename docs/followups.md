@@ -34,6 +34,22 @@ hence keeping it verbatim in the comment.
 
 ---
 
+## Repo About panel
+
+Needs setting by hand — a PAT cannot edit repo metadata without Administration
+permission.
+
+- **Description:** Record any browser workflow into a step-by-step guide with annotated
+  screenshots. Local-first — no account, no cloud, no tracking.
+- **Website:** https://tryskyforge.github.io/ditto/
+- **Topics:** browser-extension, chrome-extension, firefox-addon, documentation,
+  screenshots, step-by-step-guide, sop, manifest-v3, local-first, privacy, typescript,
+  react, wxt, onboarding
+
+Topics drive GitHub's own browse and search, so they are worth filling in.
+
+---
+
 ## Update the site once the stores publish
 
 `site/install.html` exists because the listings are in review. When they go live:
