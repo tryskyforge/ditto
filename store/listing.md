@@ -233,8 +233,10 @@ key or point the extension at their own model server. Everything else works full
 Chrome shows the extension ID in the dashboard URL immediately, before review completes.
 
 - Chrome: `ipcgbegaacaepfkmfllmaojdlenhedao` — filled into README.md
-- Edge: `EDGE_EXTENSION_ID` still a placeholder in README.md (twice — badge query and
-  store link)
+- Edge: CRX ID `empdagcgkgnnppmfdajbmldbghhbnboi` — filled into README.md. Partner Center
+  also shows a Store ID (`0RDCKCPT7W05`) and a Product ID
+  (`32edfc80-dabe-4df8-bfae-4054db06d9b6`); the CRX ID is the one the store URL and the
+  version badge use.
 - Firefox: uses the slug `ditto` in its URL, which the existing badge already assumes
 
 The Chrome id is also needed as the `CHROME_EXTENSION_ID` repository secret for
