@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install Ditto</title>
+<meta name="description" content="Load Ditto in Chrome, Edge or Firefox while the store listings are in review. Takes about a minute.">
+<link rel="icon" href="mascot.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#23362B; --muted:#6B7280; --line:#CFE0C8; --bg:#FAFAF7; --accent:#3D6B47; --soft:#EEF4EA; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Poppins', system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.7; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 56px 24px 80px; }
+  header { display: flex; align-items: center; gap: 10px; margin-bottom: 40px; }
+  header img { width: 34px; height: 34px; }
+  header a.brand { font-size: 18px; font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -0.02em; }
+  header nav { margin-left: auto; display: flex; gap: 18px; font-size: 14px; }
+  h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 10px; }
+  .lead { font-size: 16px; background: var(--soft); border-radius: 12px; padding: 18px 20px; margin: 20px 0 32px; }
+  h2 { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; margin: 36px 0 12px; }
+  h3 { font-size: 15px; font-weight: 600; margin: 24px 0 8px; }
+  p { margin-bottom: 14px; font-size: 15px; }
+  ol, ul { margin: 0 0 16px 22px; font-size: 15px; }
+  li { margin-bottom: 9px; }
+  a { color: var(--accent); }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13.5px; background: var(--soft); padding: 2px 6px; border-radius: 5px; }
+  pre { background: #23362B; color: #EEF4EA; padding: 16px 18px; border-radius: 10px; overflow-x: auto; margin-bottom: 16px; }
+  pre code { background: none; color: inherit; padding: 0; font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); font-weight: 600; }
+  .note { border-left: 3px solid var(--line); padding: 2px 0 2px 16px; color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+  .btn { display: inline-block; background: var(--ink); color: var(--soft); padding: 11px 20px; border-radius: 10px;
+         font-size: 14px; font-weight: 600; text-decoration: none; margin-bottom: 8px; }
+  footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+  footer a { margin-right: 16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img src="mascot.svg" alt="">
+    <a class="brand" href="./">Ditto</a>
+    <nav>
+      <a href="https://github.com/tryskyforge/ditto">GitHub</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+  </header>
+
+  <h1>Install Ditto</h1>
+
+  <p class="lead">Ditto is in review at the Chrome, Firefox and Edge stores. Until it's published you can load it manually — about a minute, and it's the same build that was submitted.</p>
+
+  <a class="btn" href="https://github.com/tryskyforge/ditto/releases/latest">Download the latest release</a>
+
+  <h2>Which file</h2>
+  <table>
+    <tr><th>File</th><th>For</th></tr>
+    <tr><td><code>ditto-1.0.0-chrome.zip</code></td><td>Chrome, Edge, Brave, Arc, Opera, Vivaldi</td></tr>
+    <tr><td><code>ditto-1.0.0-firefox.zip</code></td><td>Firefox</td></tr>
+    <tr><td><code>ditto-1.0.0-edge.zip</code></td><td>Identical to the Chrome build</td></tr>
+    <tr><td><code>ditto-1.0.0-sources.zip</code></td><td>Source archive for Firefox review — not installable</td></tr>
+  </table>
+
+  <h2>Chrome, Edge, Brave and other Chromium browsers</h2>
+  <ol>
+    <li><strong>Unzip the file.</strong> You need the folder, not the zip — this is the step people miss.</li>
+    <li>Open <code>chrome://extensions</code> (or <code>edge://extensions</code>, <code>brave://extensions</code>).</li>
+    <li>Turn on <strong>Developer mode</strong>, top right.</li>
+    <li>Click <strong>Load unpacked</strong> and select the unzipped folder — the one containing <code>manifest.json</code>.</li>
+    <li>Click the puzzle-piece icon in the toolbar and <strong>pin</strong> Ditto.</li>
+    <li>Click the Ditto icon to open the side panel.</li>
+  </ol>
+  <p class="note">Keep the folder where it is. The browser loads the extension from that path every time it starts, so moving or deleting it breaks the install. Chrome will also warn about developer-mode extensions on each start — that's normal for unpacked extensions and stops once the store version is out.</p>
+
+  <h2>Firefox</h2>
+  <ol>
+    <li>Open <code>about:debugging#/runtime/this-firefox</code>.</li>
+    <li>Click <strong>Load Temporary Add-on</strong>.</li>
+    <li>Select the zip directly — no unzipping on Firefox.</li>
+    <li>Open the sidebar with <code>Ctrl</code>/<code>Cmd</code>+<code>B</code>, or View → Sidebar → Ditto.</li>
+  </ol>
+  <p class="note">Firefox removes temporary add-ons when it restarts, so you'll need to load it again each session until the listing is public. Ditto also lives in the <strong>sidebar</strong> on Firefox rather than a side panel, asks for site permission the first time you record instead of at install, and has no voice narration — that feature needs a Chromium API Firefox doesn't have.</p>
+
+  <h2>Or build it yourself</h2>
+  <p>Needs Node 22 and pnpm 10.</p>
+  <pre><code>git clone https://github.com/tryskyforge/ditto.git
+cd ditto
+pnpm install --frozen-lockfile
+pnpm zip:all</code></pre>
+  <p>Zips land in <code>.output/</code>. For an unpacked build you can load without unzipping, use <code>pnpm build</code> or <code>pnpm build:firefox</code>.</p>
+
+  <h2>First recording</h2>
+  <ol>
+    <li>Open any normal website. Browser pages like <code>chrome://</code> and <code>about:</code> can't be recorded — browsers don't let extensions run there.</li>
+    <li>Open the Ditto panel and click <strong>Start recording</strong>.</li>
+    <li>Click and type on the page. Each action becomes a step with its own screenshot.</li>
+    <li>Click <strong>Finish recording</strong>. Your guide opens, ready to edit, annotate and export.</li>
+  </ol>
+
+  <h2>If something goes wrong</h2>
+  <table>
+    <tr><th>What you see</th><th>What it means</th></tr>
+    <tr><td>Manifest file is missing or unreadable</td><td>You selected the zip, or a folder one level too high. Pick the folder that directly contains <code>manifest.json</code>.</td></tr>
+    <tr><td>Open a website to start capturing</td><td>You're on a browser page, the Web Store, or a local <code>file://</code> page. Switch to a normal site.</td></tr>
+    <tr><td>The extension vanished after restarting Firefox</td><td>Expected for temporary add-ons. Load it again.</td></tr>
+    <tr><td>Empty panel or greyed-out icon</td><td>Same as above — you're on a page extensions can't touch.</td></tr>
+  </table>
+  <p>Anything else, <a href="https://github.com/tryskyforge/ditto/issues">open an issue</a>.</p>
+
+  <footer>
+    <a href="https://github.com/tryskyforge/ditto">GitHub</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="https://github.com/tryskyforge/ditto/issues">Report an issue</a>
+  </footer>
+</div>
+</body>
+</html>
