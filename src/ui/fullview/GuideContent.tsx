@@ -314,7 +314,7 @@ export default function GuideContent({ guideId, initialStepId, initialTool }: Gu
       )}
 
       <div className={historyOpen ? 'flex items-start gap-6' : 'flex items-start gap-10'}>
-        {!historyOpen && !preview && <GuideStepRail steps={viewSteps} />}
+        {!historyOpen && <GuideStepRail steps={viewSteps} />}
         <div className="flex-1 min-w-0">
           {preview && (
             <div className="flex items-center gap-2 rounded-lg bg-secondary border border-border px-4 py-3 mb-4">

@@ -3,6 +3,8 @@ import { actionSteps, stepNumbers } from '@/core/guides/blocks';
 import type { Step } from '@/core/guides/types';
 import { useFullview } from '@/stores/fullview';
 
+export const STEP_RAIL_MIN_STEPS = 4;
+
 interface GuideStepRailProps {
   steps: Step[];
 }
@@ -19,7 +21,7 @@ export default function GuideStepRail({ steps }: GuideStepRailProps) {
   }));
 
   const listed = actionSteps(steps);
-  if (listed.length < 4) return null;
+  if (listed.length < STEP_RAIL_MIN_STEPS) return null;
 
   const numbers = stepNumbers(steps);
 
