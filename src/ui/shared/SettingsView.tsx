@@ -27,10 +27,10 @@ import {
   hasPresetModels,
   isCustomBaseUrl,
   isCustomModel,
-  LOCAL_AI_PROVIDER,
   modelPlaceholder,
   providerOrDefault,
   requiresApiKey,
+  SELF_HOSTED_AI_PROVIDER,
 } from '@/core/capture/ai/models';
 import { AI_LANGUAGES, type AILanguageCode } from '@/core/capture/ai/prompts';
 import { resolveVoiceApiKey } from '@/core/capture/voice/api-key';
@@ -235,9 +235,9 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
 
   const providerConfig = AI_PROVIDERS[provider] ?? AI_PROVIDERS[DEFAULT_AI_PROVIDER];
   const usingCustomModel = customModel || isCustomModel(model, providerConfig) || !hasPresetModels(providerConfig);
-  const isLocal = provider === LOCAL_AI_PROVIDER;
+  const isSelfHosted = provider === SELF_HOSTED_AI_PROVIDER;
   const keyRequired = requiresApiKey(provider);
-  const serverUrlOpen = ownServer || isLocal;
+  const serverUrlOpen = ownServer || isSelfHosted;
   const voiceKey = resolveVoiceApiKey({ voiceProvider, voiceApiKey, aiProvider: provider, aiApiKey: apiKey });
 
   const BLUR_PRESET_I18N: Record<PresetKey, string> = {
@@ -367,13 +367,13 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
                 </p>
               ) : (
                 <p className="mt-1.5 text-[10px] text-muted-foreground leading-relaxed">
-                  {i18n.t('settings.localNoKeyNeeded')}
+                  {i18n.t('settings.selfHostedNoKeyNeeded')}
                 </p>
               ))}
           </div>
 
           <div>
-            {isLocal ? (
+            {isSelfHosted ? (
               <label className="block text-[11px] font-semibold text-foreground mb-1 flex items-center gap-1">
                 <Globe size={11} className="-mt-px" />
                 {i18n.t('settings.serverUrl')}
@@ -403,7 +403,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
               </div>
             )}
             {serverUrlOpen && (
-              <div className={isLocal ? 'space-y-1.5' : 'mt-2 space-y-1.5'}>
+              <div className={isSelfHosted ? 'space-y-1.5' : 'mt-2 space-y-1.5'}>
                 <Input
                   type="text"
                   value={baseUrl}
@@ -412,13 +412,13 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
                     aiKeyCheck.reset();
                   }}
                   placeholder={providerConfig.defaultBaseUrl}
-                  aria-label={i18n.t(isLocal ? 'settings.serverUrl' : 'settings.baseUrl')}
+                  aria-label={i18n.t(isSelfHosted ? 'settings.serverUrl' : 'settings.baseUrl')}
                   className="h-8 text-[13px] rounded-lg border-border"
                 />
                 <p className="text-[10px] text-muted-foreground leading-relaxed">
                   {i18n.t(
-                    isLocal
-                      ? 'settings.localServerHint'
+                    isSelfHosted
+                      ? 'settings.selfHostedServerHint'
                       : providerConfig.protocol === 'anthropic'
                         ? 'settings.ownServerHintAnthropic'
                         : 'settings.ownServerHintOpenai',

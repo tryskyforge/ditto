@@ -88,10 +88,10 @@ settings:
   model: 模型
   modelCustom: 自定义模型
   baseUrl: 基础 URL
-  apiKeyOptional: "本地模型无需填写"
-  localNoKeyNeeded: "本地服务器通常不需要密钥。除非你的服务器要求，否则留空即可。"
+  apiKeyOptional: "仅在服务器需要时填写"
+  selfHostedNoKeyNeeded: "多数自建服务器无需密钥。除非你的服务器要求，否则留空即可。"
   serverUrl: "服务器地址"
-  localServerHint: "在你本机运行的模型的 OpenAI 兼容接口地址 —— Ollama、LM Studio、llama.cpp 或 vLLM。"
+  selfHostedServerHint: "任何 OpenAI 兼容接口 —— 本机的 Ollama 或 LM Studio，或你自建的 vLLM、LiteLLM 与网关。"
   useOwnServer: 使用自己的服务器
   ownServerHintOpenai: "支持 Ollama、LM Studio、vLLM 或任何兼容 OpenAI 的服务器。"
   ownServerHintAnthropic: "支持 LiteLLM 代理或任何兼容 Anthropic 的服务器。"

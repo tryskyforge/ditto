@@ -78,8 +78,8 @@ export const AI_PROVIDERS = {
       { id: CUSTOM_MODEL_VALUE, label: 'Custom' },
     ],
   },
-  local: {
-    label: 'Local model',
+  selfHosted: {
+    label: 'Your own server',
     protocol: 'openai',
     transport: 'chat',
     keyOptional: true,
@@ -94,7 +94,7 @@ export type AIProviderKey = keyof typeof AI_PROVIDERS;
 
 export const DEFAULT_AI_PROVIDER: AIProviderKey = 'openai';
 
-export const LOCAL_AI_PROVIDER: AIProviderKey = 'local';
+export const SELF_HOSTED_AI_PROVIDER: AIProviderKey = 'selfHosted';
 
 export function isProviderKey(value: unknown): value is AIProviderKey {
   return typeof value === 'string' && value in AI_PROVIDERS;

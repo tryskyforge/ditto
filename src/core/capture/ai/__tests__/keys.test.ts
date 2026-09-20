@@ -58,9 +58,9 @@ describe('keyFor and withKeyFor', () => {
 });
 
 describe('resolveAiKey', () => {
-  it('counts a keyless local provider as ready with no key stored', () => {
-    expect(resolveAiKey({ aiApiKeys: {}, aiProvider: 'local' })).toEqual({
-      provider: 'local',
+  it('counts a keyless self-hosted provider as ready with no key stored', () => {
+    expect(resolveAiKey({ aiApiKeys: {}, aiProvider: 'selfHosted' })).toEqual({
+      provider: 'selfHosted',
       apiKey: '',
       ready: true,
     });
