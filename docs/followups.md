@@ -34,6 +34,18 @@ hence keeping it verbatim in the comment.
 
 ---
 
+## Update the site once the stores publish
+
+`site/install.html` exists because the listings are in review. When they go live:
+
+- Replace the manual-install lead with store buttons, and keep the manual route lower
+  down for people who want it.
+- `site/index.html` says "in review" under **Getting it** — update that too.
+- Version numbers in the file table (`ditto-1.0.0-*.zip`) are hardcoded and will go
+  stale on the next release.
+
+---
+
 ## Onboarding pin screenshot does not match its copy
 
 `public/pin-screenshot.png` shows the `chrome://extensions` management card, but the
