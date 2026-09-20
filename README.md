@@ -64,9 +64,9 @@ Each step gets a screenshot with the clicked element highlighted and zoomed in. 
 
 | Browser | Version | Install |
 | ------- | ------- | ------- |
-| Chrome  | [![Chrome Version][chrome-version-shield]][chrome-link]   | [Chrome Web Store][chrome-link] |
-| Firefox | [![Firefox Version][firefox-version-shield]][firefox-link] | [Firefox Add-ons][firefox-link]  |
-| Edge    | [![Edge Version][edge-version-shield]][edge-link]          | [Microsoft Edge Add-ons][edge-link] |
+| Chrome  | [![Chrome Version][chrome-version-shield]][chrome-link]   | [Chrome Web Store][chrome-link] *(pending)* |
+| Firefox | [![Firefox Version][firefox-version-shield]][firefox-link] | [Firefox Add-ons][firefox-link] *(pending)* |
+| Edge    | [![Edge Version][edge-version-shield]][edge-link]          | [Microsoft Edge Add-ons][edge-link] *(pending)* |
 
 Once it's installed, a short setup walks you through pinning the extension, turning on voice narration, and connecting a model if you want AI-written step descriptions. All of it is optional and can be skipped.
 
@@ -259,11 +259,17 @@ Ditto began as a fork of [Mimik](https://github.com/westpoint-io/mimik) by Westp
 [issues-shield]: https://img.shields.io/github/issues/tryskyforge/ditto?style=flat-square&labelColor=23362B
 [issues-link]: https://github.com/tryskyforge/ditto/issues
 
-[chrome-version-shield]: https://img.shields.io/chrome-web-store/v/ipcgbegaacaepfkmfllmaojdlenhedao?label=Chrome%20Version&style=flat-square&logo=googlechrome&logoColor=CFE0C8&color=3D6B47&labelColor=23362B
+[chrome-version-shield]: https://img.shields.io/badge/Chrome-in%20review-8C8579?style=flat-square&logo=googlechrome&logoColor=CFE0C8&labelColor=23362B
+<!-- once published, swap the line above for:
+[chrome-version-shield]: https://img.shields.io/chrome-web-store/v/ipcgbegaacaepfkmfllmaojdlenhedao?label=Chrome%20Version&style=flat-square&logo=googlechrome&logoColor=CFE0C8&color=3D6B47&labelColor=23362B -->
 [chrome-link]: https://chromewebstore.google.com/detail/ditto/ipcgbegaacaepfkmfllmaojdlenhedao
-[firefox-version-shield]: https://img.shields.io/amo/v/ditto-skyforgeai?label=Firefox%20Version&style=flat-square&logo=firefoxbrowser&logoColor=CFE0C8&color=3D6B47&labelColor=23362B
+[firefox-version-shield]: https://img.shields.io/badge/Firefox-in%20review-8C8579?style=flat-square&logo=firefoxbrowser&logoColor=CFE0C8&labelColor=23362B
+<!-- once published, swap the line above for:
+[firefox-version-shield]: https://img.shields.io/amo/v/ditto-skyforgeai?label=Firefox%20Version&style=flat-square&logo=firefoxbrowser&logoColor=CFE0C8&color=3D6B47&labelColor=23362B -->
 [firefox-link]: https://addons.mozilla.org/en-US/firefox/addon/ditto-skyforgeai/
-[edge-version-shield]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fempdagcgkgnnppmfdajbmldbghhbnboi&query=%24.version&label=Edge%20Version&style=flat-square&logo=microsoftedge&logoColor=CFE0C8&color=3D6B47&labelColor=23362B
+[edge-version-shield]: https://img.shields.io/badge/Edge-in%20review-8C8579?style=flat-square&logo=microsoftedge&logoColor=CFE0C8&labelColor=23362B
+<!-- once published, swap the line above for:
+[edge-version-shield]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fempdagcgkgnnppmfdajbmldbghhbnboi&query=%24.version&label=Edge%20Version&style=flat-square&logo=microsoftedge&logoColor=CFE0C8&color=3D6B47&labelColor=23362B -->
 [edge-link]: https://microsoftedge.microsoft.com/addons/detail/empdagcgkgnnppmfdajbmldbghhbnboi
 </content>
 </invoke>

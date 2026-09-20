@@ -60,3 +60,13 @@ python3 store/generate-icons.py
 
 Screenshots and promo tiles were made by hand from screen recordings. Re-record at
 1918x1050 or wider, then crop to 1.6:1 and scale to 1280x800.
+
+## After each store publishes
+
+The three version badges in README.md are static "in review" placeholders while the
+listings are unpublished — the live shields query store APIs that return an error until
+the extension is public, which renders as a red "not found" rather than a blank.
+
+Each badge definition has the live URL directly beneath it in an HTML comment. When a
+store goes live, swap that store's line for the commented one and drop the *(pending)*
+note from its row in the install table.
