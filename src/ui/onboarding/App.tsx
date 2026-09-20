@@ -1,4 +1,4 @@
-import { Globe, Mic, MousePointerClick, Shield } from 'lucide-react';
+import { Mic, MousePointerClick, Shield } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { browser, i18n } from '#imports';
 import { PRESET_LABELS, type PresetKey } from '@/core/blur/regexes';
@@ -7,15 +7,8 @@ import {
   AI_PROVIDERS,
   type AIProviderKey,
   CUSTOM_MODEL_VALUE,
-  DEFAULT_AI_PROVIDER,
-  hasPresetModels,
   isCustomBaseUrl,
-  modelOptions,
-  modelPlaceholder,
   providerOrDefault,
-  requiresApiKey,
-  SELF_HOSTED_AI_PROVIDER,
-  selectableModelIds,
 } from '@/core/capture/ai/models';
 import { AI_LANGUAGES, type AILanguageCode } from '@/core/capture/ai/prompts';
 import { normalizeVoiceProvider } from '@/core/capture/voice/api-key';
@@ -28,7 +21,8 @@ import {
 import { localStorage, openSidebar, requestHostPermissions } from '@/lib/browser-api';
 import { Input } from '@/ui/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/ui/components/ui/select';
-import { KeyStatusNote, KeyWarningNote, ModelList, SecretInput, useKeyCheck } from '@/ui/shared/key-check';
+import AiProviderFields from '@/ui/shared/AiProviderFields';
+import { SecretInput, useKeyCheck } from '@/ui/shared/key-check';
 import MascotIcon from '@/ui/shared/MascotIcon';
 import MicrophonePicker from '@/ui/shared/MicrophonePicker';
 
@@ -149,15 +143,6 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
     return () => document.removeEventListener('visibilitychange', onVisible);
   }, []);
 
-  const providerConfig = AI_PROVIDERS[provider] ?? AI_PROVIDERS[DEFAULT_AI_PROVIDER];
-  const availableModels = modelOptions(providerConfig, aiKeyCheck.models);
-  const selectableModels = selectableModelIds(availableModels);
-  const usingCustomModel =
-    customModel || selectableModels.length === 0 || (model.trim() !== '' && !selectableModels.includes(model.trim()));
-  const isSelfHosted = provider === SELF_HOSTED_AI_PROVIDER;
-  const keyRequired = requiresApiKey(provider);
-  const serverUrlOpen = ownServer || isSelfHosted;
-
   const handleProviderChange = (newProvider: AIProviderKey) => {
     const nextModel = AI_PROVIDERS[newProvider].defaultModel;
     setProvider(newProvider);
@@ -224,138 +209,36 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
           <p className="text-sm text-muted-foreground leading-relaxed mb-8">{i18n.t('onboarding.aiMessage')}</p>
 
           <div className="space-y-4 mb-8">
-            <div>
-              <label className="block text-xs font-semibold text-foreground mb-1.5">
-                {i18n.t('settings.provider')}
-              </label>
-              <Select value={provider} onValueChange={(v) => handleProviderChange(v as AIProviderKey)}>
-                <SelectTrigger className="w-full h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.entries(AI_PROVIDERS).map(([key, cfg]) => (
-                    <SelectItem key={key} value={key}>
-                      {cfg.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-foreground mb-1.5">{i18n.t('settings.model')}</label>
-              <Select value={usingCustomModel ? CUSTOM_MODEL_VALUE : model} onValueChange={handleModelChange}>
-                <SelectTrigger className="w-full h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10">
-                  <SelectValue placeholder={modelPlaceholder(providerConfig)} />
-                </SelectTrigger>
-                <SelectContent>
-                  {availableModels.map((m) => (
-                    <SelectItem key={m.id} value={m.id}>
-                      {m.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {usingCustomModel && (
-                <Input
-                  type="text"
-                  value={model}
-                  onChange={(e) => {
-                    setModel(e.target.value);
-                    aiKeyCheck.reset();
-                    void localStorage.set({ aiModel: e.target.value });
-                  }}
-                  placeholder={modelPlaceholder(providerConfig)}
-                  className="w-full mt-1.5 h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10"
-                />
-              )}
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-foreground mb-1.5">{i18n.t('settings.apiKey')}</label>
-              <SecretInput
-                value={apiKey}
-                onChange={handleApiKeyChange}
-                placeholder={keyRequired ? 'sk-...' : i18n.t('settings.apiKeyOptional')}
-                className="w-full h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10"
-                buttonClassName="right-3"
-              />
-              {!keyRequired && !apiKey.trim() && (
-                <p className="mt-1.5 text-[11px] text-muted-foreground leading-relaxed">
-                  {i18n.t('settings.selfHostedNoKeyNeeded')}
-                </p>
-              )}
-              <div className="flex items-center gap-3 mt-2">
+            <AiProviderFields
+              variant="wizard"
+              provider={provider}
+              onProviderChange={handleProviderChange}
+              model={model}
+              customModel={customModel}
+              onModelSelect={handleModelChange}
+              onModelInput={(value) => {
+                setModel(value);
+                aiKeyCheck.reset();
+                void localStorage.set({ aiModel: value });
+              }}
+              apiKey={apiKey}
+              onApiKeyChange={handleApiKeyChange}
+              baseUrl={baseUrl}
+              onBaseUrlChange={handleBaseUrlChange}
+              ownServer={ownServer}
+              onOwnServerToggle={handleOwnServerToggle}
+              keyCheck={aiKeyCheck}
+              checkButton={({ disabled, onClick, label }) => (
                 <button
                   type="button"
-                  disabled={(keyRequired && !apiKey) || aiKeyCheck.status === 'checking'}
-                  onClick={() => {
-                    if (aiKeyCheck.status !== 'checking') void aiKeyCheck.check(provider, apiKey, baseUrl, model);
-                  }}
+                  disabled={disabled}
+                  onClick={onClick}
                   className="px-4 py-2 bg-card text-foreground border border-border rounded-lg font-semibold text-xs hover:border-accent hover:text-accent transition-colors disabled:opacity-50 disabled:pointer-events-none"
                 >
-                  {i18n.t('settings.checkKey')}
+                  {label}
                 </button>
-                <div className="min-w-0">
-                  <KeyStatusNote status={aiKeyCheck.status} />
-                  <KeyWarningNote warning={aiKeyCheck.warning} />
-                </div>
-              </div>
-              {aiKeyCheck.models && hasPresetModels(providerConfig) && <ModelList models={aiKeyCheck.models} />}
-            </div>
-
-            <div>
-              {isSelfHosted ? (
-                <label className="block text-xs font-semibold text-foreground mb-1.5 flex items-center gap-1">
-                  <Globe size={12} className="-mt-px" />
-                  {i18n.t('settings.serverUrl')}
-                </label>
-              ) : (
-                <div className="flex items-center justify-between gap-3">
-                  <span className="text-xs font-semibold text-foreground flex items-center gap-1">
-                    <Globe size={12} className="-mt-px" />
-                    {i18n.t('settings.useOwnServer')}
-                  </span>
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={ownServer}
-                    aria-label={i18n.t('settings.useOwnServer')}
-                    onClick={handleOwnServerToggle}
-                    className={`w-10 h-6 rounded-full transition-colors relative shrink-0 ${
-                      ownServer ? 'bg-accent' : 'bg-border'
-                    }`}
-                  >
-                    <span
-                      className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${
-                        ownServer ? 'translate-x-4' : 'translate-x-0'
-                      }`}
-                    />
-                  </button>
-                </div>
               )}
-              {serverUrlOpen && (
-                <div className={isSelfHosted ? 'space-y-2' : 'mt-2 space-y-2'}>
-                  <Input
-                    type="text"
-                    value={baseUrl}
-                    onChange={(e) => handleBaseUrlChange(e.target.value)}
-                    placeholder={providerConfig.defaultBaseUrl}
-                    aria-label={i18n.t(isSelfHosted ? 'settings.serverUrl' : 'settings.baseUrl')}
-                    className="w-full h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10"
-                  />
-                  <p className="text-[11px] text-muted-foreground leading-relaxed">
-                    {i18n.t(
-                      isSelfHosted
-                        ? 'settings.selfHostedServerHint'
-                        : providerConfig.protocol === 'anthropic'
-                          ? 'settings.ownServerHintAnthropic'
-                          : 'settings.ownServerHintOpenai',
-                    )}
-                  </p>
-                </div>
-              )}
-            </div>
+            />
 
             <div>
               <label className="block text-xs font-semibold text-foreground mb-1.5">
