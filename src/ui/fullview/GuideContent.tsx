@@ -2,6 +2,7 @@ import { History, Loader2, Play, Sparkles } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { TypeAnimation } from 'react-type-animation';
 import { i18n } from '#imports';
+import { AI_KEY_SETTINGS, resolveAiKey } from '@/core/capture/ai/keys';
 import { startInsertRecording } from '@/core/capture/start-insert-recording';
 import { actionSteps } from '@/core/guides/blocks';
 import {
@@ -137,7 +138,7 @@ export default function GuideContent({ guideId, initialStepId, initialTool }: Gu
   }, [data, guideId, setGuideExportData]);
 
   useEffect(() => {
-    localStorage.get(['aiApiKey']).then((s) => setHasApiKey(Boolean(s.aiApiKey)));
+    localStorage.get([...AI_KEY_SETTINGS]).then((s) => setHasApiKey(resolveAiKey(s).ready));
   }, []);
 
   const handleTitleBlur = useCallback(async () => {
