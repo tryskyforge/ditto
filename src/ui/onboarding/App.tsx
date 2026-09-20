@@ -8,9 +8,13 @@ import {
   type AIProviderKey,
   CUSTOM_MODEL_VALUE,
   DEFAULT_AI_PROVIDER,
+  hasPresetModels,
   isCustomBaseUrl,
   isCustomModel,
+  modelPlaceholder,
   providerOrDefault,
+  requiresApiKey,
+  SELF_HOSTED_AI_PROVIDER,
 } from '@/core/capture/ai/models';
 import { AI_LANGUAGES, type AILanguageCode } from '@/core/capture/ai/prompts';
 import type { VoiceProvider } from '@/core/capture/voice/transcribe';
@@ -139,13 +143,16 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
   }, []);
 
   const providerConfig = AI_PROVIDERS[provider] ?? AI_PROVIDERS[DEFAULT_AI_PROVIDER];
-  const usingCustomModel = customModel || isCustomModel(model, providerConfig);
+  const usingCustomModel = customModel || isCustomModel(model, providerConfig) || !hasPresetModels(providerConfig);
+  const isSelfHosted = provider === SELF_HOSTED_AI_PROVIDER;
+  const keyRequired = requiresApiKey(provider);
+  const serverUrlOpen = ownServer || isSelfHosted;
 
   const handleProviderChange = (newProvider: AIProviderKey) => {
     const nextModel = AI_PROVIDERS[newProvider].defaultModel;
     setProvider(newProvider);
     setModel(nextModel);
-    setCustomModel(false);
+    setCustomModel(!hasPresetModels(AI_PROVIDERS[newProvider]));
     setOwnServer(false);
     setBaseUrl('');
     const nextKey = keyFor(apiKeys, newProvider);
@@ -248,7 +255,7 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
                     aiKeyCheck.reset();
                     void localStorage.set({ aiModel: e.target.value });
                   }}
-                  placeholder={providerConfig.defaultModel}
+                  placeholder={modelPlaceholder(providerConfig)}
                   className="w-full mt-1.5 h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10"
                 />
               )}
@@ -259,14 +266,19 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
               <SecretInput
                 value={apiKey}
                 onChange={handleApiKeyChange}
-                placeholder="sk-..."
+                placeholder={keyRequired ? 'sk-...' : i18n.t('settings.apiKeyOptional')}
                 className="w-full h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10"
                 buttonClassName="right-3"
               />
+              {!keyRequired && !apiKey.trim() && (
+                <p className="mt-1.5 text-[11px] text-muted-foreground leading-relaxed">
+                  {i18n.t('settings.selfHostedNoKeyNeeded')}
+                </p>
+              )}
               <div className="flex items-center gap-3 mt-2">
                 <button
                   type="button"
-                  disabled={!apiKey || aiKeyCheck.status === 'checking'}
+                  disabled={(keyRequired && !apiKey) || aiKeyCheck.status === 'checking'}
                   onClick={() => {
                     if (aiKeyCheck.status !== 'checking') void aiKeyCheck.check(provider, apiKey, baseUrl, model);
                   }}
@@ -283,43 +295,52 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
             </div>
 
             <div>
-              <div className="flex items-center justify-between gap-3">
-                <span className="text-xs font-semibold text-foreground flex items-center gap-1">
+              {isSelfHosted ? (
+                <label className="block text-xs font-semibold text-foreground mb-1.5 flex items-center gap-1">
                   <Globe size={12} className="-mt-px" />
-                  {i18n.t('settings.useOwnServer')}
-                </span>
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={ownServer}
-                  aria-label={i18n.t('settings.useOwnServer')}
-                  onClick={handleOwnServerToggle}
-                  className={`w-10 h-6 rounded-full transition-colors relative shrink-0 ${
-                    ownServer ? 'bg-accent' : 'bg-border'
-                  }`}
-                >
-                  <span
-                    className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${
-                      ownServer ? 'translate-x-4' : 'translate-x-0'
+                  {i18n.t('settings.serverUrl')}
+                </label>
+              ) : (
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-xs font-semibold text-foreground flex items-center gap-1">
+                    <Globe size={12} className="-mt-px" />
+                    {i18n.t('settings.useOwnServer')}
+                  </span>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={ownServer}
+                    aria-label={i18n.t('settings.useOwnServer')}
+                    onClick={handleOwnServerToggle}
+                    className={`w-10 h-6 rounded-full transition-colors relative shrink-0 ${
+                      ownServer ? 'bg-accent' : 'bg-border'
                     }`}
-                  />
-                </button>
-              </div>
-              {ownServer && (
-                <div className="mt-2 space-y-2">
+                  >
+                    <span
+                      className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${
+                        ownServer ? 'translate-x-4' : 'translate-x-0'
+                      }`}
+                    />
+                  </button>
+                </div>
+              )}
+              {serverUrlOpen && (
+                <div className={isSelfHosted ? 'space-y-2' : 'mt-2 space-y-2'}>
                   <Input
                     type="text"
                     value={baseUrl}
                     onChange={(e) => handleBaseUrlChange(e.target.value)}
                     placeholder={providerConfig.defaultBaseUrl}
-                    aria-label={i18n.t('settings.baseUrl')}
+                    aria-label={i18n.t(isSelfHosted ? 'settings.serverUrl' : 'settings.baseUrl')}
                     className="w-full h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10"
                   />
                   <p className="text-[11px] text-muted-foreground leading-relaxed">
                     {i18n.t(
-                      providerConfig.protocol === 'anthropic'
-                        ? 'settings.ownServerHintAnthropic'
-                        : 'settings.ownServerHintOpenai',
+                      isSelfHosted
+                        ? 'settings.selfHostedServerHint'
+                        : providerConfig.protocol === 'anthropic'
+                          ? 'settings.ownServerHintAnthropic'
+                          : 'settings.ownServerHintOpenai',
                     )}
                   </p>
                 </div>
