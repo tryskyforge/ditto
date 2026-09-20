@@ -1,12 +1,18 @@
-import { defineConfig } from "wxt";
 import tailwindcss from "@tailwindcss/vite";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { defineConfig } from "wxt";
+
+const browserFlagIndex = process.argv.findIndex((arg) => arg === "-b" || arg === "--browser");
+const devBrowser = browserFlagIndex === -1 ? "chrome" : (process.argv[browserFlagIndex + 1] ?? "chrome");
+const devProfile = join(tmpdir(), `ditto-${devBrowser}-profile`);
 
 export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/i18n/module"],
   srcDir: "src",
   imports: false,
   webExt: {
-    chromiumArgs: ['--user-data-dir=/tmp/ditto-dev-profile', '--window-size=1280,800', '--window-position=0,0', '--force-device-scale-factor=1.25'],
+    chromiumArgs: [`--user-data-dir=${devProfile}`, '--window-size=1280,800', '--window-position=0,0', '--force-device-scale-factor=1.25'],
   },
   zip: {
     excludeSources: [
