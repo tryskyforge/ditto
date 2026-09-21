@@ -259,7 +259,10 @@ class CaptureController {
     }
 
     if (!this.input.active) {
-      this.enqueue(() => this.input.start(target));
+      this.enqueue(async () => {
+        if (this.input.active) this.input.update(target);
+        else await this.input.start(target);
+      });
     } else {
       this.input.update(target);
     }

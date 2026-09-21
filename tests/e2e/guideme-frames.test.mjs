@@ -157,10 +157,7 @@ test('Guide Me replays steps in the top frame, shadow DOM, and same- and cross-o
   await page.click('button.save');
   await waitFor('shadow DOM step', async () => (await stepsFor(guideId)).length >= 2);
   await same.locator('#frame-input').click();
-  // Typing before the click's input step is saved records a second, empty input step (#55).
-  await waitFor('input step', async () => (await stepsFor(guideId)).some((s) => s.action === 'input'));
-  await sleep(1000);
-  await same.locator('#frame-input').pressSequentially('hello', { delay: 80 });
+  await same.locator('#frame-input').pressSequentially('hello');
   await sleep(500);
   await cross.locator('#cross-btn').click();
   await waitFor('cross-origin step', async () =>
