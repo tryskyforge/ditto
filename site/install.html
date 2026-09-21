@@ -35,7 +35,6 @@
   .note { border-left: 3px solid var(--line); padding: 2px 0 2px 16px; color: var(--muted); font-size: 14px; margin-bottom: 16px; }
   .btn { display: inline-block; background: var(--ink); color: var(--soft); padding: 11px 20px; border-radius: 10px;
          font-size: 14px; font-weight: 600; text-decoration: none; margin-bottom: 8px; }
-  .btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); margin-left: 8px; }
   footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
   footer a { margin-right: 16px; }
 </style>
@@ -53,11 +52,18 @@
 
   <h1>Install Ditto</h1>
 
-  <h2>Getting it</h2>
-  <p class="lead">On Edge, <a href="https://microsoftedge.microsoft.com/addons/detail/ditto-stepbystep-guide/empdagcgkgnnppmfdajbmldbghhbnboi">install Ditto from Microsoft Edge Add-ons</a>. The Chrome and Firefox listings are still in review; until they're published you can load it manually — about a minute, and it's the same build that was submitted.</p>
+  <h2>From a store</h2>
+  <table>
+    <tr><th>Browser</th><th>Store</th><th>Status</th></tr>
+    <tr><td>Edge</td><td><a href="https://microsoftedge.microsoft.com/addons/detail/ditto-stepbystep-guide/empdagcgkgnnppmfdajbmldbghhbnboi">Microsoft Edge Add-ons</a></td><td>Live</td></tr>
+    <tr><td>Chrome</td><td>Chrome Web Store</td><td>In review — <a href="#manual">load it manually</a></td></tr>
+    <tr><td>Firefox</td><td>Firefox Add-ons</td><td>In review — <a href="#manual">load it manually</a></td></tr>
+  </table>
 
-  <a class="btn" href="https://microsoftedge.microsoft.com/addons/detail/ditto-stepbystep-guide/empdagcgkgnnppmfdajbmldbghhbnboi">Get it on Edge Add-ons</a>
-  <a class="btn ghost" href="https://github.com/tryskyforge/ditto/releases/latest">Download the latest release</a>
+  <h2 id="manual">Load it manually</h2>
+  <p>Until the Chrome and Firefox listings are published, load the same build that was submitted — about a minute.</p>
+
+  <a class="btn" href="https://github.com/tryskyforge/ditto/releases/latest">Download the latest release</a>
 
   <h2>Which file</h2>
   <table>
