@@ -1,6 +1,7 @@
 import { browser, defineBackground } from '#imports';
 import { rewriteSelection } from '@/core/capture/ai/rewrite';
 import { validateApiKey } from '@/core/capture/ai/validate';
+import { CaptureState, type PauseReason } from '@/core/capture/machine';
 import { stepRequiresManual } from '@/core/guideme/manual';
 import { advanceSession, cancelSession, completeSession, getSession, startSession } from '@/core/guideme/session';
 import { actionSteps } from '@/core/guides/blocks';
@@ -41,6 +42,16 @@ async function resolveManual(step: Step): Promise<boolean> {
   if (!step.screenshotId) return stepRequiresManual(step, null);
   const screenshots = await getScreenshotsForSteps([step.screenshotId]);
   return stepRequiresManual(step, screenshots.get(step.id));
+}
+
+async function resumeCapture(reason: PauseReason): Promise<boolean> {
+  await waitUntilReady();
+  const actor = getActor();
+  actor.send({ type: 'RESUME', reason });
+  const { value, context } = actor.getSnapshot();
+  if (value !== CaptureState.RECORDING || !context.currentGuideId) return false;
+  await broadcastStartCapture(context.currentGuideId);
+  return true;
 }
 
 async function startNarrationIfPossible(): Promise<boolean> {
@@ -163,6 +174,7 @@ export default defineBackground(() => {
 
   onMessage('enterBlurMode', async () => {
     await waitUntilReady();
+    getActor().send({ type: 'PAUSE', reason: 'blur' });
     await broadcastStopCapture();
     const activeTab = await getActiveTab();
     if (activeTab?.id) {
@@ -174,13 +186,20 @@ export default defineBackground(() => {
   onMessage('exitBlurMode', async () => {
     await waitUntilReady();
     await localStorage.set({ dittoBlurMode: false });
-    const actor = getActor();
-    const guideId = actor.getSnapshot().context.currentGuideId;
-    if (guideId) {
-      await broadcastStartCapture(guideId);
-    }
+    await resumeCapture('blur');
     return { exited: true };
   });
+
+  onMessage('pauseRecording', async () => {
+    await waitUntilReady();
+    const actor = getActor();
+    if (actor.getSnapshot().value !== CaptureState.RECORDING) return { paused: false };
+    actor.send({ type: 'PAUSE', reason: 'user' });
+    await broadcastStopCapture();
+    return { paused: true };
+  });
+
+  onMessage('resumeRecording', async () => ({ resumed: await resumeCapture('user') }));
 
   onMessage('generateGuideDescription', ({ data }) => generateDescriptionOnDemand(data.guideId));
 

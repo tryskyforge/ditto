@@ -74,6 +74,8 @@ recording:
   readyTitle: "Prêt à capturer !"
   readySub: Cliquez sur la page pour commencer
   finishRecording: "Terminer l'enregistrement"
+  pause: Pause
+  resume: Reprendre
   smartBlur: Flou intelligent
   discard: Abandonner
   deleteStep: "Supprimer l'étape"

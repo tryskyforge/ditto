@@ -116,4 +116,62 @@ describe('captureMachine', () => {
 
     expect(firstId).not.toBe(secondId);
   });
+
+  describe('PAUSED', () => {
+    function recording() {
+      const actor = startActor();
+      actor.send({ type: 'START_RECORDING', url: 'https://example.com' });
+      return actor;
+    }
+
+    it('pauses from RECORDING and keeps the guide', () => {
+      const actor = recording();
+      const guideId = actor.getSnapshot().context.currentGuideId;
+      actor.send({ type: 'PAUSE', reason: 'blur' });
+      const snap = actor.getSnapshot();
+      expect(snap.value).toBe(CaptureState.PAUSED);
+      expect(snap.context.pauseReason).toBe('blur');
+      expect(snap.context.currentGuideId).toBe(guideId);
+    });
+
+    it('does not count USER_ACTION while paused', () => {
+      const actor = recording();
+      actor.send({ type: 'PAUSE', reason: 'user' });
+      actor.send({ type: 'USER_ACTION' });
+      expect(actor.getSnapshot().context.stepCount).toBe(0);
+    });
+
+    it('resumes only for the reason it paused', () => {
+      const actor = recording();
+      actor.send({ type: 'PAUSE', reason: 'user' });
+      actor.send({ type: 'RESUME', reason: 'blur' });
+      expect(actor.getSnapshot().value).toBe(CaptureState.PAUSED);
+      actor.send({ type: 'RESUME', reason: 'user' });
+      expect(actor.getSnapshot().value).toBe(CaptureState.RECORDING);
+      expect(actor.getSnapshot().context.pauseReason).toBeNull();
+    });
+
+    it('ignores a second PAUSE with a different reason', () => {
+      const actor = recording();
+      actor.send({ type: 'PAUSE', reason: 'user' });
+      actor.send({ type: 'PAUSE', reason: 'blur' });
+      expect(actor.getSnapshot().context.pauseReason).toBe('user');
+    });
+
+    it('stops from PAUSED and resets context', () => {
+      const actor = recording();
+      actor.send({ type: 'PAUSE', reason: 'blur' });
+      actor.send({ type: 'STOP_RECORDING' });
+      const snap = actor.getSnapshot();
+      expect(snap.value).toBe(CaptureState.IDLE);
+      expect(snap.context.currentGuideId).toBeNull();
+      expect(snap.context.pauseReason).toBeNull();
+    });
+
+    it('cannot pause from IDLE', () => {
+      const actor = startActor();
+      actor.send({ type: 'PAUSE', reason: 'user' });
+      expect(actor.getSnapshot().value).toBe(CaptureState.IDLE);
+    });
+  });
 });

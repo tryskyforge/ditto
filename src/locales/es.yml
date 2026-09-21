@@ -74,6 +74,8 @@ recording:
   readyTitle: "¡Listo para grabar!"
   readySub: Haz clic en la página para empezar
   finishRecording: Terminar grabación
+  pause: Pausar
+  resume: Reanudar
   smartBlur: Desenfoque inteligente
   discard: Descartar
   deleteStep: Eliminar paso
