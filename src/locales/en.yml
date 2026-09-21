@@ -3,7 +3,7 @@ meta:
 
 app:
   name: Ditto
-  store_title: "Ditto: Step-by-Step Guides & Tutorials"
+  store_title: "Ditto – Turn Clicks into Guides"
   description: "Record any browser workflow as a step-by-step guide. Edit, voice-narrate, export to video, PDF or DOCX. Local-first, open source."
 
 common:

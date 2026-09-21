@@ -3,7 +3,7 @@ meta:
 
 app:
   name: Ditto
-  store_title: "Ditto：分步指南与教程"
+  store_title: "Ditto – 把点击变成指南"
   description: "将任何浏览器工作流录制成分步指南。可编辑、添加语音讲解，并导出为视频、PDF 或 DOCX。本地优先，开源透明。"
 
 common:
