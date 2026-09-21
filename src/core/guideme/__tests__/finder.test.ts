@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vitest';
 import type { ElementMeta } from '@/core/guides/types';
-import { compareText, findElement, isVisible, scoreCandidate, THRESHOLD, WEIGHTS } from '../finder';
+import { collectCandidates, compareText, findElement, isVisible, scoreCandidate, THRESHOLD, WEIGHTS } from '../finder';
 
 function makeMeta(overrides: Partial<ElementMeta> = {}): ElementMeta {
   return {
@@ -576,5 +576,60 @@ describe('findElement', () => {
     const result = findElement(meta);
     expect(result.element).toBe(btn);
     expect(result.matchDetails.cssSelector).toBe(1);
+  });
+});
+
+describe('shadow DOM', () => {
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
+
+  function host(mode: ShadowRootMode = 'open'): { host: HTMLElement; root: ShadowRoot } {
+    const el = document.createElement('div');
+    document.body.appendChild(el);
+    return { host: el, root: el.attachShadow({ mode }) };
+  }
+
+  it('collects candidates inside open shadow roots, including nested ones', () => {
+    const outer = host();
+    const inner = document.createElement('span');
+    outer.root.appendChild(inner);
+    const nested = inner.attachShadow({ mode: 'open' });
+    const a = document.createElement('button');
+    const b = document.createElement('button');
+    outer.root.appendChild(a);
+    nested.appendChild(b);
+    document.body.appendChild(document.createElement('button'));
+
+    expect(collectCandidates(document, 'button')).toHaveLength(3);
+    expect(collectCandidates(document, 'button')).toEqual(expect.arrayContaining([a, b]));
+  });
+
+  it('cannot see inside closed shadow roots', () => {
+    const { root } = host('closed');
+    root.appendChild(document.createElement('button'));
+    expect(collectCandidates(document, 'button')).toHaveLength(0);
+  });
+
+  it('finds an element inside a shadow root', () => {
+    const { root } = host();
+    const target = makeVisible(document.createElement('button'));
+    target.textContent = 'Save record';
+    target.setAttribute('aria-label', 'Save');
+    root.appendChild(target);
+
+    const result = findElement(makeMeta({ textContent: 'Save record', ariaLabel: 'Save', cssSelector: '#none' }));
+    expect(result.element).toBe(target);
+  });
+
+  it('scores the css selector against the shadow root it was recorded in', () => {
+    const { root } = host();
+    const target = makeVisible(document.createElement('button'));
+    target.className = 'submit';
+    root.appendChild(target);
+
+    const { score, matchDetails } = scoreCandidate(makeMeta({ cssSelector: 'button.submit' }), target);
+    expect(matchDetails.cssSelector).toBe(1);
+    expect(score).toBe(1);
   });
 });

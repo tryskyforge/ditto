@@ -47,7 +47,14 @@ pnpm zip:all               # package both browsers
 pnpm test                  # run all tests once
 pnpm test:watch            # watch mode
 pnpm test:cov              # coverage report
+pnpm test:e2e              # build, then drive the real extension in Chromium
 ```
+
+The end-to-end tests load `.output/chrome-mv3` into Chromium with Playwright, record a guide
+across the top frame, an open shadow root and same- and cross-origin iframes, and replay it
+with Guide Me. First run needs a browser: `pnpm exec playwright install chromium`. Branded
+Google Chrome no longer accepts `--load-extension`, so use Playwright's Chromium or point
+`DITTO_E2E_CHROME` at another Chromium build. `HEADED=1 pnpm test:e2e` shows the window.
 
 ### Lint & format
 

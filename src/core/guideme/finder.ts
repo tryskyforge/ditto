@@ -58,9 +58,14 @@ function getCandidateValue(el: HTMLElement, signal: string): string | null {
   }
 }
 
+function selectorScope(el: Element): ParentNode {
+  const root = el.getRootNode();
+  return root instanceof ShadowRoot || root instanceof Document ? root : document;
+}
+
 function scoreCssSelector(meta: ElementMeta, candidate: HTMLElement): number {
   try {
-    const matched = document.querySelector(meta.cssSelector);
+    const matched = selectorScope(candidate).querySelector(meta.cssSelector);
     return matched === candidate ? 1 : 0;
   } catch {
     return 0;
@@ -113,8 +118,20 @@ function scoreCandidate(
   return { score, matchDetails };
 }
 
-function findElement(meta: ElementMeta): FindResult {
-  const candidates = document.querySelectorAll<HTMLElement>(meta.tag);
+function collectCandidates(root: ParentNode, tag: string): HTMLElement[] {
+  const found: HTMLElement[] = [];
+  const visit = (scope: ParentNode) => {
+    for (const el of Array.from(scope.querySelectorAll<HTMLElement>('*'))) {
+      if (el.localName === tag) found.push(el);
+      if (el.shadowRoot) visit(el.shadowRoot);
+    }
+  };
+  visit(root);
+  return found;
+}
+
+function findElement(meta: ElementMeta, root: ParentNode = document): FindResult {
+  const candidates = collectCandidates(root, meta.tag);
   let bestResult: FindResult = { element: null, score: 0, matchDetails: {} };
 
   for (const candidate of candidates) {
@@ -134,4 +151,4 @@ function findElement(meta: ElementMeta): FindResult {
 }
 
 export type { FindResult };
-export { compareText, findElement, isVisible, scoreCandidate, THRESHOLD, WEIGHTS };
+export { collectCandidates, compareText, findElement, isVisible, scoreCandidate, THRESHOLD, WEIGHTS };

@@ -1,4 +1,4 @@
-import type { Step } from '@/core/guides/types';
+import type { GuideMeClaim, Step } from '@/core/guides/types';
 import { localStorage } from '@/lib/browser-api';
 
 export interface GuideMeSession {
@@ -12,6 +12,7 @@ const SESSION_KEY = 'guideMeSession';
 const STEP_KEY = 'guideMeStep';
 const BLOCKED_KEY = 'guideMeBlocked';
 const MANUAL_KEY = 'guideMeManual';
+const ATTACHED_KEY = 'guideMeAttached';
 
 export async function startSession(
   guideId: string,
@@ -25,6 +26,7 @@ export async function startSession(
     [STEP_KEY]: firstStep,
     [MANUAL_KEY]: requiresManual,
     [BLOCKED_KEY]: requiresManual ? 0 : null,
+    [ATTACHED_KEY]: null,
   });
 }
 
@@ -37,6 +39,7 @@ export async function advanceSession(nextStep: Step, nextIndex: number, requires
     [STEP_KEY]: nextStep,
     [MANUAL_KEY]: requiresManual,
     [BLOCKED_KEY]: requiresManual ? nextIndex : null,
+    [ATTACHED_KEY]: null,
   });
 }
 
@@ -49,11 +52,18 @@ export async function completeSession(): Promise<void> {
     [STEP_KEY]: null,
     [MANUAL_KEY]: false,
     [BLOCKED_KEY]: null,
+    [ATTACHED_KEY]: null,
   });
 }
 
 export async function cancelSession(): Promise<void> {
-  await localStorage.set({ [SESSION_KEY]: null, [STEP_KEY]: null, [MANUAL_KEY]: false, [BLOCKED_KEY]: null });
+  await localStorage.set({
+    [SESSION_KEY]: null,
+    [STEP_KEY]: null,
+    [MANUAL_KEY]: false,
+    [BLOCKED_KEY]: null,
+    [ATTACHED_KEY]: null,
+  });
 }
 
 export async function getSession(): Promise<GuideMeSession | null> {
@@ -61,4 +71,5 @@ export async function getSession(): Promise<GuideMeSession | null> {
   return (data[SESSION_KEY] as GuideMeSession) || null;
 }
 
-export { BLOCKED_KEY, MANUAL_KEY, SESSION_KEY, STEP_KEY };
+export type { GuideMeClaim };
+export { ATTACHED_KEY, BLOCKED_KEY, MANUAL_KEY, SESSION_KEY, STEP_KEY };
