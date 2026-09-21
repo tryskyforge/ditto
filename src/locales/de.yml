@@ -74,6 +74,8 @@ recording:
   readyTitle: Bereit zur Aufnahme!
   readySub: Klicke auf die Seite, um zu starten
   finishRecording: Aufnahme beenden
+  pause: Pausieren
+  resume: Fortsetzen
   smartBlur: Smart Blur
   discard: Verwerfen
   deleteStep: Schritt löschen

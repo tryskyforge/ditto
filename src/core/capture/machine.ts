@@ -3,13 +3,18 @@ import { assign, createMachine, type SnapshotFrom } from 'xstate';
 export const CaptureState = {
   IDLE: 'IDLE',
   RECORDING: 'RECORDING',
+  PAUSED: 'PAUSED',
 } as const;
 
 export type CaptureStateValue = (typeof CaptureState)[keyof typeof CaptureState];
 
+export type PauseReason = 'user' | 'blur';
+
 type CaptureEvent =
   | { type: 'START_RECORDING'; url?: string; insertTargetGuideId?: string; insertAtIndex?: number }
   | { type: 'STOP_RECORDING' }
+  | { type: 'PAUSE'; reason: PauseReason }
+  | { type: 'RESUME'; reason: PauseReason }
   | { type: 'USER_ACTION' }
   | { type: 'URL_CHANGED'; url: string };
 
@@ -19,6 +24,7 @@ interface CaptureContext {
   currentUrl: string;
   insertTargetGuideId: string | null;
   insertAtIndex: number | null;
+  pauseReason: PauseReason | null;
 }
 
 export const captureMachine = createMachine({
@@ -34,6 +40,7 @@ export const captureMachine = createMachine({
     currentUrl: '',
     insertTargetGuideId: null,
     insertAtIndex: null,
+    pauseReason: null,
   },
   states: {
     [CaptureState.IDLE]: {
@@ -60,12 +67,42 @@ export const captureMachine = createMachine({
             currentUrl: '',
             insertTargetGuideId: null,
             insertAtIndex: null,
+            pauseReason: null,
           }),
+        },
+        PAUSE: {
+          target: CaptureState.PAUSED,
+          actions: assign({ pauseReason: ({ event }) => event.reason }),
         },
         USER_ACTION: {
           actions: assign({
             stepCount: ({ context }) => context.stepCount + 1,
           }),
+        },
+        URL_CHANGED: {
+          actions: assign({
+            currentUrl: ({ event }) => event.url,
+          }),
+        },
+      },
+    },
+    [CaptureState.PAUSED]: {
+      on: {
+        STOP_RECORDING: {
+          target: CaptureState.IDLE,
+          actions: assign({
+            currentGuideId: null,
+            stepCount: 0,
+            currentUrl: '',
+            insertTargetGuideId: null,
+            insertAtIndex: null,
+            pauseReason: null,
+          }),
+        },
+        RESUME: {
+          guard: ({ context, event }) => context.pauseReason === event.reason,
+          target: CaptureState.RECORDING,
+          actions: assign({ pauseReason: null }),
         },
         URL_CHANGED: {
           actions: assign({

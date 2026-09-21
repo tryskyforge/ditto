@@ -1,7 +1,7 @@
 import { Globe, Search, Settings, Video } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { browser, i18n } from '#imports';
-import { CaptureState } from '@/core/capture/machine';
+import { CaptureState, type PauseReason } from '@/core/capture/machine';
 import { isRecordableUrl } from '@/core/capture/recordable-tabs';
 import type { GuideMeSession } from '@/core/guideme/session';
 import { SESSION_KEY } from '@/core/guideme/session';
@@ -42,6 +42,7 @@ type View =
 export default function App() {
   const [isAlive, setIsAlive] = useState(false);
   const [_isRecording, setIsRecording] = useState(false);
+  const [pauseReason, setPauseReason] = useState<PauseReason | null>(null);
   const [view, setView] = useState<View>({ name: 'library' });
   const [search, setSearch] = useState('');
   const [activeUrl, setActiveUrl] = useState<string>();
@@ -64,7 +65,8 @@ export default function App() {
       },
       onDisconnect: () => setIsAlive(false),
       onStateUpdate: (update) => {
-        if (update.state === CaptureState.RECORDING) {
+        setPauseReason(update.pauseReason ?? null);
+        if (update.state === CaptureState.RECORDING || update.state === CaptureState.PAUSED) {
           setIsRecording(true);
           setAiFailure(null);
           const guideId = update.currentGuideId;
@@ -165,7 +167,15 @@ export default function App() {
 
   function renderView() {
     if (view.name === 'recording') {
-      return <RecordingView guideId={view.guideId} onStop={handleStopRecording} voice={voice} aiFailure={aiFailure} />;
+      return (
+        <RecordingView
+          guideId={view.guideId}
+          onStop={handleStopRecording}
+          voice={voice}
+          aiFailure={aiFailure}
+          pauseReason={pauseReason}
+        />
+      );
     }
 
     if (view.name === 'guideme') {
