@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Ditto Guide Me e2e</title>
+    <style>
+      body { font-family: sans-serif; margin: 20px; }
+      iframe { display: block; margin-top: 16px; border: 1px solid #999; }
+    </style>
+  </head>
+  <body>
+    <h1>Top frame</h1>
+    <button id="top-btn">Top button</button>
+    <x-card></x-card>
+    <iframe id="same" src="/frame.html" width="500" height="140"></iframe>
+    <iframe id="cross" src="__CROSS_ORIGIN__/cross.html" width="500" height="140"></iframe>
+    <script>
+      customElements.define(
+        'x-card',
+        class extends HTMLElement {
+          constructor() {
+            super();
+            const root = this.attachShadow({ mode: 'open' });
+            root.innerHTML =
+              '<div id="box" style="height:90px;overflow:auto;border:1px solid #ccc;margin-top:12px">' +
+              '<div style="height:160px">scroll me</div>' +
+              '<button class="save" aria-label="Shadow save">Shadow save</button></div>';
+          }
+        },
+      );
+    </script>
+  </body>
+</html>

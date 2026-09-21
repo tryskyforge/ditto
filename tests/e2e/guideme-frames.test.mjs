@@ -1,0 +1,208 @@
+// Records a guide across the top frame, an open shadow root, a same-origin iframe and a
+// cross-origin iframe, then replays it with Guide Me against the built extension.
+//
+//   pnpm test:e2e                      build, then run headless
+//   HEADED=1 pnpm test:e2e             watch it in a real window
+//   DITTO_E2E_CHROME=/path/to/chrome   use a specific Chromium / Chrome for Testing binary
+//   DITTO_E2E_EXTENSION=/path/to/build  test a different build (default .output/chrome-mv3)
+//
+// Needs a Chromium that still accepts --load-extension (Playwright's bundled Chromium does:
+// `pnpm exec playwright install chromium`). Branded Google Chrome does not.
+
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import http from 'node:http';
+import os from 'node:os';
+import path from 'node:path';
+import { after, before, test } from 'node:test';
+import { fileURLToPath } from 'node:url';
+import { chromium } from 'playwright';
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+const extensionPath = process.env.DITTO_E2E_EXTENSION || path.resolve(here, '../../.output/chrome-mv3');
+const fixtures = path.join(here, 'fixtures');
+const headed = process.env.HEADED === '1';
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function waitFor(what, fn, timeout = 10_000) {
+  const end = Date.now() + timeout;
+  let last;
+  while (Date.now() < end) {
+    last = await fn().catch(() => undefined);
+    if (last) return last;
+    await sleep(200);
+  }
+  assert.fail(`Timed out waiting for ${what}`);
+}
+
+let server;
+let port;
+let ctx;
+let sw;
+let driver;
+let page;
+
+before(async () => {
+  assert.ok(fs.existsSync(path.join(extensionPath, 'manifest.json')), 'Build first: pnpm build');
+
+  server = http.createServer((req, res) => {
+    const name = new URL(req.url, 'http://x').pathname.replace(/^\/$/, '/index.html');
+    const file = path.join(fixtures, path.basename(name));
+    if (!fs.existsSync(file)) return res.writeHead(404).end();
+    const html = fs.readFileSync(file, 'utf8').replace('__CROSS_ORIGIN__', `http://127.0.0.1:${port}`);
+    res.writeHead(200, { 'content-type': 'text/html' }).end(html);
+  });
+  await new Promise((resolve) => server.listen(0, resolve));
+  port = server.address().port;
+
+  ctx = await chromium.launchPersistentContext(fs.mkdtempSync(path.join(os.tmpdir(), 'ditto-e2e-')), {
+    executablePath: process.env.DITTO_E2E_CHROME || undefined,
+    headless: !headed,
+    viewport: { width: 1100, height: 800 },
+    args: [
+      `--disable-extensions-except=${extensionPath}`,
+      `--load-extension=${extensionPath}`,
+      '--no-proxy-server',
+      ...(headed ? [] : ['--headless=new']),
+    ],
+  });
+  [sw] = ctx.serviceWorkers();
+  if (!sw) sw = await ctx.waitForEvent('serviceworker');
+  const extensionId = new URL(sw.url()).host;
+
+  await sleep(1000);
+  for (const p of ctx.pages()) if (p.url().includes('onboarding')) await p.close();
+
+  driver = await ctx.newPage();
+  await driver.goto(`chrome-extension://${extensionId}/options.html`);
+  page = ctx.pages().find((p) => p !== driver && !p.url().startsWith('chrome-extension')) ?? (await ctx.newPage());
+});
+
+after(async () => {
+  await ctx?.close();
+  server?.close();
+});
+
+const send = (type, data) =>
+  driver.evaluate(
+    ([type, data]) => chrome.runtime.sendMessage({ id: Math.floor(Math.random() * 1e9), type, data, timestamp: Date.now() }),
+    [type, data],
+  );
+
+const storage = (keys) => sw.evaluate((keys) => chrome.storage.local.get(keys), keys);
+
+const stepsFor = (guideId) =>
+  driver.evaluate(
+    (guideId) =>
+      new Promise((resolve, reject) => {
+        const req = indexedDB.open('ditto');
+        req.onerror = () => reject(req.error);
+        req.onsuccess = () => {
+          const all = req.result.transaction('steps').objectStore('steps').getAll();
+          all.onsuccess = () =>
+            resolve(all.result.filter((s) => s.guideId === guideId).sort((a, b) => a.index - b.index));
+        };
+      }),
+    guideId,
+  );
+
+const frames = {
+  top: () => page.mainFrame(),
+  same: () => page.frame({ url: /frame\.html/ }),
+  cross: () => page.frame({ url: /cross\.html/ }),
+};
+
+async function highlightedFrames() {
+  const found = [];
+  for (const [name, frame] of Object.entries(frames)) {
+    const has = await frame()
+      ?.evaluate(() => !!document.querySelector('ditto-guideme'))
+      .catch(() => false);
+    if (has) found.push(name);
+  }
+  return found;
+}
+
+async function expectStep(index, frame) {
+  await waitFor(`step ${index} highlighted in the ${frame} frame`, async () => {
+    const { guideMeSession } = await storage(['guideMeSession']);
+    if (guideMeSession?.activeStepIndex !== index) return false;
+    const where = await highlightedFrames();
+    return where.length === 1 && where[0] === frame;
+  });
+  const { guideMeBlocked } = await storage(['guideMeBlocked']);
+  assert.equal(guideMeBlocked ?? null, null, `step ${index} should not be blocked`);
+}
+
+test('Guide Me replays steps in the top frame, shadow DOM, and same- and cross-origin iframes', async () => {
+  await page.goto(`http://localhost:${port}/index.html`);
+  await page.bringToFront();
+  await waitFor('iframes to load', async () => frames.same() && frames.cross());
+  await sleep(1000);
+
+  const same = page.frameLocator('#same');
+  const cross = page.frameLocator('#cross');
+
+  const started = await send('startRecording', { url: page.url() });
+  assert.ok(started.res?.guideId, 'recording should start');
+  const guideId = started.res.guideId;
+  await sleep(1000);
+
+  await page.click('#top-btn');
+  await waitFor('top-frame step', async () => (await stepsFor(guideId)).length >= 1);
+  await page.locator('x-card').evaluate((el) => {
+    el.shadowRoot.getElementById('box').scrollTop = 200;
+  });
+  await page.click('button.save');
+  await waitFor('shadow DOM step', async () => (await stepsFor(guideId)).length >= 2);
+  await same.locator('#frame-input').click();
+  // Typing before the click's input step is saved records a second, empty input step (#55).
+  await waitFor('input step', async () => (await stepsFor(guideId)).some((s) => s.action === 'input'));
+  await sleep(1000);
+  await same.locator('#frame-input').pressSequentially('hello', { delay: 80 });
+  await sleep(500);
+  await cross.locator('#cross-btn').click();
+  await waitFor('cross-origin step', async () =>
+    (await stepsFor(guideId)).some((s) => s.elementMeta?.cssSelector === '#cross-btn'),
+  );
+
+  const stopped = await send('stopRecording');
+  assert.equal(stopped.res?.success, true, 'recording should stop');
+
+  const steps = await stepsFor(guideId);
+  assert.deepEqual(
+    steps.map((s) => [s.action, s.elementMeta?.cssSelector]),
+    [
+      ['click', '#top-btn'],
+      ['click', '.save'],
+      ['input', '#frame-input'],
+      ['click', '#cross-btn'],
+    ],
+  );
+
+  for (const p of ctx.pages()) if (p !== page && p !== driver) await p.close();
+  await page.reload();
+  await page.bringToFront();
+  await waitFor('iframes to reload', async () => frames.same() && frames.cross());
+
+  const guideMe = await send('startGuideMe', { guideId });
+  assert.equal(guideMe.res?.started, true, 'Guide Me should start');
+
+  await expectStep(0, 'top');
+  await page.click('#top-btn');
+
+  await expectStep(1, 'top');
+  await page.click('button.save');
+
+  await waitFor('input step to auto-fill inside the same-origin iframe', async () =>
+    (await frames.same()?.evaluate(() => document.getElementById('frame-input').value)) === 'hello',
+  );
+
+  await expectStep(3, 'cross');
+  await cross.locator('#cross-btn').click();
+
+  await waitFor('session to complete', async () => (await storage(['guideMeSession'])).guideMeSession?.active === false);
+  const { guideMeBlocked } = await storage(['guideMeBlocked']);
+  assert.equal(guideMeBlocked ?? null, null);
+});
