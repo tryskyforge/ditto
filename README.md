@@ -70,9 +70,9 @@ Each step gets a screenshot with the clicked element highlighted and zoomed in. 
 | ------- | ------- | ------- |
 | Chrome  | [![Chrome Version][chrome-version-shield]][chrome-link]   | [Chrome Web Store][chrome-link] *(pending)* |
 | Firefox | [![Firefox Version][firefox-version-shield]][firefox-link] | [Firefox Add-ons][firefox-link] *(pending)* |
-| Edge    | [![Edge Version][edge-version-shield]][edge-link]          | [Microsoft Edge Add-ons][edge-link] *(pending)* |
+| Edge    | [![Edge Version][edge-version-shield]][edge-link]          | [Microsoft Edge Add-ons][edge-link] |
 
-All three listings are in review. In the meantime you can [install from source](docs/install-from-source.md) — download a build from the [latest release](https://github.com/tryskyforge/ditto/releases/latest) and load it in about a minute.
+Ditto is live on Edge; the Chrome and Firefox listings are still in review. In the meantime you can [install from source](docs/install-from-source.md) — download a build from the [latest release](https://github.com/tryskyforge/ditto/releases/latest) and load it in about a minute.
 
 Once it's installed, a short setup walks you through pinning the extension, turning on voice narration, and connecting a model if you want AI-written step descriptions. All of it is optional and can be skipped.
 
@@ -271,9 +271,5 @@ MIT © [Skyforge AI](https://github.com/tryskyforge). See [LICENSE](./LICENSE) f
 <!-- once published, swap the line above for:
 [firefox-version-shield]: https://img.shields.io/amo/v/ditto-skyforgeai?label=Firefox%20Version&style=flat-square&logo=firefoxbrowser&logoColor=CFE0C8&color=3D6B47&labelColor=23362B -->
 [firefox-link]: https://addons.mozilla.org/en-US/firefox/addon/ditto-skyforgeai/
-[edge-version-shield]: https://img.shields.io/badge/Edge-in%20review-8C8579?style=flat-square&logo=microsoftedge&logoColor=CFE0C8&labelColor=23362B
-<!-- once published, swap the line above for:
-[edge-version-shield]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fempdagcgkgnnppmfdajbmldbghhbnboi&query=%24.version&label=Edge%20Version&style=flat-square&logo=microsoftedge&logoColor=CFE0C8&color=3D6B47&labelColor=23362B -->
-[edge-link]: https://microsoftedge.microsoft.com/addons/detail/empdagcgkgnnppmfdajbmldbghhbnboi
-</content>
-</invoke>
+[edge-version-shield]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fempdagcgkgnnppmfdajbmldbghhbnboi&query=%24.version&label=Edge%20Version&style=flat-square&logo=microsoftedge&logoColor=CFE0C8&color=3D6B47&labelColor=23362B
+[edge-link]: https://microsoftedge.microsoft.com/addons/detail/ditto-stepbystep-guide/empdagcgkgnnppmfdajbmldbghhbnboi
