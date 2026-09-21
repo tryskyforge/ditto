@@ -4,8 +4,8 @@ import { logger } from '@/lib/logger';
 import { sendMessage } from '@/lib/messaging';
 import { findElement } from './finder';
 import { GuideMeOverlay } from './overlay';
-import type { GuideMeSession } from './session';
-import { BLOCKED_KEY, MANUAL_KEY, SESSION_KEY, STEP_KEY } from './session';
+import type { GuideMeClaim, GuideMeSession } from './session';
+import { ATTACHED_KEY, BLOCKED_KEY, MANUAL_KEY, SESSION_KEY, STEP_KEY } from './session';
 
 const MAX_RETRIES = 5;
 const RETRY_INTERVAL_MS = 1000;
@@ -18,13 +18,16 @@ export class GuideMeController {
   private currentTarget: HTMLElement | null = null;
   private currentStepIndex = -1;
   private watchTimer: ReturnType<typeof setInterval> | null = null;
+  private advanceTimer: ReturnType<typeof setTimeout> | null = null;
+  private readonly frame = crypto.randomUUID();
 
-  constructor() {
-    if (window.self !== window.top) return;
+  constructor(private readonly isTopFrame = window.self === window.top) {
     this.storageListener = (changes) => {
       if (changes[SESSION_KEY] || changes[STEP_KEY]) {
         this.onStorageChange();
+        return;
       }
+      if (changes[ATTACHED_KEY]) this.onClaim(changes[ATTACHED_KEY].newValue as GuideMeClaim | null);
     };
     browser.storage.local.onChanged.addListener(this.storageListener);
     this.checkForActiveSession();
@@ -64,6 +67,13 @@ export class GuideMeController {
     this.showStep(step, session.activeStepIndex, data[MANUAL_KEY] === true);
   }
 
+  private onClaim(claim: GuideMeClaim | null) {
+    if (!claim || claim.stepIndex !== this.currentStepIndex || claim.frame === this.frame) return;
+    this.stopWatching();
+    this.removeActionDetection();
+    this.destroyOverlay();
+  }
+
   private showStep(step: Step, stepIndex: number, requiresManual: boolean) {
     this.removeActionDetection();
     this.destroyOverlay();
@@ -72,7 +82,7 @@ export class GuideMeController {
 
     const meta = step.elementMeta;
     if (!meta || requiresManual) {
-      this.setBlocked(stepIndex);
+      if (this.isTopFrame) this.setBlocked(stepIndex);
       return;
     }
 
@@ -81,11 +91,11 @@ export class GuideMeController {
       const { element } = findElement(meta);
       if (!element) {
         attempts += 1;
-        if (attempts === MAX_RETRIES) this.setBlocked(stepIndex);
+        if (attempts === MAX_RETRIES && this.isTopFrame) this.blockUnlessClaimed(stepIndex);
         return;
       }
       this.stopWatching();
-      this.setBlocked(null);
+      this.claim(stepIndex);
       this.overlay = new GuideMeOverlay();
       this.overlay.show(step.description, stepIndex + 1, element);
       this.setupActionDetection(step, element);
@@ -93,6 +103,20 @@ export class GuideMeController {
 
     attach();
     if (!this.overlay) this.watchTimer = setInterval(attach, RETRY_INTERVAL_MS);
+  }
+
+  private claim(stepIndex: number) {
+    const claim: GuideMeClaim = { stepIndex, frame: this.frame };
+    browser.storage.local
+      .set({ [ATTACHED_KEY]: claim, [BLOCKED_KEY]: null })
+      .catch((err) => logger.warn('Failed to claim guide me step', err));
+  }
+
+  private async blockUnlessClaimed(stepIndex: number) {
+    const data = await browser.storage.local.get([ATTACHED_KEY]);
+    const claim = data[ATTACHED_KEY] as GuideMeClaim | null;
+    if (claim?.stepIndex === stepIndex || this.currentStepIndex !== stepIndex) return;
+    this.setBlocked(stepIndex);
   }
 
   private setBlocked(stepIndex: number | null) {
@@ -128,7 +152,7 @@ export class GuideMeController {
       }
       target.dispatchEvent(new Event('input', { bubbles: true }));
       target.dispatchEvent(new Event('change', { bubbles: true }));
-      setTimeout(() => this.advanceStep(), 500);
+      this.advanceTimer = setTimeout(() => this.advanceStep(), 500);
       return;
     }
 
@@ -144,6 +168,8 @@ export class GuideMeController {
   }
 
   private removeActionDetection() {
+    if (this.advanceTimer) clearTimeout(this.advanceTimer);
+    this.advanceTimer = null;
     if (this.clickHandler && this.currentTarget) {
       this.currentTarget.removeEventListener(this.clickEvent, this.clickHandler);
     }

@@ -67,8 +67,8 @@ export class GuideMeOverlay {
   private highlightEl: HTMLDivElement | null = null;
   private labelEl: HTMLDivElement | null = null;
   private currentTarget: HTMLElement | null = null;
-  private scrollHandler: (() => void) | null = null;
-  private resizeObserver: ResizeObserver | null = null;
+  private frameRequest: number | null = null;
+  private lastRect = '';
 
   constructor() {
     this.host = document.createElement(ELEMENT_TAG);
@@ -106,10 +106,12 @@ export class GuideMeOverlay {
     this.shadow.appendChild(this.labelEl);
     this.positionLabel(rect);
 
-    this.scrollHandler = () => this.reposition();
-    window.addEventListener('scroll', this.scrollHandler, true);
-    this.resizeObserver = new ResizeObserver(() => this.reposition());
-    this.resizeObserver.observe(document.documentElement);
+    this.track();
+  }
+
+  private track(): void {
+    this.reposition();
+    this.frameRequest = requestAnimationFrame(() => this.track());
   }
 
   private positionHighlight(rect: DOMRect): void {
@@ -143,17 +145,17 @@ export class GuideMeOverlay {
   private reposition(): void {
     if (!this.currentTarget) return;
     const rect = this.currentTarget.getBoundingClientRect();
+    const key = `${rect.left},${rect.top},${rect.width},${rect.height},${window.innerWidth},${window.innerHeight}`;
+    if (key === this.lastRect) return;
+    this.lastRect = key;
     this.positionHighlight(rect);
     this.positionLabel(rect);
   }
 
   private cleanup(): void {
-    if (this.scrollHandler) {
-      window.removeEventListener('scroll', this.scrollHandler, true);
-      this.scrollHandler = null;
-    }
-    this.resizeObserver?.disconnect();
-    this.resizeObserver = null;
+    if (this.frameRequest !== null) cancelAnimationFrame(this.frameRequest);
+    this.frameRequest = null;
+    this.lastRect = '';
     this.highlightEl?.remove();
     this.highlightEl = null;
     this.labelEl?.remove();

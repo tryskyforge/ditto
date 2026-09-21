@@ -62,6 +62,11 @@ export interface Screenshot {
   edits?: ScreenshotEdits;
 }
 
+export interface GuideMeClaim {
+  stepIndex: number;
+  frame: string;
+}
+
 export interface Settings {
   aiApiKey: string;
   aiApiKeys: AIApiKeys;
@@ -86,6 +91,7 @@ export interface Settings {
   guideMeStep: Step | null;
   guideMeBlocked: number | null;
   guideMeManual: boolean;
+  guideMeAttached: GuideMeClaim | null;
   dittoBlurMode: boolean;
   onboardingCompleted: boolean;
 }
