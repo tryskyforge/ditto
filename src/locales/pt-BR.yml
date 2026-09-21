@@ -3,7 +3,7 @@ meta:
 
 app:
   name: Ditto
-  store_title: "Ditto: guias passo a passo e tutoriais"
+  store_title: "Ditto – Transforme cliques em guias"
   description: "Grave qualquer tarefa do navegador como um guia passo a passo. Edite, narre com voz e exporte em vídeo, PDF ou DOCX. Código aberto."
 
 common:

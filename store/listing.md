@@ -8,7 +8,7 @@ The same copy works for all three; only the form layout differs.
 ## Name
 
 ```
-Ditto: Step-by-Step Guides & Tutorials
+Ditto – Turn Clicks into Guides
 ```
 
 (Already in the manifest via `app.store_title` — Chrome fills this automatically.)
@@ -42,6 +42,8 @@ https://tryskyforge.github.io/ditto/privacy.html
 ## Full description
 
 ```
+Do it once, share it forever.
+
 Click record, do the thing, get a polished guide.
 
 Ditto watches what you do in the browser and turns it into a step-by-step guide with

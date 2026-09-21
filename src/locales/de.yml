@@ -3,7 +3,7 @@ meta:
 
 app:
   name: Ditto
-  store_title: "Ditto: Schritt-für-Schritt-Anleitungen"
+  store_title: "Ditto – Aus Klicks werden Anleitungen"
   description: "Nimm jeden Browser-Workflow als Schritt-für-Schritt-Anleitung auf. Bearbeiten, vertonen, als Video, PDF oder DOCX exportieren."
 
 common:
