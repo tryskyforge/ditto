@@ -4,7 +4,7 @@ import { validateApiKey } from '@/core/capture/ai/validate';
 import { CaptureState, type PauseReason } from '@/core/capture/machine';
 import { stepRequiresManual } from '@/core/guideme/manual';
 import { advanceSession, cancelSession, completeSession, getSession, startSession } from '@/core/guideme/session';
-import { actionSteps } from '@/core/guides/blocks';
+import { actionSteps, isReplayable } from '@/core/guides/blocks';
 import {
   createGuide,
   createSnapshot,
@@ -26,9 +26,15 @@ import { onMessage } from '@/lib/messaging';
 import { broadcastStateToPanel, setupPortListener } from '@/lib/port';
 import { recordUpdate } from '@/lib/update-notice';
 import { getActor, getStateUpdate, initActor, initActorFallback, waitUntilReady } from './actor';
+import { goToStepsEnabled, registerGoToListeners, requestPageStep } from './go-to';
 import { generateDescriptionOnDemand, generateGuideMetaOnStop, settlePendingDescriptions } from './guide-meta';
 import { registerNavigationListeners } from './navigation';
-import { handleCaptureStep, handleFinalizeInputStep, handleUpdateInputStep } from './step-pipeline';
+import {
+  handleCapturePageStep,
+  handleCaptureStep,
+  handleFinalizeInputStep,
+  handleUpdateInputStep,
+} from './step-pipeline';
 import { broadcastStartCapture, broadcastStopCapture, showNotificationOnTab } from './tab-manager';
 import {
   canStartNarrationNow,
@@ -97,6 +103,7 @@ export default defineBackground(() => {
   initActor().catch(initActorFallback);
   cancelSession();
   registerNavigationListeners();
+  registerGoToListeners();
   registerVoiceListeners(startNarrationIfPossible);
 
   setupPortListener((port) => {
@@ -146,6 +153,9 @@ export default defineBackground(() => {
     await startVoiceNarration(activeTab?.id);
 
     await broadcastStartCapture(guideId);
+    if (activeTab?.id && data.insertTargetGuideId === undefined && (await goToStepsEnabled())) {
+      void requestPageStep(activeTab.id);
+    }
     return { guideId };
   });
 
@@ -212,6 +222,11 @@ export default defineBackground(() => {
     return handleCaptureStep(data);
   });
 
+  onMessage('capturePageStep', async ({ data }) => {
+    await waitUntilReady();
+    return handleCapturePageStep(data);
+  });
+
   onMessage('updateInputStep', async ({ data }) => {
     await waitUntilReady();
     await handleUpdateInputStep(data.stepId, data.description, data.inputValue);
@@ -228,8 +243,8 @@ export default defineBackground(() => {
     const steps = actionSteps(await getStepsForGuide(data.guideId));
     if (steps.length === 0) return { started: false, error: 'No steps' };
 
-    const firstStep = steps.find((s) => s.elementMeta) ?? steps[0];
-    if (!steps.some((s) => s.elementMeta)) return { started: false, error: 'Guide lacks element metadata' };
+    if (!steps.some(isReplayable)) return { started: false, error: 'Guide lacks element metadata' };
+    const firstStep = steps[0];
 
     await startSession(data.guideId, steps.length, firstStep, await resolveManual(firstStep));
 

@@ -20,7 +20,7 @@ vi.hoisted(() => {
 });
 
 import { hexToRgb } from '@/core/screenshot/color';
-import { actionSteps, calloutAccent, DEFAULT_CALLOUT_COLOR, stepNumbers, tint } from '../blocks';
+import { actionSteps, calloutAccent, DEFAULT_CALLOUT_COLOR, isReplayable, stepNumbers, tint } from '../blocks';
 import { db } from '../db';
 import { insertBlock } from '../service';
 import type { BlockType, CalloutVariant, Guide, Step } from '../types';
@@ -267,5 +267,22 @@ describe('insertBlock', () => {
     expect(numbers.get('s2')).toBe(2);
     expect(numbers.get('s3')).toBe(3);
     expect(numbers.has(blockId)).toBe(false);
+  });
+});
+
+describe('isReplayable', () => {
+  const base = { id: 's', guideId: 'g', index: 0, description: '', url: 'https://a.com', timestamp: 0 };
+
+  it('replays steps with an element target', () => {
+    expect(isReplayable({ ...base, action: 'click', elementMeta: {} as never })).toBe(true);
+  });
+
+  it('replays Go-to steps that have an address', () => {
+    expect(isReplayable({ ...base, action: 'navigate' })).toBe(true);
+    expect(isReplayable({ ...base, action: 'navigate', url: '' })).toBe(false);
+  });
+
+  it('does not replay other steps without a target', () => {
+    expect(isReplayable({ ...base, action: 'click' })).toBe(false);
   });
 });

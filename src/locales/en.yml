@@ -124,6 +124,8 @@ settings:
   microphoneTestFailed: That microphone could not be opened. Pick another one and try again.
   targetColor: "Brand colour"
   targetColorHint: "Click highlights and export accents"
+  goToSteps: 'Add "Go to" steps'
+  goToStepsHint: "Start each guide with the page it opens on, and record addresses you type"
   branding: "Export Branding"
   brandLogo: "Logo"
   uploadLogo: "Upload logo"
@@ -486,6 +488,7 @@ steps:
   cutFrom: "Cut from $1"
   drag: "Drag $1"
   navigate: Navigate to page
+  goTo: "Go to $1"
   defaultAction: "$1 $2"
 
 export:

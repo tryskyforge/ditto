@@ -149,13 +149,14 @@ test('Guide Me replays steps in the top frame, shadow DOM, and same- and cross-o
   const guideId = started.res.guideId;
   await sleep(1000);
 
+  await waitFor('opening Go-to step', async () => (await stepsFor(guideId)).length >= 1);
   await page.click('#top-btn');
-  await waitFor('top-frame step', async () => (await stepsFor(guideId)).length >= 1);
+  await waitFor('top-frame step', async () => (await stepsFor(guideId)).length >= 2);
   await page.locator('x-card').evaluate((el) => {
     el.shadowRoot.getElementById('box').scrollTop = 200;
   });
   await page.click('button.save');
-  await waitFor('shadow DOM step', async () => (await stepsFor(guideId)).length >= 2);
+  await waitFor('shadow DOM step', async () => (await stepsFor(guideId)).length >= 3);
   await same.locator('#frame-input').click();
   await same.locator('#frame-input').pressSequentially('hello');
   await sleep(500);
@@ -171,6 +172,7 @@ test('Guide Me replays steps in the top frame, shadow DOM, and same- and cross-o
   assert.deepEqual(
     steps.map((s) => [s.action, s.elementMeta?.cssSelector]),
     [
+      ['navigate', undefined],
       ['click', '#top-btn'],
       ['click', '.save'],
       ['input', '#frame-input'],
@@ -186,20 +188,94 @@ test('Guide Me replays steps in the top frame, shadow DOM, and same- and cross-o
   const guideMe = await send('startGuideMe', { guideId });
   assert.equal(guideMe.res?.started, true, 'Guide Me should start');
 
-  await expectStep(0, 'top');
-  await page.click('#top-btn');
+  await waitFor('Go-to step to advance on its own', async () =>
+    (await storage(['guideMeSession'])).guideMeSession?.activeStepIndex === 1,
+  );
 
   await expectStep(1, 'top');
+  await page.click('#top-btn');
+
+  await expectStep(2, 'top');
   await page.click('button.save');
 
   await waitFor('input step to auto-fill inside the same-origin iframe', async () =>
     (await frames.same()?.evaluate(() => document.getElementById('frame-input').value)) === 'hello',
   );
 
-  await expectStep(3, 'cross');
+  await expectStep(4, 'cross');
   await cross.locator('#cross-btn').click();
 
   await waitFor('session to complete', async () => (await storage(['guideMeSession'])).guideMeSession?.active === false);
   const { guideMeBlocked } = await storage(['guideMeBlocked']);
   assert.equal(guideMeBlocked ?? null, null);
+});
+
+test('Go-to steps: opening page and typed addresses, not link clicks; Guide Me follows them', async () => {
+  await page.goto(`http://localhost:${port}/index.html`);
+  await page.bringToFront();
+  await sleep(1000);
+
+  const started = await send('startRecording', { url: page.url() });
+  const guideId = started.res.guideId;
+  await waitFor('opening Go-to step', async () => (await stepsFor(guideId)).length >= 1);
+
+  await page.click('#next-link');
+  await page.waitForURL(/frame\.html/);
+  await waitFor('link click step', async () => (await stepsFor(guideId)).length >= 2);
+  await sleep(1500);
+
+  await page.goto(`http://127.0.0.1:${port}/cross.html`);
+  await waitFor('typed Go-to step', async () => (await stepsFor(guideId)).length >= 3);
+  await sleep(1500);
+  await send('stopRecording');
+
+  const steps = await stepsFor(guideId);
+  assert.deepEqual(
+    steps.map((s) => [s.action, s.description, s.url]),
+    [
+      ['navigate', 'Go to localhost', `http://localhost:${port}/index.html`],
+      ['click', 'Click link "Next page"', `http://localhost:${port}/index.html`],
+      ['navigate', 'Go to 127.0.0.1', `http://127.0.0.1:${port}/cross.html`],
+    ],
+  );
+  assert.ok(steps[0].screenshotId && steps[2].screenshotId, 'Go-to steps have a page screenshot');
+
+  await page.goto(`http://localhost:${port}/frame.html`);
+  await page.bringToFront();
+  const guideMe = await send('startGuideMe', { guideId });
+  assert.equal(guideMe.res?.started, true);
+
+  await expectStep(1, 'top');
+  await page.click('#next-link');
+  await waitFor('Guide Me to open the typed address', async () => page.url().includes('127.0.0.1') && page.url().includes('cross.html'));
+  await waitFor('session to complete', async () => (await storage(['guideMeSession'])).guideMeSession?.active === false);
+  const { guideMeBlocked } = await storage(['guideMeBlocked']);
+  assert.equal(guideMeBlocked ?? null, null);
+});
+
+
+test('Go-to steps can be turned off in Settings', async () => {
+  await sw.evaluate(() => chrome.storage.local.set({ recordGoToSteps: false }));
+  try {
+    await page.goto(`http://localhost:${port}/index.html`);
+    await page.bringToFront();
+    await sleep(1000);
+
+    const started = await send('startRecording', { url: page.url() });
+    const guideId = started.res.guideId;
+    await sleep(1500);
+    await page.goto(`http://127.0.0.1:${port}/cross.html`);
+    await sleep(2500);
+    await page.click('#cross-btn');
+    await waitFor('click step', async () => (await stepsFor(guideId)).length >= 1);
+    await sleep(1000);
+    await send('stopRecording');
+
+    assert.deepEqual(
+      (await stepsFor(guideId)).map((s) => s.action),
+      ['click'],
+    );
+  } finally {
+    await sw.evaluate(() => chrome.storage.local.remove('recordGoToSteps'));
+  }
 });

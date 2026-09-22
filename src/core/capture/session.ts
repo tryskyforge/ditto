@@ -36,6 +36,12 @@ export class CaptureSession {
     this.capture = startCapture(guideId, isTopFrame);
   }
 
+  capturePage(): boolean {
+    if (!this.capture) return false;
+    this.capture.capturePage();
+    return true;
+  }
+
   stop(): void {
     if (!this.isActive) return;
 

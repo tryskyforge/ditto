@@ -43,3 +43,11 @@ export function buildFallbackDescription(action: string, meta: ElementMeta): str
       return i18n.t('steps.defaultAction', [action, target]);
   }
 }
+
+export function buildGoToDescription(url: string): string {
+  let site = url;
+  try {
+    site = new URL(url).hostname.replace(/^www\./, '') || url;
+  } catch {}
+  return i18n.t('steps.goTo', [site]);
+}

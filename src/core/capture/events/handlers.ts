@@ -51,6 +51,7 @@ let lastClickTime = 0;
 
 export interface CaptureHandle {
   stop: () => void;
+  capturePage: () => void;
 }
 
 const PASSIVE_CAPTURE = { capture: true, passive: true } as const;
@@ -316,6 +317,10 @@ class CaptureController {
     this.enqueue(this.capture('drag', findFocusableAncestor(target)));
   }
 
+  capturePage() {
+    this.enqueue(() => sendMessage('capturePageStep', { guideId: this.guideId, url: window.location.href }));
+  }
+
   stop() {
     for (const [event, handler, opts] of this.listeners) {
       window.removeEventListener(event, handler, opts);
@@ -330,5 +335,6 @@ export function startCapture(guideId: string, isTopFrame = true): CaptureHandle 
   const controller = new CaptureController(guideId, isTopFrame);
   return {
     stop: () => controller.stop(),
+    capturePage: () => controller.capturePage(),
   };
 }

@@ -54,6 +54,11 @@ function createTabMessageHandler(session: CaptureSession, guideMe: GuideMeContro
         sendResponse({ stopped: true });
         return true;
 
+      case TabMessage.CAPTURE_PAGE:
+        if (window.self !== window.top) return false;
+        sendResponse({ captured: session.capturePage() });
+        return true;
+
       case TabMessage.START_BLUR:
         if (window.self === window.top) blurManager.start();
         sendResponse({ started: true });

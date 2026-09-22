@@ -8,6 +8,7 @@ import {
   Globe,
   ImageIcon,
   Mic,
+  Navigation,
   Shield,
   Sparkles,
   Star,
@@ -87,6 +88,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
   const [brandLogo, setBrandLogo] = useState<BrandLogo | null>(null);
   const [brandFooter, setBrandFooter] = useState('');
   const [brandAttribution, setBrandAttribution] = useState(true);
+  const [recordGoToSteps, setRecordGoToSteps] = useState(true);
   const logoInputRef = useRef<HTMLInputElement>(null);
   const [blurPresets, setBlurPresets] = useState<Record<PresetKey, boolean>>({
     email: true,
@@ -116,6 +118,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
         'brandLogo',
         'brandFooter',
         'brandAttribution',
+        'recordGoToSteps',
       ])
       .then((result) => {
         const p = providerOrDefault(result.aiProvider);
@@ -139,6 +142,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
         if (result.brandLogo) setBrandLogo(result.brandLogo as BrandLogo);
         setBrandFooter(typeof result.brandFooter === 'string' ? result.brandFooter : defaultFooterLine());
         if (result.brandAttribution === false) setBrandAttribution(false);
+        if (result.recordGoToSteps === false) setRecordGoToSteps(false);
         setLoaded(true);
       });
   }, []);
@@ -160,6 +164,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
     brandLogo,
     brandFooter,
     brandAttribution,
+    recordGoToSteps,
   };
 
   const flush = useCallback(async () => {
@@ -465,6 +470,34 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
               />
             </button>
           </div>
+        </div>
+
+        <div className="border border-border rounded-[10px] p-3.5 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-secondary flex items-center justify-center shrink-0">
+              <Navigation size={14} className="text-accent" />
+            </div>
+            <div>
+              <div className="text-xs font-bold text-foreground">{i18n.t('settings.goToSteps')}</div>
+              <div className="text-[11px] text-muted-foreground">{i18n.t('settings.goToStepsHint')}</div>
+            </div>
+          </div>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={recordGoToSteps}
+            aria-label={i18n.t('settings.goToSteps')}
+            onClick={() => setRecordGoToSteps((prev) => !prev)}
+            className={`w-9 h-5 rounded-full transition-colors relative shrink-0 ${
+              recordGoToSteps ? 'bg-accent' : 'bg-border'
+            }`}
+          >
+            <span
+              className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${
+                recordGoToSteps ? 'translate-x-4' : 'translate-x-0'
+              }`}
+            />
+          </button>
         </div>
 
         <div className="border border-border rounded-[10px] p-3.5 space-y-3">

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { ElementMeta } from '@/core/guides/types';
-import { buildFallbackDescription } from '../step-description';
+import { buildFallbackDescription, buildGoToDescription } from '../step-description';
 
 function makeMeta(overrides: Partial<ElementMeta> = {}): ElementMeta {
   return {
@@ -107,5 +107,21 @@ describe('buildFallbackDescription', () => {
     const longText = 'A'.repeat(100);
     const result = buildFallbackDescription('click', makeMeta({ textContent: longText }));
     expect(result).toBe(`steps.click[${'A'.repeat(80)}]`);
+  });
+});
+
+describe('buildGoToDescription', () => {
+  it('names the site without www', () => {
+    expect(buildGoToDescription('https://www.google.com/')).toBe('steps.goTo[google.com]');
+  });
+
+  it('keeps subdomains that identify the site', () => {
+    expect(buildGoToDescription('https://dev12345.service-now.com/login.do')).toBe(
+      'steps.goTo[dev12345.service-now.com]',
+    );
+  });
+
+  it('falls back to the raw value when it is not a URL', () => {
+    expect(buildGoToDescription('not a url')).toBe('steps.goTo[not a url]');
   });
 });

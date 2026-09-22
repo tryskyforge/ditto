@@ -1,9 +1,13 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fakeBrowser } from 'wxt/testing';
+import { sendMessage } from '@/lib/messaging';
+
+vi.mock('@/lib/messaging', () => ({ sendMessage: vi.fn().mockResolvedValue({}) }));
+
 import type { ElementMeta, Step } from '@/core/guides/types';
-import { GuideMeController } from '../content';
-import { ATTACHED_KEY, BLOCKED_KEY, MANUAL_KEY, SESSION_KEY, STEP_KEY } from '../session';
+import { GuideMeController, isSamePage } from '../content';
+import { ATTACHED_KEY, BLOCKED_KEY, MANUAL_KEY, NAVIGATED_KEY, SESSION_KEY, STEP_KEY } from '../session';
 
 const meta: ElementMeta = {
   tag: 'button',
@@ -122,5 +126,74 @@ describe('GuideMeController across frames', () => {
     await fakeBrowser.storage.local.set({ [ATTACHED_KEY]: { stepIndex: 0, frame: 'other' } });
     await flush();
     expect(document.querySelector('ditto-guideme')).toBeNull();
+  });
+});
+
+describe('isSamePage', () => {
+  it('matches the same origin and path, ignoring query, hash and a trailing slash', () => {
+    expect(isSamePage('https://a.com/x/?q=1#h', 'https://a.com/x')).toBe(true);
+  });
+
+  it('does not match another path or origin', () => {
+    expect(isSamePage('https://a.com/x', 'https://a.com/y')).toBe(false);
+    expect(isSamePage('https://a.com/x', 'https://b.com/x')).toBe(false);
+  });
+});
+
+describe('GuideMeController on Go-to steps', () => {
+  const controllers: GuideMeController[] = [];
+  const make = (isTop: boolean) => {
+    const c = new GuideMeController(isTop);
+    controllers.push(c);
+    return c;
+  };
+
+  async function startGoTo(url: string, navigated: number | null = null) {
+    await fakeBrowser.storage.local.set({
+      [SESSION_KEY]: { guideId: 'g1', activeStepIndex: 0, totalSteps: 2, active: true },
+      [STEP_KEY]: { ...step, action: 'navigate', description: 'Go to example.com', url, elementMeta: undefined },
+      [MANUAL_KEY]: false,
+      [BLOCKED_KEY]: null,
+      [ATTACHED_KEY]: null,
+      [NAVIGATED_KEY]: navigated,
+    });
+  }
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    fakeBrowser.reset();
+    vi.mocked(sendMessage).mockClear();
+  });
+
+  afterEach(() => {
+    for (const c of controllers.splice(0)) c.dispose();
+    vi.useRealTimers();
+  });
+
+  const completed = () => vi.mocked(sendMessage).mock.calls.filter(([name]) => name === 'guideMeStepCompleted');
+
+  it('advances when the tab is already on the page', async () => {
+    await startGoTo(window.location.href);
+    make(true);
+    await vi.advanceTimersByTimeAsync(2_000);
+    expect(completed()).toHaveLength(1);
+    const data = await fakeBrowser.storage.local.get([BLOCKED_KEY]);
+    expect(data[BLOCKED_KEY] ?? null).toBeNull();
+  });
+
+  it('advances instead of navigating again after a redirect', async () => {
+    await startGoTo('https://example.com/start', 0);
+    make(true);
+    await vi.advanceTimersByTimeAsync(2_000);
+    expect(completed()).toHaveLength(1);
+  });
+
+  it('leaves Go-to steps to the top frame', async () => {
+    await startGoTo(window.location.href);
+    make(false);
+    await vi.advanceTimersByTimeAsync(10_000);
+    expect(completed()).toHaveLength(0);
+    const data = await fakeBrowser.storage.local.get([BLOCKED_KEY]);
+    expect(data[BLOCKED_KEY] ?? null).toBeNull();
   });
 });
