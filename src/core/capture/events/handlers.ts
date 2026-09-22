@@ -20,6 +20,7 @@ import { InputSession } from './input-session';
 
 const DEDUP_MS = 300;
 const DRAG_MIN_PX = 30;
+const RIGHT_BUTTON = 2;
 const INTERCEPT_DELAY_MS = 100;
 const PAINT_FRAMES = 3;
 const CAPTURE_BUDGET_MS = 2500;
@@ -54,6 +55,10 @@ export interface CaptureHandle {
   capturePage: () => void;
 }
 
+function isEditable(el: HTMLElement): boolean {
+  return el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el.isContentEditable;
+}
+
 const PASSIVE_CAPTURE = { capture: true, passive: true } as const;
 const ACTIVE_CAPTURE = { capture: true } as const;
 
@@ -76,6 +81,7 @@ class CaptureController {
     this.listeners = [
       ['click', this.onClick.bind(this), ACTIVE_CAPTURE],
       ['auxclick', this.onAuxClick.bind(this), ACTIVE_CAPTURE],
+      ['contextmenu', this.onContextMenu.bind(this), ACTIVE_CAPTURE],
       ['keydown', this.onKeydown.bind(this), ACTIVE_CAPTURE],
       ['input', this.onInput.bind(this), PASSIVE_CAPTURE],
       ['focusout', this.onFocusOut.bind(this), PASSIVE_CAPTURE],
@@ -212,7 +218,18 @@ class CaptureController {
     });
   }
 
+  private onContextMenu(e: Event) {
+    const me = e as MouseEvent;
+    const raw = eventTarget(me);
+    if (!raw || !(raw instanceof Element)) return;
+    const target = findFocusableAncestor(raw);
+    if (isDittoElement(target)) return;
+    this.enqueue(this.capture('rightClick', target, { x: me.clientX, y: me.clientY }));
+  }
+
   private onAuxClick(e: Event) {
+    const me = e as MouseEvent;
+    if (me.button === RIGHT_BUTTON) return;
     const raw = eventTarget(e);
     if (!raw || !(raw instanceof Element)) return;
     const target = findFocusableAncestor(raw);
@@ -280,6 +297,7 @@ class CaptureController {
     const resolved = eventTarget(e);
     const target = resolved instanceof HTMLElement ? resolved : document.activeElement;
     if (!target || !(target instanceof HTMLElement) || isDittoElement(target)) return;
+    if (e.type === 'paste' && isEditable(target)) return;
     this.enqueue(this.capture(e.type, target));
   }
 

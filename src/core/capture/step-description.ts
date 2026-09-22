@@ -26,6 +26,8 @@ export function buildFallbackDescription(action: string, meta: ElementMeta): str
       if (meta.role === 'radio') return i18n.t('steps.selectRadio', [target]);
       if (meta.href) return i18n.t('steps.clickLink', [target]);
       return i18n.t('steps.click', [target]);
+    case 'rightClick':
+      return i18n.t('steps.rightClick', [target]);
     case 'input':
       if (meta.inputType) return i18n.t('steps.typeIntoField', [meta.inputType, target]);
       return i18n.t('steps.typeInto', [target]);
