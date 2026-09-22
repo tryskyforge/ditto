@@ -42,66 +42,31 @@ https://tryskyforge.github.io/ditto/privacy.html
 ## Full description
 
 ```
-Do it once, share it forever.
+Record any browser workflow as a step-by-step guide. Edit, voice-narrate, export to video, PDF or DOCX. Local-first, open source.
 
-Click record, do the thing, get a polished guide.
+Ditto turns any browser workflow into a step-by-step guide with annotated screenshots. Automatic capture, no manual work. Click "Record," do the thing, and stop. Ditto captures each click and keystroke as a step. Each step has a screenshot, the element you clicked, and a description. Edit, replay, or export.
 
-Ditto watches what you do in the browser and turns it into a step-by-step guide with
-annotated screenshots — no manual cropping, no writing each step by hand. Every click,
-keystroke and page navigation becomes a step, with the clicked element highlighted and
-zoomed in automatically.
+Features
+- Auto-capture clicks, typing, and navigation. No more writing steps by hand.
+- Annotated screenshots highlight what you clicked. No cropping, no arrow tools.
+- Narrate out loud while you record. Ditto turns what you said into the step descriptions.
+- Optional AI step descriptions and titles, using your own API key or your own model server.
+- Rewrite any step with AI, inline, without leaving the editor.
+- Edit screenshots: crop, annotate, and redact before you share.
+- Add headings and notes between steps, reorder them, and roll back with version history.
+- Guide Me replays any guide on the live page, highlighting each next step. Use it for onboarding or training.
+- Export to video, PDF, DOCX, HTML, or Markdown. Files are self-contained, ready to share anywhere.
+- Smart Blur hides emails, phone numbers, and card data before the screenshot is taken.
+- Available in six languages.
 
-Everything runs inside your browser. There is no backend, no account and no tracking.
+Private by design
+- Local by default. Guides, screenshots, and recordings stay in your browser. Nothing is sent to a Ditto server. There is no Ditto server.
+- No account, no sign-up, no tracking.
+- Site icons are fetched from Google's favicon service, so the domain of each recorded site is sent there. Nothing else is.
+- AI and voice are optional. Turn them on with your own key. Requests go from your browser straight to the provider, never to us. AI descriptions are generated from a short text snippet of the page, never from your screenshots.
 
-WHAT IT DOES
-
-• Auto-capture — clicks, form input, keyboard shortcuts, clipboard actions, drag events
-  and navigations. Rapid clicks on nearby elements are merged so guides stay readable,
-  and clicks are captured before the page navigates away, so nothing is lost on single-
-  page apps or full page loads.
-
-• Smart Blur — emails, phone numbers, SSNs, credit cards, IP and MAC addresses are
-  detected and masked before the screenshot is taken. Anything the patterns miss, you can
-  select by hand and mask across every screenshot it appears in.
-
-• Guide Me — replay any guide live on the real page. Ditto highlights the next element,
-  tracks your progress and advances as you interact. Useful for onboarding someone
-  without sitting next to them.
-
-• Voice narration (optional) — talk through the workflow while you record and Ditto turns
-  what you said into the step descriptions, matched to the action each sentence belongs to.
-
-• AI descriptions (optional) — turn "Click login-button" into "Click the Login button to
-  sign in". Generated from a short text snippet of page context, never from your
-  screenshots.
-
-• Guide editor — crop, annotate and redact screenshots, rewrite text inline, add headings
-  and notes between steps, reorder or bulk-delete, and roll back through version history.
-
-• Export anywhere — PDF, DOCX, HTML, Markdown, MP4/WebM video or GIF. All generated in
-  the browser; nothing is uploaded to produce them.
-
-• Six languages — English, Spanish, French, German, Portuguese (Brazil) and Chinese
-  (Simplified).
-
-PRIVACY
-
-Your guides, screenshots and settings stay in your browser's own storage. Ditto has no
-servers, so there is nothing for your data to be sent to.
-
-Two optional features talk to a third party, and only if you turn them on: AI descriptions
-and voice transcription send text or audio to a provider you choose, using your own API
-key. You can also point Ditto at a model server you run yourself, in which case nothing
-leaves your machine at all. Site icons are fetched from Google's favicon service, which
-sends that site's domain and nothing else.
-
-No analytics, no telemetry, no account, no ads, and your data is never used to train
-anything.
-
-OPEN SOURCE
-
-MIT licensed. Read the code, file an issue, or build it yourself:
-https://github.com/tryskyforge/ditto
+Open source
+Free and MIT-licensed. Source code and issues: https://github.com/tryskyforge/ditto
 ```
 
 ---
