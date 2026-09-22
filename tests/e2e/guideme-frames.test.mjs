@@ -233,9 +233,9 @@ test('Go-to steps: opening page and typed addresses, not link clicks; Guide Me f
   assert.deepEqual(
     steps.map((s) => [s.action, s.description, s.url]),
     [
-      ['navigate', 'Go to localhost', `http://localhost:${port}/index.html`],
+      ['navigate', `Go to localhost:${port}/index.html`, `http://localhost:${port}/index.html`],
       ['click', 'Click link "Next page"', `http://localhost:${port}/index.html`],
-      ['navigate', 'Go to 127.0.0.1', `http://127.0.0.1:${port}/cross.html`],
+      ['navigate', `Go to 127.0.0.1:${port}/cross.html`, `http://127.0.0.1:${port}/cross.html`],
     ],
   );
   assert.ok(steps[0].screenshotId && steps[2].screenshotId, 'Go-to steps have a page screenshot');

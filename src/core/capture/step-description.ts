@@ -44,10 +44,17 @@ export function buildFallbackDescription(action: string, meta: ElementMeta): str
   }
 }
 
-export function buildGoToDescription(url: string): string {
-  let site = url;
+export function goToAddress(url: string): string {
   try {
-    site = new URL(url).hostname.replace(/^www\./, '') || url;
-  } catch {}
-  return i18n.t('steps.goTo', [site]);
+    const parsed = new URL(url);
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return url;
+    const path = parsed.pathname === '/' ? '' : parsed.pathname;
+    return `${parsed.host}${path}${parsed.search}`;
+  } catch {
+    return url;
+  }
+}
+
+export function buildGoToDescription(url: string): string {
+  return i18n.t('steps.goTo', [goToAddress(url)]);
 }

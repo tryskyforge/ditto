@@ -111,17 +111,24 @@ describe('buildFallbackDescription', () => {
 });
 
 describe('buildGoToDescription', () => {
-  it('names the site without www', () => {
-    expect(buildGoToDescription('https://www.google.com/')).toBe('steps.goTo[google.com]');
-  });
-
-  it('keeps subdomains that identify the site', () => {
+  it('shows the full address without the scheme', () => {
     expect(buildGoToDescription('https://dev12345.service-now.com/login.do')).toBe(
-      'steps.goTo[dev12345.service-now.com]',
+      'steps.goTo[dev12345.service-now.com/login.do]',
     );
   });
 
-  it('falls back to the raw value when it is not a URL', () => {
+  it('keeps www, the port and the query, and drops the hash', () => {
+    expect(buildGoToDescription('https://www.example.com:8443/a/b?x=1&y=2#top')).toBe(
+      'steps.goTo[www.example.com:8443/a/b?x=1&y=2]',
+    );
+  });
+
+  it('shows a site root without a trailing slash', () => {
+    expect(buildGoToDescription('https://google.com/')).toBe('steps.goTo[google.com]');
+  });
+
+  it('keeps other schemes and invalid values as they are', () => {
+    expect(buildGoToDescription('file:///tmp/page.html')).toBe('steps.goTo[file:///tmp/page.html]');
     expect(buildGoToDescription('not a url')).toBe('steps.goTo[not a url]');
   });
 });
