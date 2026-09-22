@@ -502,6 +502,72 @@ describe('findElement', () => {
     expect(result.element).toBeNull();
   });
 
+  it('matches text recorded from the first line of an element that also holds an icon', () => {
+    const btn = makeVisible(document.createElement('button'));
+    btn.innerHTML = '<div>🎯</div>\n<div>Focusing</div>';
+    document.body.appendChild(btn);
+
+    const result = findElement(makeMeta({ textContent: 'Focusing', cssSelector: '#nonexistent' }));
+    expect(result.element).toBe(btn);
+    expect(result.matchDetails.textContent).toBe(1);
+  });
+
+  it('falls back to the nearest visible ancestor of a hidden match', () => {
+    const badge = makeVisible(document.createElement('div'));
+    const wrapper = makeHidden(document.createElement('div'));
+    const label = makeHidden(document.createElement('span'));
+    label.textContent = 'Focusing';
+    wrapper.appendChild(label);
+    badge.appendChild(wrapper);
+    document.body.appendChild(badge);
+
+    const result = findElement(makeMeta({ tag: 'span', textContent: 'Focusing', cssSelector: '#nonexistent' }));
+    expect(result.element).toBe(badge);
+  });
+
+  it('prefers a visible match over the ancestor of a hidden one', () => {
+    const badge = makeVisible(document.createElement('div'));
+    const hidden = makeHidden(document.createElement('button'));
+    hidden.textContent = 'Submit';
+    badge.appendChild(hidden);
+    document.body.appendChild(badge);
+    const visible = makeVisible(document.createElement('button'));
+    visible.textContent = 'Submit';
+    document.body.appendChild(visible);
+
+    const result = findElement(makeMeta({ textContent: 'Submit', cssSelector: '#nonexistent' }));
+    expect(result.element).toBe(visible);
+  });
+
+  it('does not fall back to an ancestor that covers most of the viewport', () => {
+    const page = document.createElement('div');
+    Object.defineProperty(page, 'getBoundingClientRect', {
+      value: () => ({ x: 0, y: 0, width: window.innerWidth, height: window.innerHeight }),
+    });
+    const hidden = makeHidden(document.createElement('button'));
+    hidden.textContent = 'Submit';
+    page.appendChild(hidden);
+    document.body.appendChild(page);
+
+    expect(findElement(makeMeta({ textContent: 'Submit', cssSelector: '#nonexistent' })).element).toBeNull();
+  });
+
+  it('does not climb more than a few levels to find a visible ancestor', () => {
+    const outer = makeVisible(document.createElement('div'));
+    let node: HTMLElement = outer;
+    for (let i = 0; i < 4; i++) {
+      const child = makeHidden(document.createElement('div'));
+      node.appendChild(child);
+      node = child;
+    }
+    const hidden = makeHidden(document.createElement('button'));
+    hidden.textContent = 'Submit';
+    node.appendChild(hidden);
+    document.body.appendChild(outer);
+
+    expect(findElement(makeMeta({ textContent: 'Submit', cssSelector: '#nonexistent' })).element).toBeNull();
+  });
+
   it('picks the highest scoring element among multiple visible candidates', () => {
     const weak = makeVisible(document.createElement('button'));
     weak.textContent = 'Sub';
