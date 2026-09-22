@@ -85,6 +85,8 @@ recording:
 
 settings:
   targetColorHint: "Klick-Hervorhebungen und Export-Akzente"
+  goToSteps: "„Öffnen“-Schritte hinzufügen"
+  goToStepsHint: "Jede Anleitung mit der Startseite beginnen und eingegebene Adressen aufzeichnen"
   branding: "Export-Branding"
   brandLogo: "Logo"
   uploadLogo: "Logo hochladen"
@@ -417,6 +419,7 @@ steps:
   cutFrom: "Aus $1 ausschneiden"
   drag: "$1 ziehen"
   navigate: Zur Seite navigieren
+  goTo: "$1 öffnen"
   defaultAction: "$1 $2"
 
 export:

@@ -13,6 +13,7 @@ const STEP_KEY = 'guideMeStep';
 const BLOCKED_KEY = 'guideMeBlocked';
 const MANUAL_KEY = 'guideMeManual';
 const ATTACHED_KEY = 'guideMeAttached';
+const NAVIGATED_KEY = 'guideMeNavigated';
 
 export async function startSession(
   guideId: string,
@@ -27,6 +28,7 @@ export async function startSession(
     [MANUAL_KEY]: requiresManual,
     [BLOCKED_KEY]: requiresManual ? 0 : null,
     [ATTACHED_KEY]: null,
+    [NAVIGATED_KEY]: null,
   });
 }
 
@@ -40,6 +42,7 @@ export async function advanceSession(nextStep: Step, nextIndex: number, requires
     [MANUAL_KEY]: requiresManual,
     [BLOCKED_KEY]: requiresManual ? nextIndex : null,
     [ATTACHED_KEY]: null,
+    [NAVIGATED_KEY]: null,
   });
 }
 
@@ -53,6 +56,7 @@ export async function completeSession(): Promise<void> {
     [MANUAL_KEY]: false,
     [BLOCKED_KEY]: null,
     [ATTACHED_KEY]: null,
+    [NAVIGATED_KEY]: null,
   });
 }
 
@@ -63,6 +67,7 @@ export async function cancelSession(): Promise<void> {
     [MANUAL_KEY]: false,
     [BLOCKED_KEY]: null,
     [ATTACHED_KEY]: null,
+    [NAVIGATED_KEY]: null,
   });
 }
 
@@ -72,4 +77,4 @@ export async function getSession(): Promise<GuideMeSession | null> {
 }
 
 export type { GuideMeClaim };
-export { ATTACHED_KEY, BLOCKED_KEY, MANUAL_KEY, SESSION_KEY, STEP_KEY };
+export { ATTACHED_KEY, BLOCKED_KEY, MANUAL_KEY, NAVIGATED_KEY, SESSION_KEY, STEP_KEY };

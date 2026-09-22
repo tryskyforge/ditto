@@ -5,10 +5,22 @@ import { sendMessage } from '@/lib/messaging';
 import { findElement } from './finder';
 import { GuideMeOverlay } from './overlay';
 import type { GuideMeClaim, GuideMeSession } from './session';
-import { ATTACHED_KEY, BLOCKED_KEY, MANUAL_KEY, SESSION_KEY, STEP_KEY } from './session';
+import { ATTACHED_KEY, BLOCKED_KEY, MANUAL_KEY, NAVIGATED_KEY, SESSION_KEY, STEP_KEY } from './session';
 
 const MAX_RETRIES = 5;
 const RETRY_INTERVAL_MS = 1000;
+
+const NAVIGATE_PAUSE_MS = 1200;
+
+export function isSamePage(current: string, target: string): boolean {
+  try {
+    const a = new URL(current);
+    const b = new URL(target);
+    return a.origin === b.origin && a.pathname.replace(/\/$/, '') === b.pathname.replace(/\/$/, '');
+  } catch {
+    return false;
+  }
+}
 
 export class GuideMeController {
   private overlay: GuideMeOverlay | null = null;
@@ -80,6 +92,11 @@ export class GuideMeController {
     this.stopWatching();
     this.currentStepIndex = stepIndex;
 
+    if (step.action === 'navigate' && step.url && !requiresManual) {
+      if (this.isTopFrame && document.visibilityState === 'visible') void this.followNavigateStep(step.url, stepIndex);
+      return;
+    }
+
     const meta = step.elementMeta;
     if (!meta || requiresManual) {
       if (this.isTopFrame) this.setBlocked(stepIndex);
@@ -103,6 +120,18 @@ export class GuideMeController {
 
     attach();
     if (!this.overlay) this.watchTimer = setInterval(attach, RETRY_INTERVAL_MS);
+  }
+
+  private async followNavigateStep(url: string, stepIndex: number) {
+    this.claim(stepIndex);
+    const data = await browser.storage.local.get([NAVIGATED_KEY]);
+    if (this.currentStepIndex !== stepIndex) return;
+    if (!isSamePage(window.location.href, url) && data[NAVIGATED_KEY] !== stepIndex) {
+      await browser.storage.local.set({ [NAVIGATED_KEY]: stepIndex });
+      window.location.assign(url);
+      return;
+    }
+    this.advanceTimer = setTimeout(() => this.advanceStep(), NAVIGATE_PAUSE_MS);
   }
 
   private claim(stepIndex: number) {

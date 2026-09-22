@@ -30,6 +30,10 @@ export function isBlock(step: Step): boolean {
   return step.blockType !== undefined;
 }
 
+export function isReplayable(step: Step): boolean {
+  return !!step.elementMeta || (step.action === 'navigate' && !!step.url);
+}
+
 export function actionSteps(steps: Step[]): Step[] {
   return steps.filter((step) => step.blockType === undefined);
 }

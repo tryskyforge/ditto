@@ -1,7 +1,7 @@
 import { AI_KEY_SETTINGS, resolveAiKey } from '@/core/capture/ai/keys';
 import type { DOMContext } from '@/core/capture/dom/context';
 import { CaptureState } from '@/core/capture/machine';
-import { buildFallbackDescription } from '@/core/capture/step-description';
+import { buildFallbackDescription, buildGoToDescription } from '@/core/capture/step-description';
 import { db } from '@/core/guides/db';
 import {
   addStepToGuide,
@@ -14,7 +14,7 @@ import type { ElementMeta, Screenshot, Step } from '@/core/guides/types';
 import { DEFAULT_TARGET_COLOR } from '@/core/screenshot/types';
 import { captureVisibleTab, localStorage } from '@/lib/browser-api';
 import { logger } from '@/lib/logger';
-import type { CaptureStepData, CaptureStepResponse } from '@/lib/messaging';
+import type { CapturePageStepData, CaptureStepData, CaptureStepResponse } from '@/lib/messaging';
 import { getActor } from './actor';
 import { generateAiDescription } from './ai-description';
 import { deferDescription, shouldQueueAiDescription } from './deferred-descriptions';
@@ -112,6 +112,55 @@ export async function handleCaptureStep(data: CaptureStepData): Promise<CaptureS
 
   if (narrationCapturing) void flushNarrationForStep(guideId, stepId, timestamp);
 
+  return { stepId };
+}
+
+async function takePageScreenshot(stepId: string): Promise<string | undefined> {
+  try {
+    const dataUrl = await captureVisibleTab('jpeg', 90);
+    const blob = await fetch(dataUrl).then((r) => r.blob());
+    const img = await createImageBitmap(blob);
+    const screenshot: Screenshot = {
+      id: crypto.randomUUID(),
+      stepId,
+      blob,
+      mimeType: 'image/jpeg',
+      width: img.width,
+      height: img.height,
+      bounds: { x: 0, y: 0, width: 0, height: 0 },
+    };
+    img.close();
+    await saveScreenshot(screenshot);
+    return screenshot.id;
+  } catch (err) {
+    logger.warn('Page screenshot capture failed', err);
+    return undefined;
+  }
+}
+
+export async function handleCapturePageStep(data: CapturePageStepData): Promise<CaptureStepResponse> {
+  const snap = getActor().getSnapshot();
+  if (snap.value !== CaptureState.RECORDING || snap.context.currentGuideId !== data.guideId) return { ignored: true };
+
+  const stepIndex = snap.context.stepCount;
+  getActor().send({ type: 'USER_ACTION' });
+
+  const guideId = data.guideId;
+  const stepId = crypto.randomUUID();
+  const screenshotId = await takePageScreenshot(stepId);
+
+  await createStep({
+    id: stepId,
+    guideId,
+    index: stepIndex,
+    description: buildGoToDescription(data.url),
+    action: 'navigate',
+    url: data.url,
+    timestamp: Date.now(),
+    screenshotId,
+    descriptionSource: 'heuristic',
+  });
+  await addStepToGuide(guideId, stepId);
   return { stepId };
 }
 

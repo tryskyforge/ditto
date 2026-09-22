@@ -164,6 +164,12 @@ export function onNavigationCompleted(
   browser.webNavigation.onCompleted.addListener(handler);
 }
 
+export function onNavigationCommitted(
+  handler: (details: Browser.webNavigation.WebNavigationTransitionCallbackDetails) => void,
+): void {
+  browser.webNavigation.onCommitted.addListener(handler);
+}
+
 export function onHistoryStateUpdated(
   handler: (details: Browser.webNavigation.WebNavigationTransitionCallbackDetails) => void,
 ): void {

@@ -124,6 +124,8 @@ settings:
   microphoneTestFailed: 无法打开该麦克风。请选择另一个后重试。
   targetColor: "品牌颜色"
   targetColorHint: "点击高亮和导出强调色"
+  goToSteps: "添加“前往”步骤"
+  goToStepsHint: "以起始页面作为指南的第一步，并记录你输入的网址"
   branding: "导出品牌设置"
   brandLogo: "Logo"
   uploadLogo: "上传 Logo"
@@ -486,6 +488,7 @@ steps:
   cutFrom: "从 $1 剪切"
   drag: "拖动 $1"
   navigate: 导航到页面
+  goTo: "前往 $1"
   defaultAction: "$1 $2"
 
 export:

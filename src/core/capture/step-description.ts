@@ -43,3 +43,18 @@ export function buildFallbackDescription(action: string, meta: ElementMeta): str
       return i18n.t('steps.defaultAction', [action, target]);
   }
 }
+
+export function goToAddress(url: string): string {
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return url;
+    const path = parsed.pathname === '/' ? '' : parsed.pathname;
+    return `${parsed.host}${path}${parsed.search}`;
+  } catch {
+    return url;
+  }
+}
+
+export function buildGoToDescription(url: string): string {
+  return i18n.t('steps.goTo', [goToAddress(url)]);
+}

@@ -92,6 +92,8 @@ export interface Settings {
   guideMeBlocked: number | null;
   guideMeManual: boolean;
   guideMeAttached: GuideMeClaim | null;
+  guideMeNavigated: number | null;
+  recordGoToSteps: boolean;
   dittoBlurMode: boolean;
   onboardingCompleted: boolean;
 }

@@ -124,6 +124,8 @@ settings:
   microphoneTestFailed: "No se pudo abrir ese micrófono. Elige otro e inténtalo de nuevo."
   targetColor: "Color de marca"
   targetColorHint: "Resaltados de clic y acentos de exportación"
+  goToSteps: 'Añadir pasos "Ir a"'
+  goToStepsHint: "Empezar cada guía con la página inicial y registrar las direcciones que escribas"
   branding: "Marca en exportaciones"
   brandLogo: "Logotipo"
   uploadLogo: "Subir logotipo"
@@ -486,6 +488,7 @@ steps:
   cutFrom: "Cortar de $1"
   drag: "Arrastrar $1"
   navigate: Ir a la página
+  goTo: "Ir a $1"
   defaultAction: "$1 $2"
 
 export:

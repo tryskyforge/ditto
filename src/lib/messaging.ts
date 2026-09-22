@@ -134,6 +134,11 @@ export interface ExitBlurModeResponse {
   exited: boolean;
 }
 
+export interface CapturePageStepData {
+  guideId: string;
+  url: string;
+}
+
 export interface PauseRecordingResponse {
   paused: boolean;
 }
@@ -156,6 +161,7 @@ interface DittoProtocol {
   enterBlurMode(): EnterBlurModeResponse;
   exitBlurMode(): ExitBlurModeResponse;
   pauseRecording(): PauseRecordingResponse;
+  capturePageStep(data: CapturePageStepData): CaptureStepResponse;
   resumeRecording(): ResumeRecordingResponse;
   startNarration(): StartNarrationResponse;
   generateGuideDescription(data: GenerateGuideDescriptionData): GenerateGuideDescriptionResponse;

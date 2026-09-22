@@ -3,6 +3,7 @@ import type { Screenshot, Step } from '@/core/guides/types';
 const POSITION_TOLERANCE = 1;
 
 export function stepRequiresManual(step: Step, screenshot: Screenshot | null | undefined): boolean {
+  if (step.action === 'navigate' && step.url) return false;
   if (!step.elementMeta) return true;
   if (!screenshot?.bounds) return false;
 

@@ -37,6 +37,16 @@ describe('stepRequiresManual', () => {
     expect(stepRequiresManual(step({ elementMeta: undefined }), null)).toBe(true);
   });
 
+  it('stays automatic for a Go-to step, which Guide Me opens itself', () => {
+    expect(
+      stepRequiresManual(step({ action: 'navigate', url: 'https://example.com', elementMeta: undefined }), null),
+    ).toBe(false);
+  });
+
+  it('requires manual advance for a navigate step with no address', () => {
+    expect(stepRequiresManual(step({ action: 'navigate', url: '', elementMeta: undefined }), null)).toBe(true);
+  });
+
   it('stays automatic when there is no screenshot to inspect', () => {
     expect(stepRequiresManual(step(), null)).toBe(false);
   });
