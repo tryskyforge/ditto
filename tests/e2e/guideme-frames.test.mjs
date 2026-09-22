@@ -67,6 +67,7 @@ before(async () => {
       ...(headed ? [] : ['--headless=new']),
     ],
   });
+  await ctx.grantPermissions(['clipboard-read', 'clipboard-write']).catch(() => {});
   [sw] = ctx.serviceWorkers();
   if (!sw) sw = await ctx.waitForEvent('serviceworker');
   const extensionId = new URL(sw.url()).host;
@@ -314,6 +315,37 @@ test('Guide Me finds hover-revealed targets and jumps ahead when the tab lands o
   await expectStep(4, 'top');
   await page.click('#repo-btn');
   await waitFor('session to complete', async () => (await storage(['guideMeSession'])).guideMeSession?.active === false);
+});
+
+test('right-clicking is recorded, and pasting into a field is one step', async () => {
+  const base = `http://localhost:${port}/status.html`;
+  await page.goto(base);
+  await page.bringToFront();
+  await sleep(1000);
+
+  const started = await send('startRecording', { url: page.url() });
+  const guideId = started.res.guideId;
+  await waitFor('opening Go-to step', async () => (await stepsFor(guideId)).length >= 1);
+
+  await page.click('#repos-link', { button: 'right' });
+  await waitFor('right-click step', async () => (await stepsFor(guideId)).length >= 2);
+  await page.keyboard.press('Escape');
+
+  await page.evaluate(() => navigator.clipboard.writeText('pasted text'));
+  await page.click('#note');
+  await sleep(500);
+  await page.keyboard.press('ControlOrMeta+V');
+  await waitFor('paste step', async () => (await stepsFor(guideId)).some((s) => s.inputValue === 'pasted text'));
+  await sleep(1000);
+  await send('stopRecording');
+
+  const steps = await stepsFor(guideId);
+  assert.deepEqual(
+    steps.map((s) => s.action),
+    ['navigate', 'rightClick', 'keydown:Escape', 'input'],
+  );
+  assert.equal(steps[1].description, 'Right-click Repositories');
+  assert.equal(steps.at(-1).inputValue, 'pasted text');
 });
 
 test('Go-to steps can be turned off in Settings', async () => {
