@@ -8,6 +8,9 @@ interface FindResult {
 
 const THRESHOLD = 0.5;
 
+const MAX_ANCESTOR_HOPS = 4;
+const MAX_ANCESTOR_RATIO = 0.8;
+
 const WEIGHTS: Record<string, number> = {
   textContent: 0.3,
   cssSelector: 0.2,
@@ -35,6 +38,17 @@ function compareText(stored: string, candidate: string): number {
 function isVisible(el: HTMLElement): boolean {
   const rect = el.getBoundingClientRect();
   return rect.width > 0 && rect.height > 0;
+}
+
+function leadingLine(el: HTMLElement): string | null {
+  const text = el.innerText ?? el.textContent ?? '';
+  return (
+    text
+      .split('\n')
+      .find((line) => line.trim().length > 2)
+      ?.trim()
+      .slice(0, 80) || null
+  );
 }
 
 function getCandidateValue(el: HTMLElement, signal: string): string | null {
@@ -109,6 +123,10 @@ function scoreCandidate(
       if (candidateValue) {
         signalScore = compareText(storedValue, candidateValue);
       }
+      if (key === 'textContent' && signalScore < 1) {
+        const line = leadingLine(candidate);
+        if (line) signalScore = Math.max(signalScore, compareText(storedValue, line));
+      }
     }
 
     matchDetails[key] = signalScore;
@@ -130,12 +148,37 @@ function collectCandidates(root: ParentNode, tag: string): HTMLElement[] {
   return found;
 }
 
+function isTooLarge(el: HTMLElement): boolean {
+  const rect = el.getBoundingClientRect();
+  return rect.width / window.innerWidth > MAX_ANCESTOR_RATIO || rect.height / window.innerHeight > MAX_ANCESTOR_RATIO;
+}
+
+function parentOf(el: Element): Element | null {
+  if (el.parentElement) return el.parentElement;
+  const root = el.getRootNode();
+  return root instanceof ShadowRoot ? root.host : null;
+}
+
+function visibleAncestor(el: HTMLElement): HTMLElement | null {
+  let node: Element | null = el;
+  for (let hop = 0; hop < MAX_ANCESTOR_HOPS; hop++) {
+    node = node ? parentOf(node) : null;
+    if (!(node instanceof HTMLElement) || node === document.body || node === document.documentElement) return null;
+    if (isVisible(node)) return isTooLarge(node) ? null : node;
+  }
+  return null;
+}
+
 function findElement(meta: ElementMeta, root: ParentNode = document): FindResult {
   const candidates = collectCandidates(root, meta.tag);
   let bestResult: FindResult = { element: null, score: 0, matchDetails: {} };
+  const hidden: HTMLElement[] = [];
 
   for (const candidate of candidates) {
-    if (!isVisible(candidate)) continue;
+    if (!isVisible(candidate)) {
+      hidden.push(candidate);
+      continue;
+    }
 
     const { score, matchDetails } = scoreCandidate(meta, candidate);
     if (score > bestResult.score) {
@@ -143,11 +186,20 @@ function findElement(meta: ElementMeta, root: ParentNode = document): FindResult
     }
   }
 
-  if (bestResult.score < THRESHOLD) {
-    return { element: null, score: bestResult.score, matchDetails: bestResult.matchDetails };
+  if (bestResult.score >= THRESHOLD) return bestResult;
+
+  let bestHidden: FindResult = { element: null, score: 0, matchDetails: {} };
+  for (const candidate of hidden) {
+    const { score, matchDetails } = scoreCandidate(meta, candidate);
+    if (score > bestHidden.score) {
+      bestHidden = { element: candidate, score, matchDetails };
+    }
   }
 
-  return bestResult;
+  const anchor = bestHidden.element && bestHidden.score >= THRESHOLD ? visibleAncestor(bestHidden.element) : null;
+  if (anchor) return { element: anchor, score: bestHidden.score, matchDetails: bestHidden.matchDetails };
+
+  return { element: null, score: bestResult.score, matchDetails: bestResult.matchDetails };
 }
 
 export type { FindResult };

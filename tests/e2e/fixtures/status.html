@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Ditto Guide Me hover e2e</title>
+    <style>
+      body { font-family: sans-serif; margin: 20px; }
+      .status { display: flex; align-items: center; border: 1px solid #ccc; border-radius: 16px; padding: 4px 8px; background: #fff; }
+      .status .msg { width: 0; opacity: 0; overflow: hidden; white-space: nowrap; }
+      .status:hover .msg { width: auto; opacity: 1; }
+      .menu { position: relative; display: inline-block; margin-top: 16px; padding: 6px; border: 1px solid #ccc; }
+      .menu .items { display: none; position: absolute; left: 0; top: 100%; background: #fff; }
+      .menu:hover .items { display: block; }
+    </style>
+  </head>
+  <body>
+    <h1>Profile</h1>
+    <button id="status" class="status"><div>🎯</div><div class="msg">Focusing</div></button>
+    <div class="menu" id="menu">More<div class="items"><button id="archive">Archive</button></div></div>
+    <p><a id="repos-link" href="/status.html?tab=repositories">Repositories</a></p>
+    <button id="repo-btn">Open ditto</button>
+  </body>
+</html>

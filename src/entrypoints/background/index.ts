@@ -2,17 +2,10 @@ import { browser, defineBackground } from '#imports';
 import { rewriteSelection } from '@/core/capture/ai/rewrite';
 import { validateApiKey } from '@/core/capture/ai/validate';
 import { CaptureState, type PauseReason } from '@/core/capture/machine';
-import { stepRequiresManual } from '@/core/guideme/manual';
+import { isSameAddress } from '@/core/guideme/progress';
 import { advanceSession, cancelSession, completeSession, getSession, startSession } from '@/core/guideme/session';
 import { actionSteps, isReplayable } from '@/core/guides/blocks';
-import {
-  createGuide,
-  createSnapshot,
-  getScreenshotsForSteps,
-  getStepsForGuide,
-  mergeGuideInto,
-} from '@/core/guides/service';
-import type { Step } from '@/core/guides/types';
+import { createGuide, createSnapshot, getStepsForGuide, mergeGuideInto } from '@/core/guides/service';
 import {
   getActiveTab,
   localStorage,
@@ -28,6 +21,7 @@ import { recordUpdate } from '@/lib/update-notice';
 import { getActor, getStateUpdate, initActor, initActorFallback, waitUntilReady } from './actor';
 import { goToStepsEnabled, registerGoToListeners, requestPageStep } from './go-to';
 import { generateDescriptionOnDemand, generateGuideMetaOnStop, settlePendingDescriptions } from './guide-meta';
+import { registerGuideMeListeners, resolveManual } from './guideme';
 import { registerNavigationListeners } from './navigation';
 import {
   handleCapturePageStep,
@@ -43,12 +37,6 @@ import {
   startVoiceNarration,
   stopVoiceNarration,
 } from './voice';
-
-async function resolveManual(step: Step): Promise<boolean> {
-  if (!step.screenshotId) return stepRequiresManual(step, null);
-  const screenshots = await getScreenshotsForSteps([step.screenshotId]);
-  return stepRequiresManual(step, screenshots.get(step.id));
-}
 
 async function resumeCapture(reason: PauseReason): Promise<boolean> {
   await waitUntilReady();
@@ -104,6 +92,7 @@ export default defineBackground(() => {
   cancelSession();
   registerNavigationListeners();
   registerGoToListeners();
+  registerGuideMeListeners();
   registerVoiceListeners(startNarrationIfPossible);
 
   setupPortListener((port) => {
@@ -249,7 +238,7 @@ export default defineBackground(() => {
     await startSession(data.guideId, steps.length, firstStep, await resolveManual(firstStep));
 
     const activeTab = await getActiveTab();
-    if (activeTab?.id && firstStep.url) {
+    if (activeTab?.id && firstStep.url && !isSameAddress(activeTab.url ?? '', firstStep.url)) {
       await updateTab(activeTab.id, { url: firstStep.url });
     }
 
@@ -258,8 +247,8 @@ export default defineBackground(() => {
 
   onMessage('guideMeStepCompleted', async ({ data }) => {
     const sessionData = await localStorage.get(['guideMeSession']);
-    const session = sessionData.guideMeSession as { guideId: string } | undefined;
-    if (!session) return { advanced: false };
+    const session = sessionData.guideMeSession as { guideId: string; activeStepIndex: number } | undefined;
+    if (!session || session.activeStepIndex !== data.stepIndex) return { advanced: false };
 
     const steps = actionSteps(await getStepsForGuide(session.guideId));
     const nextIndex = data.stepIndex + 1;

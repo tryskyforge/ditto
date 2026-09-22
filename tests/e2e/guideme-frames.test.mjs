@@ -254,6 +254,68 @@ test('Go-to steps: opening page and typed addresses, not link clicks; Guide Me f
 });
 
 
+test('Guide Me finds hover-revealed targets and jumps ahead when the tab lands on a later step page', async () => {
+  const base = `http://localhost:${port}/status.html`;
+  await page.goto(base);
+  await page.bringToFront();
+  await sleep(1000);
+
+  const started = await send('startRecording', { url: page.url() });
+  const guideId = started.res.guideId;
+  await waitFor('opening Go-to step', async () => (await stepsFor(guideId)).length >= 1);
+
+  await page.hover('#status');
+  await page.click('#status .msg');
+  await waitFor('status click step', async () => (await stepsFor(guideId)).length >= 2);
+  await page.hover('#menu');
+  await page.click('#archive');
+  await waitFor('menu item step', async () => (await stepsFor(guideId)).length >= 3);
+  await page.click('#repos-link');
+  await page.waitForURL(/tab=repositories/);
+  await waitFor('link click step', async () => (await stepsFor(guideId)).length >= 4);
+  await sleep(1500);
+  await page.click('#repo-btn');
+  await waitFor('button step', async () => (await stepsFor(guideId)).length >= 5);
+  await sleep(500);
+  await send('stopRecording');
+
+  const steps = await stepsFor(guideId);
+  assert.deepEqual(
+    steps.map((s) => [s.action, s.elementMeta?.cssSelector, s.url]),
+    [
+      ['navigate', undefined, base],
+      ['click', '#status', base],
+      ['click', '#archive', base],
+      ['click', '#repos-link', base],
+      ['click', '#repo-btn', `${base}?tab=repositories`],
+    ],
+  );
+  assert.equal(steps[1].elementMeta.textContent, 'Focusing');
+
+  await page.mouse.move(700, 700);
+  const guideMe = await send('startGuideMe', { guideId });
+  assert.equal(guideMe.res?.started, true);
+
+  await expectStep(1, 'top');
+  await page.click('#status');
+
+  await expectStep(2, 'top');
+  const highlighted = await page.evaluate(() => {
+    const menu = document.getElementById('menu').getBoundingClientRect();
+    const host = document.querySelector('ditto-guideme');
+    return !!host && menu.width > 0;
+  });
+  assert.ok(highlighted, 'hidden menu item falls back to its visible menu');
+
+  await page.goto(`${base}?tab=repositories`);
+  await waitFor('Guide Me to jump to the step recorded on this page', async () =>
+    (await storage(['guideMeSession'])).guideMeSession?.activeStepIndex === 4,
+  );
+  await expectStep(4, 'top');
+  await page.click('#repo-btn');
+  await waitFor('session to complete', async () => (await storage(['guideMeSession'])).guideMeSession?.active === false);
+});
+
 test('Go-to steps can be turned off in Settings', async () => {
   await sw.evaluate(() => chrome.storage.local.set({ recordGoToSteps: false }));
   try {
