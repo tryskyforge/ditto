@@ -14,9 +14,11 @@ import {
   isSensitiveField,
   isTextField,
   isTooLarge,
+  opensAsyncPanel,
 } from '../dom/element-utils';
 import { isReplayedClick, replayClick, replayInit, shouldInterceptClick } from './click-intercept';
 import { InputSession } from './input-session';
+import { waitForOpenPanel } from './panel-wait';
 
 const DEDUP_MS = 300;
 const DRAG_MIN_PX = 30;
@@ -105,7 +107,9 @@ class CaptureController {
 
   private capture(action: string, target: HTMLElement, point?: { x: number; y: number }) {
     const atEvent = freezeRect(target);
+    const awaitPanel = action === 'click' && opensAsyncPanel(target);
     return async () => {
+      if (awaitPanel) await waitForOpenPanel();
       const elementMeta = extractElementMeta(target, atEvent);
       await sendMessage('captureStep', {
         guideId: this.guideId,
