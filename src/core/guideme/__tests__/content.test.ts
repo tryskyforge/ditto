@@ -129,6 +129,45 @@ describe('GuideMeController across frames', () => {
   });
 });
 
+describe('GuideMeController on right-click steps', () => {
+  const controllers: GuideMeController[] = [];
+
+  beforeEach(async () => {
+    vi.useFakeTimers();
+    fakeBrowser.reset();
+    Element.prototype.scrollIntoView = () => {};
+    await fakeBrowser.storage.local.set({
+      [SESSION_KEY]: { guideId: 'g1', activeStepIndex: 0, totalSteps: 1, active: true },
+      [STEP_KEY]: { ...step, action: 'rightClick' },
+      [MANUAL_KEY]: false,
+      [BLOCKED_KEY]: null,
+      [ATTACHED_KEY]: null,
+    });
+  });
+
+  afterEach(() => {
+    for (const c of controllers.splice(0)) c.dispose();
+    document.body.innerHTML = '';
+    for (const el of document.querySelectorAll('ditto-guideme')) el.remove();
+    vi.useRealTimers();
+  });
+
+  it('advances on a right-click, not on a left click', async () => {
+    const target = addTarget();
+    const c = new GuideMeController(true);
+    controllers.push(c);
+    await vi.advanceTimersByTimeAsync(0);
+
+    target.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await vi.advanceTimersByTimeAsync(0);
+    expect(sendMessage).not.toHaveBeenCalledWith('guideMeStepCompleted', { stepIndex: 0 });
+
+    target.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }));
+    await vi.advanceTimersByTimeAsync(0);
+    expect(sendMessage).toHaveBeenCalledWith('guideMeStepCompleted', { stepIndex: 0 });
+  });
+});
+
 describe('isSamePage', () => {
   it('matches the same origin and path, ignoring query, hash and a trailing slash', () => {
     expect(isSamePage('https://a.com/x/?q=1#h', 'https://a.com/x')).toBe(true);

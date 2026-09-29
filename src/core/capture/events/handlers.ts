@@ -20,6 +20,7 @@ import { InputSession } from './input-session';
 
 const DEDUP_MS = 300;
 const DRAG_MIN_PX = 30;
+const RIGHT_BUTTON = 2;
 const INTERCEPT_DELAY_MS = 100;
 const PAINT_FRAMES = 3;
 const CAPTURE_BUDGET_MS = 2500;
@@ -54,6 +55,10 @@ export interface CaptureHandle {
   capturePage: () => void;
 }
 
+function isEditable(el: HTMLElement): boolean {
+  return el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el.isContentEditable;
+}
+
 const PASSIVE_CAPTURE = { capture: true, passive: true } as const;
 const ACTIVE_CAPTURE = { capture: true } as const;
 
@@ -67,6 +72,7 @@ class CaptureController {
   private ring = new HoverRing(DEFAULT_TARGET_COLOR);
   private hovered: HTMLElement | null = null;
   private busy = false;
+  private pendingPaste: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
     private guideId: string,
@@ -76,6 +82,7 @@ class CaptureController {
     this.listeners = [
       ['click', this.onClick.bind(this), ACTIVE_CAPTURE],
       ['auxclick', this.onAuxClick.bind(this), ACTIVE_CAPTURE],
+      ['contextmenu', this.onContextMenu.bind(this), ACTIVE_CAPTURE],
       ['keydown', this.onKeydown.bind(this), ACTIVE_CAPTURE],
       ['input', this.onInput.bind(this), PASSIVE_CAPTURE],
       ['focusout', this.onFocusOut.bind(this), PASSIVE_CAPTURE],
@@ -111,7 +118,7 @@ class CaptureController {
         guideId: this.guideId,
         action,
         elementMeta: point ? { ...elementMeta, clickPoint: point } : elementMeta,
-        domContext: extractDOMContext(target, action),
+        domContext: extractDOMContext(target, action === 'rightClick' ? 'right-click' : action),
       });
     };
   }
@@ -212,7 +219,18 @@ class CaptureController {
     });
   }
 
+  private onContextMenu(e: Event) {
+    const me = e as MouseEvent;
+    const raw = eventTarget(me);
+    if (!raw || !(raw instanceof Element)) return;
+    const target = findFocusableAncestor(raw);
+    if (isDittoElement(target)) return;
+    this.enqueue(this.capture('rightClick', target, { x: me.clientX, y: me.clientY }));
+  }
+
   private onAuxClick(e: Event) {
+    const me = e as MouseEvent;
+    if (me.button === RIGHT_BUTTON) return;
     const raw = eventTarget(e);
     if (!raw || !(raw instanceof Element)) return;
     const target = findFocusableAncestor(raw);
@@ -236,6 +254,7 @@ class CaptureController {
   }
 
   private onInput(e: Event) {
+    this.cancelPendingPaste();
     const target = eventTarget(e);
     if (!target || !(target instanceof HTMLElement)) return;
     if (
@@ -280,7 +299,21 @@ class CaptureController {
     const resolved = eventTarget(e);
     const target = resolved instanceof HTMLElement ? resolved : document.activeElement;
     if (!target || !(target instanceof HTMLElement) || isDittoElement(target)) return;
-    this.enqueue(this.capture(e.type, target));
+    const task = this.capture(e.type, target);
+    if (e.type === 'paste' && isEditable(target)) {
+      this.pendingPaste = setTimeout(() => {
+        this.pendingPaste = null;
+        this.enqueue(task);
+      }, 0);
+      return;
+    }
+    this.enqueue(task);
+  }
+
+  private cancelPendingPaste() {
+    if (this.pendingPaste === null) return;
+    clearTimeout(this.pendingPaste);
+    this.pendingPaste = null;
   }
 
   private onPointerDown(e: Event) {
@@ -325,6 +358,7 @@ class CaptureController {
     for (const [event, handler, opts] of this.listeners) {
       window.removeEventListener(event, handler, opts);
     }
+    this.cancelPendingPaste();
     this.hovered = null;
     this.ring.dispose();
     this.queue.add(() => this.input.finalize());

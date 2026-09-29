@@ -26,7 +26,7 @@ export class GuideMeController {
   private overlay: GuideMeOverlay | null = null;
   private storageListener: ((changes: Record<string, { newValue?: unknown }>) => void) | null = null;
   private clickHandler: ((e: Event) => void) | null = null;
-  private clickEvent: 'click' | 'change' = 'click';
+  private clickEvent: 'click' | 'change' | 'contextmenu' = 'click';
   private currentTarget: HTMLElement | null = null;
   private currentStepIndex = -1;
   private watchTimer: ReturnType<typeof setInterval> | null = null;
@@ -186,8 +186,8 @@ export class GuideMeController {
     }
 
     this.clickHandler = () => this.advanceStep();
-    this.clickEvent = 'click';
-    target.addEventListener('click', this.clickHandler, { once: true });
+    this.clickEvent = step.action === 'rightClick' ? 'contextmenu' : 'click';
+    target.addEventListener(this.clickEvent, this.clickHandler, { once: true });
   }
 
   private advanceStep() {

@@ -110,6 +110,14 @@ describe('buildFallbackDescription', () => {
   });
 });
 
+describe('right-click steps', () => {
+  it('describes a right-click on its target', () => {
+    expect(buildFallbackDescription('rightClick', makeMeta({ textContent: 'INC0009009' }))).toBe(
+      'steps.rightClick[INC0009009]',
+    );
+  });
+});
+
 describe('buildGoToDescription', () => {
   it('shows the full address without the scheme', () => {
     expect(buildGoToDescription('https://dev12345.service-now.com/login.do')).toBe(
