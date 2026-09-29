@@ -108,6 +108,19 @@ describe('buildFallbackDescription', () => {
     const result = buildFallbackDescription('click', makeMeta({ textContent: longText }));
     expect(result).toBe(`steps.click[${'A'.repeat(80)}]`);
   });
+
+  it('describes a select click by its field label, once textContent carries the label instead of the selected option', () => {
+    // extractElementMeta resolves a <select>'s textContent to the field's own label
+    // (e.g. "State") rather than the currently selected option's text (e.g. "New") —
+    // see element-meta.ts. This just confirms the fallback description then reads right.
+    const result = buildFallbackDescription('click', makeMeta({ tag: 'select', role: 'select', textContent: 'State' }));
+    expect(result).toBe('steps.click[State]');
+  });
+
+  it('falls back to the tag name for a select with no resolvable label, rather than naming the selected option', () => {
+    const result = buildFallbackDescription('click', makeMeta({ tag: 'select', role: 'select', textContent: null }));
+    expect(result).toBe('steps.click[select]');
+  });
 });
 
 describe('right-click steps', () => {

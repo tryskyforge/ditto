@@ -5,6 +5,7 @@ import {
   findFocusableAncestor,
   getFieldLabel,
   getFieldValue,
+  getSelectLabel,
   isSensitiveField,
   isTooLarge,
 } from '../element-utils';
@@ -193,5 +194,35 @@ describe('getFieldLabel', () => {
     const input = document.createElement('input');
     input.setAttribute('name', 'username');
     expect(getFieldLabel(input)).toBe('username');
+  });
+});
+
+describe('getSelectLabel', () => {
+  it("reads the field's associated <label>, ignoring the selected option's own text", () => {
+    const select = document.createElement('select');
+    select.id = 'state-field';
+    const option = document.createElement('option');
+    option.value = 'new';
+    option.textContent = 'New';
+    select.appendChild(option);
+    const label = document.createElement('label');
+    label.htmlFor = 'state-field';
+    label.textContent = 'State';
+    document.body.appendChild(label);
+    document.body.appendChild(select);
+
+    expect(getSelectLabel(select)).toBe('State');
+  });
+
+  it('prefers an explicit aria-label', () => {
+    const select = document.createElement('select');
+    select.setAttribute('aria-label', 'Incident state');
+    expect(getSelectLabel(select)).toBe('Incident state');
+  });
+
+  it('returns null, not a generic placeholder, when no label can be resolved', () => {
+    const select = document.createElement('select');
+    document.body.appendChild(select);
+    expect(getSelectLabel(select)).toBeNull();
   });
 });

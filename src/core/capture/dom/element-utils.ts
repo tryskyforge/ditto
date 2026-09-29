@@ -103,14 +103,8 @@ function slottedLabel(el: Element): string | null {
   );
 }
 
-export function getFieldLabel(el: HTMLElement): string {
-  const ariaLabel = el.getAttribute('aria-label');
-  if (ariaLabel) return ariaLabel;
-
-  const placeholder = el.getAttribute('placeholder');
-  if (placeholder) return placeholder;
-
-  if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+function resolveAssociatedLabel(el: HTMLElement): string | null {
+  if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement) {
     const labels = el.labels;
     if (labels && labels.length > 0) {
       const labelText = meaningfulLabel(labels[0].innerText);
@@ -136,8 +130,36 @@ export function getFieldLabel(el: HTMLElement): string {
     if (labelText) return labelText;
   }
 
+  return null;
+}
+
+export function getFieldLabel(el: HTMLElement): string {
+  const ariaLabel = el.getAttribute('aria-label');
+  if (ariaLabel) return ariaLabel;
+
+  const placeholder = el.getAttribute('placeholder');
+  if (placeholder) return placeholder;
+
+  const associated = resolveAssociatedLabel(el);
+  if (associated) return associated;
+
   const name = el.getAttribute('name');
   if (name && !/[-_]test|[-_]id|[-_]key/i.test(name)) return name;
 
   return 'text field';
+}
+
+/**
+ * A native <select>'s own textContent/innerText is the currently selected option's
+ * label, not the field's own label — using it for a step description names the step
+ * after whatever was selected before the click ("Click New", "Click -- None --")
+ * instead of the field itself ("Click State"). Resolve the field's actual label the
+ * same way getFieldLabel does, but return null (rather than a generic "text field"
+ * fallback) when nothing is found, so callers can fall through to the field's own
+ * name/role/tag instead of a misleading string.
+ */
+export function getSelectLabel(el: HTMLSelectElement): string | null {
+  const ariaLabel = el.getAttribute('aria-label');
+  if (ariaLabel) return ariaLabel;
+  return resolveAssociatedLabel(el);
 }
