@@ -1,5 +1,6 @@
 import { getCssSelector } from 'css-selector-generator';
 import type { ElementMeta } from '@/core/guides/types';
+import { getSelectLabel } from './element-utils';
 
 function getCleanText(el: HTMLElement): string | null {
   const clone = el.cloneNode(true) as HTMLElement;
@@ -46,7 +47,7 @@ export function extractElementMeta(el: HTMLElement, atEvent?: FrozenRect): Eleme
   return {
     tag: el.tagName?.toLowerCase() ?? 'unknown',
     cssSelector,
-    textContent: getCleanText(el),
+    textContent: el instanceof HTMLSelectElement ? getSelectLabel(el) : getCleanText(el),
     ariaLabel: el.getAttribute('aria-label'),
     placeholder: el.getAttribute('placeholder'),
     altText: el instanceof HTMLImageElement ? el.alt : null,

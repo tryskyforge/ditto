@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 import { describe, expect, it } from 'vitest';
 import { extractElementMeta } from '@/core/capture/dom/element-meta';
 
@@ -46,5 +46,56 @@ describe('extractElementMeta', () => {
     const meta = extractElementMeta(el, { x: 12, y: 34, width: 100, height: 20 });
     expect(meta.ariaLabel).toBe('Copy link');
     expect(meta.rect).toEqual({ x: 12, y: 34, width: 100, height: 20 });
+  });
+
+  describe('a native <select>', () => {
+    function selectWithLabel(labelText: string, id = 'state'): HTMLSelectElement {
+      const label = document.createElement('label');
+      label.htmlFor = id;
+      label.textContent = labelText;
+      const select = document.createElement('select');
+      select.id = id;
+      for (const text of ['New', 'In Progress', 'On Hold']) {
+        const option = document.createElement('option');
+        option.value = text;
+        option.textContent = text;
+        select.appendChild(option);
+      }
+      document.body.appendChild(label);
+      document.body.appendChild(select);
+      return select;
+    }
+
+    it("uses the field's own label, not the currently selected option's text", () => {
+      const select = selectWithLabel('State', 'state-1');
+      select.value = 'New';
+      const meta = extractElementMeta(select);
+      expect(meta.textContent).toBe('State');
+    });
+
+    it('stays on the label even after a later option is selected', () => {
+      const select = selectWithLabel('On hold reason', 'state-2');
+      select.value = 'On Hold';
+      const meta = extractElementMeta(select);
+      expect(meta.textContent).toBe('On hold reason');
+    });
+
+    it('falls back to null, not the selected option, when no label can be found', () => {
+      const select = document.createElement('select');
+      const option = document.createElement('option');
+      option.value = '-- None --';
+      option.textContent = '-- None --';
+      select.appendChild(option);
+      document.body.appendChild(select);
+      const meta = extractElementMeta(select);
+      expect(meta.textContent).toBeNull();
+    });
+
+    it('prefers an explicit aria-label over an associated <label>', () => {
+      const select = selectWithLabel('State');
+      select.setAttribute('aria-label', 'Incident state');
+      const meta = extractElementMeta(select);
+      expect(meta.textContent).toBe('Incident state');
+    });
   });
 });
