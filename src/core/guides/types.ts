@@ -49,6 +49,20 @@ export interface ScreenshotBounds {
   height: number;
 }
 
+export interface DropdownRow {
+  label: string;
+  selected?: boolean;
+  disabled?: boolean;
+  header?: boolean;
+}
+
+export interface DropdownPanel {
+  rows: DropdownRow[];
+  start: number;
+  total: number;
+  fontSize: number;
+}
+
 export interface Screenshot {
   id: string;
   stepId: string;
@@ -59,6 +73,7 @@ export interface Screenshot {
   bounds?: ScreenshotBounds;
   pixelRatio?: number;
   clickPoint?: { x: number; y: number };
+  dropdown?: DropdownPanel;
   edits?: ScreenshotEdits;
 }
 
@@ -115,6 +130,7 @@ export interface ElementMeta {
   rect: { x: number; y: number; width: number; height: number };
   devicePixelRatio: number;
   clickPoint?: { x: number; y: number };
+  dropdown?: DropdownPanel;
 }
 
 export interface Snapshot {

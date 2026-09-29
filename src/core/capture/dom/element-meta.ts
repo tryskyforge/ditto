@@ -1,5 +1,6 @@
 import { getCssSelector } from 'css-selector-generator';
 import type { ElementMeta } from '@/core/guides/types';
+import { extractDropdown } from './dropdown';
 
 function getCleanText(el: HTMLElement): string | null {
   const clone = el.cloneNode(true) as HTMLElement;
@@ -43,6 +44,7 @@ export function extractElementMeta(el: HTMLElement, atEvent?: FrozenRect): Eleme
   } catch {
     cssSelector = el.tagName?.toLowerCase() ?? 'unknown';
   }
+  const dropdown = el instanceof HTMLSelectElement ? extractDropdown(el) : undefined;
   return {
     tag: el.tagName?.toLowerCase() ?? 'unknown',
     cssSelector,
@@ -57,5 +59,6 @@ export function extractElementMeta(el: HTMLElement, atEvent?: FrozenRect): Eleme
     dataTestId: el.getAttribute('data-testid') || el.getAttribute('data-test-id') || el.getAttribute('data-qa') || null,
     rect,
     devicePixelRatio: window.devicePixelRatio,
+    ...(dropdown ? { dropdown } : {}),
   };
 }

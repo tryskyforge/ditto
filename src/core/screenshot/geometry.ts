@@ -1,4 +1,5 @@
 import type { Screenshot, ScreenshotBounds } from '@/core/guides/types';
+import { dropdownRect } from './dropdown';
 import type { Annotation, ClickTarget } from './types';
 import { DEFAULT_TARGET_COLOR } from './types';
 
@@ -26,10 +27,15 @@ export function resolveViewport(screenshot: Screenshot): ScreenshotBounds {
   if (!hasArea(bounds)) return { x: 0, y: 0, width: imgW, height: imgH };
 
   const dpr = screenshot.pixelRatio || 1;
-  const bx = bounds.x * dpr;
-  const by = bounds.y * dpr;
-  const bw = bounds.width * dpr;
-  const bh = bounds.height * dpr;
+  const list = dropdownRect(screenshot);
+  const left = Math.min(bounds.x * dpr, list?.x ?? Number.POSITIVE_INFINITY);
+  const top = Math.min(bounds.y * dpr, list?.y ?? Number.POSITIVE_INFINITY);
+  const right = Math.max((bounds.x + bounds.width) * dpr, list ? list.x + list.width : 0);
+  const bottom = Math.max((bounds.y + bounds.height) * dpr, list ? list.y + list.height : 0);
+  const bx = left;
+  const by = top;
+  const bw = right - left;
+  const bh = bottom - top;
 
   const imgAspect = imgW / imgH;
   const elAspect = bw / bh;
