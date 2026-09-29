@@ -3,7 +3,8 @@ import { logger } from '@/lib/logger';
 import { sendMessage } from '@/lib/messaging';
 import { extractDOMContext } from '../dom/context';
 import { extractElementMeta, type FrozenRect, freezeRect } from '../dom/element-meta';
-import { getFieldLabel, getFieldValue, isRedactedField, isSensitiveField } from '../dom/element-utils';
+import { getFieldLabel, getFieldValue, isRedactedField, isSensitiveField, opensAsyncPanel } from '../dom/element-utils';
+import { waitForOpenPanel } from './panel-wait';
 
 export class InputSession {
   stepId: string | null = null;
@@ -22,6 +23,7 @@ export class InputSession {
 
   async start(target: HTMLElement, atEvent?: FrozenRect) {
     this.atEvent = atEvent;
+    if (opensAsyncPanel(target)) await waitForOpenPanel();
     const res = await sendMessage('captureStep', {
       guideId: this.guideId,
       action: 'input',

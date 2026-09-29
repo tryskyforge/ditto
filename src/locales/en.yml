@@ -249,6 +249,7 @@ capture:
   noRecordableTabs: No recordable tabs are open in this window.
 
 blocks:
+  screenshot: "Screenshot"
   add: Add block
   heading: Heading
   callout: Note

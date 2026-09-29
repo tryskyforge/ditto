@@ -249,6 +249,7 @@ capture:
   noRecordableTabs: No hay pestañas grabables abiertas en esta ventana.
 
 blocks:
+  screenshot: "Captura de pantalla"
   add: "Añadir bloque"
   heading: Encabezado
   callout: Nota

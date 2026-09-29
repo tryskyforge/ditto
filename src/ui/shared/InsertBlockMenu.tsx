@@ -1,4 +1,4 @@
-import { Circle, Heading, Plus, StickyNote } from 'lucide-react';
+import { Camera, Circle, Heading, Plus, StickyNote } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { i18n } from '#imports';
 import type { BlockType } from '@/core/guides/types';
@@ -7,9 +7,10 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/ui/components/ui/tool
 interface InsertBlockMenuProps {
   onInsert: (blockType: BlockType) => void;
   onRecord?: () => void;
+  onInsertStep?: () => void;
 }
 
-export default function InsertBlockMenu({ onInsert, onRecord }: InsertBlockMenuProps) {
+export default function InsertBlockMenu({ onInsert, onRecord, onInsertStep }: InsertBlockMenuProps) {
   const [open, setOpen] = useState(false);
   const rowRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -69,6 +70,19 @@ export default function InsertBlockMenu({ onInsert, onRecord }: InsertBlockMenuP
             {choice.label}
           </button>
         ))}
+      {open && onInsertStep && (
+        <button
+          type="button"
+          onClick={() => {
+            setOpen(false);
+            onInsertStep();
+          }}
+          className="relative flex items-center gap-1 rounded-full border border-border bg-card px-2 py-0.5 text-[11px] font-medium text-purple hover:text-accent hover:bg-secondary"
+        >
+          <Camera size={13} />
+          {i18n.t('blocks.screenshot')}
+        </button>
+      )}
       {open && onRecord && (
         <button
           type="button"

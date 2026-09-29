@@ -21,7 +21,7 @@ import { deferDescription, shouldQueueAiDescription } from './deferred-descripti
 import { queueDescription } from './description-queue';
 import { flushNarrationForStep, getVoiceUpdate } from './voice';
 
-async function takeScreenshot(stepId: string, meta: ElementMeta): Promise<string | undefined> {
+async function takeScreenshot(stepId: string, meta: ElementMeta, withDropdown = false): Promise<string | undefined> {
   try {
     const { targetColor } = await localStorage.get(['targetColor']);
     const dataUrl = await captureVisibleTab('jpeg', 90);
@@ -37,6 +37,7 @@ async function takeScreenshot(stepId: string, meta: ElementMeta): Promise<string
       bounds: { x: meta.rect.x, y: meta.rect.y, width: meta.rect.width, height: meta.rect.height },
       pixelRatio: meta.devicePixelRatio,
       clickPoint: meta.clickPoint,
+      ...(withDropdown && meta.dropdown ? { dropdown: meta.dropdown } : {}),
       edits: {
         target: {
           x: meta.rect.x * meta.devicePixelRatio,
@@ -77,7 +78,7 @@ export async function handleCaptureStep(data: CaptureStepData): Promise<CaptureS
   const guideId = snap.context.currentGuideId!;
   const stepId = crypto.randomUUID();
 
-  const screenshotId = await takeScreenshot(stepId, data.elementMeta);
+  const screenshotId = await takeScreenshot(stepId, data.elementMeta, data.action === 'click');
 
   const narrationCapturing = getVoiceUpdate().phase === 'recording';
   const hasAiKey = resolveAiKey(await localStorage.get([...AI_KEY_SETTINGS])).ready;

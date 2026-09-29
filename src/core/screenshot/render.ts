@@ -1,5 +1,6 @@
 import type { Screenshot, ScreenshotBounds } from '@/core/guides/types';
 import { drawAnnotation } from './draw';
+import { drawDropdown } from './dropdown';
 import { resolveTarget, resolveViewport } from './geometry';
 
 interface RenderOptions {
@@ -46,6 +47,8 @@ export async function renderScreenshot(screenshot: Screenshot, opts: RenderOptio
       viewport.y,
     );
   }
+
+  drawDropdown(ctx, screenshot);
 
   for (const a of screenshot.edits?.annotations ?? []) drawAnnotation(ctx, a, viewport.x, viewport.y);
 

@@ -45,6 +45,12 @@ export function isTextField(el: Element): boolean {
   return el instanceof HTMLTextAreaElement || (el instanceof HTMLElement && el.isContentEditable);
 }
 
+export function opensAsyncPanel(el: Element): boolean {
+  const haspopup = el.getAttribute('aria-haspopup');
+  if (haspopup && haspopup !== 'false') return true;
+  return el.getAttribute('role') === 'combobox';
+}
+
 export function isNavigatingClick(el: HTMLElement): boolean {
   const anchor = el.closest('a[href]');
   if (!anchor) return false;
