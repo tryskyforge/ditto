@@ -413,7 +413,7 @@ describe('stepKind', () => {
   });
 
   it('folds the remaining pointer actions in with clicks', () => {
-    for (const action of ['auxclick', 'copy', 'paste', 'cut', 'drag', '']) {
+    for (const action of ['auxclick', 'rightClick', 'copy', 'paste', 'cut', 'drag', '']) {
       expect(stepKind(step({ action }))).toBe('click');
     }
   });

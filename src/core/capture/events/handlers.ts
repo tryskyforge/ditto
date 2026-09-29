@@ -72,6 +72,7 @@ class CaptureController {
   private ring = new HoverRing(DEFAULT_TARGET_COLOR);
   private hovered: HTMLElement | null = null;
   private busy = false;
+  private pendingPaste: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
     private guideId: string,
@@ -117,7 +118,7 @@ class CaptureController {
         guideId: this.guideId,
         action,
         elementMeta: point ? { ...elementMeta, clickPoint: point } : elementMeta,
-        domContext: extractDOMContext(target, action),
+        domContext: extractDOMContext(target, action === 'rightClick' ? 'right-click' : action),
       });
     };
   }
@@ -253,6 +254,7 @@ class CaptureController {
   }
 
   private onInput(e: Event) {
+    this.cancelPendingPaste();
     const target = eventTarget(e);
     if (!target || !(target instanceof HTMLElement)) return;
     if (
@@ -297,8 +299,21 @@ class CaptureController {
     const resolved = eventTarget(e);
     const target = resolved instanceof HTMLElement ? resolved : document.activeElement;
     if (!target || !(target instanceof HTMLElement) || isDittoElement(target)) return;
-    if (e.type === 'paste' && isEditable(target)) return;
-    this.enqueue(this.capture(e.type, target));
+    const task = this.capture(e.type, target);
+    if (e.type === 'paste' && isEditable(target)) {
+      this.pendingPaste = setTimeout(() => {
+        this.pendingPaste = null;
+        this.enqueue(task);
+      }, 0);
+      return;
+    }
+    this.enqueue(task);
+  }
+
+  private cancelPendingPaste() {
+    if (this.pendingPaste === null) return;
+    clearTimeout(this.pendingPaste);
+    this.pendingPaste = null;
   }
 
   private onPointerDown(e: Event) {
@@ -343,6 +358,7 @@ class CaptureController {
     for (const [event, handler, opts] of this.listeners) {
       window.removeEventListener(event, handler, opts);
     }
+    this.cancelPendingPaste();
     this.hovered = null;
     this.ring.dispose();
     this.queue.add(() => this.input.finalize());

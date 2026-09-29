@@ -91,9 +91,25 @@ describe('pasting into a field', () => {
   it('keeps copy steps as they are', async () => {
     const input = field('text');
     input.dispatchEvent(new Event('copy', { bubbles: true }));
+    input.dispatchEvent(new Event('cut', { bubbles: true }));
     await settle();
 
-    expect(captured()).toEqual(['copy']);
+    expect(captured()).toEqual(['copy', 'cut']);
+  });
+
+  it('still records the paste when the field never reports an input', async () => {
+    field('text').dispatchEvent(new Event('paste', { bubbles: true }));
+    await settle();
+
+    expect(captured()).toEqual(['paste']);
+  });
+
+  it('drops a held paste when recording stops', async () => {
+    field('text').dispatchEvent(new Event('paste', { bubbles: true }));
+    handle.stop();
+    await settle();
+
+    expect(captured()).toEqual([]);
   });
 });
 
@@ -124,6 +140,18 @@ describe('right-clicking', () => {
     await settle();
 
     expect(captured()).toEqual(['rightClick']);
+  });
+
+  it('labels the AI context as a right-click', async () => {
+    const link = document.createElement('a');
+    link.href = '/incident';
+    rect(link);
+    document.body.appendChild(link);
+
+    mouse(link, 'contextmenu', { button: 2 });
+    await settle();
+
+    expect(calls('captureStep')[0][1]).toMatchObject({ domContext: { target: { action: 'right-click' } } });
   });
 
   it('still records a middle click', async () => {
