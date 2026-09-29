@@ -191,6 +191,26 @@ export async function insertBlock(
   return id;
 }
 
+export async function insertStep(guideId: string, atIndex: number, description = ''): Promise<string> {
+  const id = crypto.randomUUID();
+  await db.transaction('rw', db.steps, db.guides, async () => {
+    const steps = await db.steps.where('guideId').equals(guideId).sortBy('index');
+    const step: Step = {
+      id,
+      guideId,
+      index: 0,
+      description,
+      action: 'manual',
+      url: '',
+      timestamp: Date.now(),
+    };
+    steps.splice(Math.max(0, Math.min(atIndex, steps.length)), 0, step);
+    await db.steps.bulkPut(steps.map((s, index) => ({ ...s, index })));
+    await db.guides.update(guideId, { stepIds: steps.map((s) => s.id), updatedAt: Date.now() });
+  });
+  return id;
+}
+
 export async function updateCallout(stepId: string, variant: CalloutVariant, color?: string): Promise<void> {
   await db.steps.update(stepId, { calloutVariant: variant, calloutColor: color });
 }

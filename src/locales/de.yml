@@ -249,6 +249,7 @@ capture:
   noRecordableTabs: In diesem Fenster ist kein aufzeichenbarer Tab offen.
 
 blocks:
+  screenshot: "Screenshot"
   add: "Block hinzufügen"
   heading: "Überschrift"
   callout: Hinweis

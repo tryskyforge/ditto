@@ -22,7 +22,7 @@ vi.hoisted(() => {
 import { hexToRgb } from '@/core/screenshot/color';
 import { actionSteps, calloutAccent, DEFAULT_CALLOUT_COLOR, isReplayable, stepNumbers, tint } from '../blocks';
 import { db } from '../db';
-import { insertBlock } from '../service';
+import { insertBlock, insertStep } from '../service';
 import type { BlockType, CalloutVariant, Guide, Step } from '../types';
 
 const HEX = /^#[0-9A-F]{6}$/;
@@ -267,6 +267,48 @@ describe('insertBlock', () => {
     expect(numbers.get('s2')).toBe(2);
     expect(numbers.get('s3')).toBe(3);
     expect(numbers.has(blockId)).toBe(false);
+  });
+});
+
+describe('insertStep', () => {
+  it('places a plain, numbered step at the requested index with no capture fields', async () => {
+    await seedGuide('g1', [makeStep({ id: 's1' }), makeStep({ id: 's2' })]);
+
+    const stepId = await insertStep('g1', 1, 'Paste the confirmation screenshot here');
+
+    const steps = await storedSteps('g1');
+    expect(steps.map((s) => s.id)).toEqual(['s1', stepId, 's2']);
+    expect(steps.map((s) => s.index)).toEqual([0, 1, 2]);
+    expect((await db.guides.get('g1'))!.stepIds).toEqual(['s1', stepId, 's2']);
+
+    const step = await db.steps.get(stepId);
+    expect(step!.blockType).toBeUndefined();
+    expect(step!.elementMeta).toBeUndefined();
+    expect(step!.screenshotId).toBeUndefined();
+    expect(step!.description).toBe('Paste the confirmation screenshot here');
+  });
+
+  it('defaults to an empty description', async () => {
+    await seedGuide('g1', []);
+
+    const stepId = await insertStep('g1', 0);
+
+    expect((await db.steps.get(stepId))!.description).toBe('');
+  });
+
+  it('is counted and numbered like a recorded step, and is not replayable until an element target is added', async () => {
+    await seedGuide('g1', [makeStep({ id: 's1' })]);
+
+    const stepId = await insertStep('g1', 1, 'Screenshot of the final state');
+
+    const steps = await storedSteps('g1');
+    expect(actionSteps(steps).map((s) => s.id)).toEqual(['s1', stepId]);
+
+    const numbers = stepNumbers(steps);
+    expect(numbers.get('s1')).toBe(1);
+    expect(numbers.get(stepId)).toBe(2);
+
+    expect(isReplayable(steps.find((s) => s.id === stepId)!)).toBe(false);
   });
 });
 

@@ -249,6 +249,7 @@ capture:
   noRecordableTabs: 当前窗口没有可录制的标签页。
 
 blocks:
+  screenshot: "截图"
   add: 添加区块
   heading: 标题
   callout: 备注

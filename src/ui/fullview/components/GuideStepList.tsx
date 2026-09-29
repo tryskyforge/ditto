@@ -2,7 +2,7 @@ import { Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { i18n } from '#imports';
 import { isBlock, stepNumbers } from '@/core/guides/blocks';
-import { createSnapshot, deleteSteps, insertBlock, reorderSteps } from '@/core/guides/service';
+import { createSnapshot, deleteSteps, insertBlock, insertStep, reorderSteps } from '@/core/guides/service';
 import type { BlockType, Screenshot, Step } from '@/core/guides/types';
 import { dominantRatio } from '@/core/screenshot/geometry';
 import { logger } from '@/lib/logger';
@@ -107,6 +107,11 @@ export default function GuideStepList({
     onChanged?.();
   };
 
+  const handleInsertStep = async (atIndex: number) => {
+    await insertStep(guideId, atIndex);
+    onChanged?.();
+  };
+
   const toggleSelected = (index: number, extend: boolean) => {
     const from = extend && anchorIndex.current !== null ? anchorIndex.current : index;
     anchorIndex.current = index;
@@ -169,6 +174,7 @@ export default function GuideStepList({
         {!readOnly && (
           <InsertBlockMenu
             onInsert={(blockType) => handleInsertBlock(0, blockType)}
+            onInsertStep={() => handleInsertStep(0)}
             onRecord={onInsertRecording && (() => setRecordAtIndex(0))}
           />
         )}
@@ -182,6 +188,7 @@ export default function GuideStepList({
       {!readOnly && (
         <InsertBlockMenu
           onInsert={(blockType) => handleInsertBlock(0, blockType)}
+          onInsertStep={() => handleInsertStep(0)}
           onRecord={onInsertRecording && (() => setRecordAtIndex(0))}
         />
       )}
@@ -239,6 +246,7 @@ export default function GuideStepList({
           {!readOnly && (
             <InsertBlockMenu
               onInsert={(blockType) => handleInsertBlock(idx + 1, blockType)}
+              onInsertStep={() => handleInsertStep(idx + 1)}
               onRecord={onInsertRecording && (() => setRecordAtIndex(idx + 1))}
             />
           )}

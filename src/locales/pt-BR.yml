@@ -249,6 +249,7 @@ capture:
   noRecordableTabs: Nenhuma aba gravável está aberta nesta janela.
 
 blocks:
+  screenshot: "Captura de tela"
   add: Adicionar bloco
   heading: "Título"
   callout: Nota

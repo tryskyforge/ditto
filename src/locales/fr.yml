@@ -249,6 +249,7 @@ capture:
   noRecordableTabs: "Aucun onglet enregistrable n'est ouvert dans cette fenêtre."
 
 blocks:
+  screenshot: "Capture d'écran"
   add: Ajouter un bloc
   heading: Titre
   callout: Note
