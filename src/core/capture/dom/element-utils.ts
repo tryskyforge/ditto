@@ -69,6 +69,16 @@ export function isRedactedField(el: Element | null): boolean {
   return el instanceof Element && !!el.closest('[data-ditto-blur]');
 }
 
+// Screen-reader position hints on a listbox/menu option ("All, 6 of 9") are meaningful
+// to assistive tech but read as noise once turned into a step description or handed to
+// the AI as the element's name — the position within a list has nothing to do with what
+// was clicked. Strip a trailing "N of M" (with or without a preceding comma).
+const POSITION_SUFFIX = /,?\s+\d+\s+of\s+\d+\s*$/i;
+
+export function stripPositionSuffix(text: string): string {
+  return text.replace(POSITION_SUFFIX, '').trim() || text;
+}
+
 export function eventTarget(e: Event): Element | null {
   const inner = e.composedPath?.()[0];
   if (inner instanceof Element) return inner;

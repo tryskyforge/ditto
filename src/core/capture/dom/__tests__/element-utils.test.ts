@@ -7,6 +7,7 @@ import {
   getFieldValue,
   isSensitiveField,
   isTooLarge,
+  stripPositionSuffix,
 } from '../element-utils';
 
 const VIEWPORT_WIDTH = 1000;
@@ -193,5 +194,32 @@ describe('getFieldLabel', () => {
     const input = document.createElement('input');
     input.setAttribute('name', 'username');
     expect(getFieldLabel(input)).toBe('username');
+  });
+});
+
+describe('stripPositionSuffix', () => {
+  it('strips a comma-separated screen-reader position hint', () => {
+    expect(stripPositionSuffix('All, 6 of 9')).toBe('All');
+  });
+
+  it('strips a space-separated position hint with no comma', () => {
+    expect(stripPositionSuffix('All 6 of 9')).toBe('All');
+  });
+
+  it('leaves ordinary text with numbers alone', () => {
+    expect(stripPositionSuffix('INC0009005')).toBe('INC0009005');
+    expect(stripPositionSuffix('Priority 1 - Critical')).toBe('Priority 1 - Critical');
+  });
+
+  it('has nothing to strip when the whole string is just the position hint', () => {
+    expect(stripPositionSuffix('6 of 9')).toBe('6 of 9');
+  });
+
+  it('falls back to the original text rather than returning an empty string', () => {
+    expect(stripPositionSuffix(' 6 of 9')).toBe(' 6 of 9');
+  });
+
+  it('leaves text with no position hint untouched', () => {
+    expect(stripPositionSuffix('State')).toBe('State');
   });
 });

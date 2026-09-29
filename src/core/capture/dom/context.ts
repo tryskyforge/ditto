@@ -1,4 +1,4 @@
-import { isRedactedField } from './element-utils';
+import { isRedactedField, stripPositionSuffix } from './element-utils';
 
 export interface SiblingElement {
   tag: string;
@@ -67,7 +67,7 @@ function getLabelForInput(el: Element): string | null {
 }
 
 function getAccessibleName(el: Element): string | null {
-  return (
+  const name =
     attr(el, 'aria-label') ??
     resolveAriaLabelledBy(el) ??
     (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement
@@ -75,8 +75,8 @@ function getAccessibleName(el: Element): string | null {
       : null) ??
     ((el.textContent?.trim()?.length ?? 0) <= 80 ? el.textContent?.trim() || null : null) ??
     attr(el, 'title') ??
-    attr(el, 'placeholder')
-  );
+    attr(el, 'placeholder');
+  return name ? stripPositionSuffix(name) : name;
 }
 
 function getElementValue(el: Element): string | null {

@@ -1,15 +1,17 @@
 import { i18n } from '#imports';
 import type { ElementMeta } from '@/core/guides/types';
+import { stripPositionSuffix } from './dom/element-utils';
 
 export function buildFallbackDescription(action: string, meta: ElementMeta): string {
-  const target =
+  const target = stripPositionSuffix(
     meta.ariaLabel ||
-    meta.placeholder ||
-    meta.textContent?.slice(0, 80) ||
-    meta.altText ||
-    meta.name ||
-    meta.role ||
-    meta.tag;
+      meta.placeholder ||
+      meta.textContent?.slice(0, 80) ||
+      meta.altText ||
+      meta.name ||
+      meta.role ||
+      meta.tag,
+  );
 
   if (action.startsWith('keydown:')) {
     const key = action.split(':')[1];

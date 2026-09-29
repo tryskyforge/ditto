@@ -103,6 +103,11 @@ describe('buildFallbackDescription', () => {
     expect(result).toBe('steps.click[Close dialog]');
   });
 
+  it('strips a screen-reader position hint off a clicked list option, naming the option instead of its position', () => {
+    const result = buildFallbackDescription('click', makeMeta({ ariaLabel: 'All, 6 of 9' }));
+    expect(result).toBe('steps.click[All]');
+  });
+
   it('truncates long textContent to 80 chars', () => {
     const longText = 'A'.repeat(100);
     const result = buildFallbackDescription('click', makeMeta({ textContent: longText }));
